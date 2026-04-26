@@ -1,0 +1,32 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+
+      <img src="logo.jpeg" alt="TALENTMAD" class="login-logo">
+      <h2>Bienvenido a TALENTMAD</h2>
+      <p>Inicia sesión para continuar</p>
+    </div>
+
+    <form (ngSubmit)="login()" #loginForm="ngForm">
+      <div class="form-group">
+        <label><i class="fas fa-envelope"></i> Correo electrónico</label>
+        <input type="email" id="username" name="username" class="form-control" [(ngModel)]="form.username" required />
+      </div>
+
+
+      <div class="form-group">
+        <label><i class="fas fa-lock"></i> Contraseña</label>
+        <input type="password" id="password" name="password" class="form-control" [(ngModel)]="form.password" required />
+      </div>
+
+      <button type="submit" class="btn-login-submit">
+        <span>Iniciar sesión</span>
+      </button>
+
+
+      <p class="login-footer">
+        ¿No tienes cuenta? <a routerLink="/registro">Regístrate aquí</a>
+      </p>
+    </form>
+  </div>
+</div>

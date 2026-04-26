@@ -1,0 +1,146 @@
+<div class="container">
+    <!-- Hero Banner -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-brain"></i> Orientación simple · Resultados claros
+            </div>
+            <h1>Descubre tu verdadera vocación sin presiones</h1>
+            <p>Test gratuito basado en tus intereses, habilidades y forma de ser. Nuestro objetivo es brindarte una guía clara y sencilla para que puedas conocerte mejor y tomar una decisión más segura sobre tu futuro profesional.</p>
+            <div class="hero-buttons">
+                <a routerLink="/test" class="btn-primary">
+                    <i class="fas fa-arrow-right"></i> Iniciar test ahora
+                </a>
+                <a (click)="scrollToSection('pasos')" class="btn-secondary">
+                    <i class="fas fa-play"></i> Cómo funciona
+                </a>
+            </div>
+        </div>
+        <div class="hero-image" style="background-image: url('https://raw.githubusercontent.com/ManuelMezaLope1/TalentMap/refs/heads/main/assets/images/logo.jpeg');"></div>
+    </section>
+
+    <!-- Beneficios -->
+    <section id="beneficios" class="section">
+        <div class="section-header">
+            <h2>¿Por qué hacer nuestro test?</h2>
+            <p>¿Por qué hacer nuestro test?
+Un espacio diseñado para que puedas conocerte mejor y tomar decisiones con mayor seguridad.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-chalkboard-user"></i></div>
+                <h3>Diseño claro</h3>
+                <p>Preguntas directas, con imágenes y opciones que reflejan situaciones reales.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Resultados multidimensionales</h3>
+                <p>No solo una carrera: te mostramos tus áreas de mayor afinidad.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Completa en cualquier lugar</h3>
+                <p>Desde tu celular, tablet o computadora. Sin instalaciones.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pasos / Cómo funciona -->
+    <section id="pasos" class="section steps-section">
+        <div class="section-header">
+            <h2>Tu camino en 3 simples pasos</h2>
+            <p>Un proceso fácil y rápido para descubrir tus intereses y explorar tus opciones.</p>
+        </div>
+        <div class="steps">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <h3>Responde con sinceridad</h3>
+                <p>Lee cada pregunta y elige la opción que más te represente, sin pensar demasiado.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <h3>Obtén tu perfil</h3>
+                <p>El sistema analiza tus respuestas y calcula tus áreas de mayor compatibilidad.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <h3>Explora carreras</h3>
+                <p>Revisa las recomendaciones y profundiza en las carreras que te interesen.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section id="testimonios" class="section">
+        <div class="section-header">
+            <h2>Más de 1000 personas ya encontraron orientación</h2>
+            <p>Usuarios reales que usaron nuestro test independiente.</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"No sabía si estudiar diseño o marketing. El test me mostró que ambas áreas me atraen, y ahora estudio Publicidad. Súper útil."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background-image: url('https://randomuser.me/api/portraits/women/68.jpg');"></div>
+                    <div><strong>Valeria M.</strong><br>Estudiante</div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Es una herramienta sencilla y confiable. Me ayudó a entender mejor lo que me gusta."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg');"></div>
+                    <div><strong>Diego R.</strong><br>Bachiller</div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Lo recomendé a mis amigos. Las preguntas son entretenidas."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background-image: url('https://randomuser.me/api/portraits/women/45.jpg');"></div>
+                    <div><strong>Camila L.</strong><br>Último año escolar</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section">
+        <div class="section-header">
+            <h2>Preguntas frecuentes</h2>
+            <p>Todo lo que necesitas saber sobre nuestro test vocacional libre.</p>
+        </div>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question" (click)="toggleFaq($event)">
+                   ¿Cuánto tiempo toma completar el test?<i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">El test es rápido y puedes completarlo en aproximadamente 5 a 7 minutos.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" (click)="toggleFaq($event)">
+                    ¿Qué tan precisos son los resultados? <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">Los resultados se basan en tus respuestas, por lo que mientras más sincero seas, más acertada será la orientación.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" (click)="toggleFaq($event)">
+                    ¿Guardo mis resultados? <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">Si completas el test, puedes ver tu resultado al instante</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" (click)="toggleFaq($event)">
+                    ¿Puedo repetir el test? <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">Sí, puedes realizar el test nuevamente en cualquier momento si deseas comparar resultados.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA final -->
+    <div class="cta-section">
+        <h2>¿Listo para descubrir tu vocación?</h2>
+        <p>Sin costo, sin spam, solo responde lo que realmente te gusta.</p>
+        <a routerLink="/test" class="btn-primary">
+            <i class="fas fa-rocket"></i> Comenzar test gratuito
+        </a>
+    </div>
+</div>

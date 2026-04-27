@@ -8,20 +8,15 @@
         <a (click)="scrollToSection('beneficios')">Beneficios</a>
         <a (click)="scrollToSection('pasos')">Cómo funciona</a>
         <a (click)="scrollToSection('testimonios')">Testimonios</a>
-        <a routerLink="/test" class="btn-nav">✨ Comenzar test</a>
+        
+        <div *ngIf="!authServicio.logueado()">
+            <a routerLink="/login" class="btn-nav">✨ Comenzar test</a>
+        </div>
 
-
-        <ng-container *ngIf="!isLoggedIn">
-            <a routerLink="/login" class="btn-login">
-                <i class="fas fa-sign-in-alt"></i> Iniciar sesión
-            </a>
-        </ng-container>
-
-
-        <div class="user-menu" *ngIf="isLoggedIn">
+        <div class="user-menu" *ngIf="authServicio.logueado()">
             <button class="btn-user" (click)="toggleUserMenu()">
                 <i class="fas fa-user-circle"></i>
-                <span>{{ userName }}</span>
+                <span>Username</span>
                 <i class="fas fa-chevron-down" [class.rotated]="menuOpen"></i>
             </button>
             <div class="dropdown-menu" *ngIf="menuOpen">
@@ -32,9 +27,7 @@
                     <i class="fas fa-chart-bar"></i> Mis tests
                 </a>
                 <div class="dropdown-divider"></div>
-                <button (click)="logout()" class="dropdown-logout">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-                </button>
+                <button (click)="logout()" class="dropdown-logout">Cerrar sesión</button>
             </div>
         </div>
     </div>
@@ -50,14 +43,12 @@
     <a (click)="scrollToSection('beneficios'); closeMobileMenu()">Beneficios</a>
     <a (click)="scrollToSection('pasos'); closeMobileMenu()">Cómo funciona</a>
     <a (click)="scrollToSection('testimonios'); closeMobileMenu()">Testimonios</a>
-    <a routerLink="/test" class="mobile-btn-nav" (click)="closeMobileMenu()">✨ Comenzar test</a>
 
-    <ng-container *ngIf="!isLoggedIn">
-        <a routerLink="/login" class="mobile-btn-login" (click)="closeMobileMenu()">Iniciar sesión</a>
-        <a routerLink="/register" class="mobile-btn-register" (click)="closeMobileMenu()">Registrarse</a>
+    <ng-container *ngIf="!authServicio.logueado()">
+        <a routerLink="/login" class="mobile-btn-nav" (click)="closeMobileMenu()">✨ Comenzar test</a>
     </ng-container>
 
-    <ng-container *ngIf="isLoggedIn">
+    <ng-container *ngIf="authServicio.logueado()">
         <a routerLink="/perfil" (click)="closeMobileMenu()">Mi perfil</a>
         <a routerLink="/mis-resultados" (click)="closeMobileMenu()">Mis tests</a>
         <button (click)="logout()" class="mobile-btn-logout">Cerrar sesión</button>

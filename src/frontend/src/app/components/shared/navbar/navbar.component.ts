@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthServicio } from '../../../servicios/auth/auth-servicio';
 
 @Component({
   selector: 'app-navbar',
@@ -10,29 +11,14 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  isLoggedIn = false;
-  userName = '';
   menuOpen = false;
   mobileMenuOpen = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, public authServicio: AuthServicio) {}
 
   ngOnInit() {
-    this.checkLoginStatus();
-
-    window.addEventListener('storage', () => {
-      this.checkLoginStatus();
-    });
   }
 
-  checkLoginStatus() {
-    const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
-    this.isLoggedIn = !!user;
-    if (user) {
-      const userData = JSON.parse(user);
-      this.userName = userData.name;
-    }
-  }
 
  scrollToSection(sectionId: string): void {
   this.closeMobileMenu();
@@ -76,21 +62,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    sessionStorage.removeItem('currentUser');
-    this.isLoggedIn = false;
-    this.userName = '';
-    this.menuOpen = false;
-    this.closeMobileMenu();
-    this.router.navigate(['/']);
-  }
-
-
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (!target.closest('.user-menu')) {
-      this.menuOpen = false;
-    }
+    this.authServicio.logout();
+    this.router.navigate(['/iniciar-sesion']);
   }
 }

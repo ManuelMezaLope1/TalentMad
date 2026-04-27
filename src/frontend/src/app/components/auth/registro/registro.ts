@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Nivelinteres } from '../../../servicios/nivelinteres/nivelinteres';
+import { NivelinteresServicio } from '../../../servicios/nivelinteres/nivelinteres-servicio';
 import { Interes } from '../../../servicios/nivelinteres/Interes';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 export class Registro {
   niveles: Interes[]=[];
 
-  constructor(private nivelInteresServicio: Nivelinteres,private http: HttpClient, private router: Router){}
+  constructor(private nivelInteresServicio: NivelinteresServicio,private http: HttpClient, private router: Router){}
 
   ngOnInit(): void{
     this.nivelInteresServicio.obtenerListaDeNivelesDeInteres().subscribe(dato=>{

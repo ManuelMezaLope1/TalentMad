@@ -1,2 +1,17 @@
-<h1>Preguntas en proceso</h1>
-<p>Vuelva dentro de un tiempo</p>
+<h1>Test Vocacional con IA</h1>
+
+<div>
+    <p>1. Describe qué te gusta hacer:</p>
+    <input type="text" [(ngModel)]="respuestas[0]" (ngModelChange)="actualizarAlmacen()">
+
+    <p>2. ¿Qué actividades haces con tanto gusto que pierdes la noción del tiempo?</p>
+    <input type="text" [(ngModel)]="respuestas[1]" (ngModelChange)="actualizarAlmacen()">
+</div>
+
+<br>
+
+<textarea [(ngModel)]="respuesta"></textarea><br><br>
+
+<button (click)="enviar()">Obtener recomendación</button>
+
+<div class="resultado" [innerHTML]="resultadoHtml"></div>

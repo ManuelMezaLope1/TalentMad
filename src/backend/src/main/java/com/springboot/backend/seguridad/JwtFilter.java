@@ -17,8 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class JwtFilter extends OncePerRequestFilter{
-     @Autowired
+public class JwtFilter extends OncePerRequestFilter {
+    @Autowired
     private JwtUtil jwtUtil;
 
     @Autowired
@@ -42,16 +42,24 @@ public class JwtFilter extends OncePerRequestFilter{
         if (header != null && header.startsWith("Bearer ")) {
 
             String token = header.substring(7);
-            String username = jwtUtil.extraerUsername(token);
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            try {
+                String username = jwtUtil.extraerUsername(token);
+                
+                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                UserDetails user = userDetailsServicio.loadUserByUsername(username);
+                    UserDetails user = userDetailsServicio.loadUserByUsername(username);
 
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                        user, null, user.getAuthorities());
+                    System.out.println("USUARIO: " + user.getUsername());
+                    System.out.println("ROLES: " + user.getAuthorities());
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                            user, null, user.getAuthorities());
+
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+            } catch (Exception e) {
+                System.out.println("❌ Token inválido: " + e.getMessage());
             }
         }
 

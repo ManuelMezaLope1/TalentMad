@@ -7,7 +7,7 @@ import { Interes } from './Interes';
   providedIn: 'root',
 })
 export class NivelinteresServicio {
-  private baseUrl="http://localhost:8080/api/v1/nivelinteres";
+  private baseUrl="http://localhost:8080/api/v1/public/nivelinteres";
 
   constructor(private httpClient: HttpClient){}
 

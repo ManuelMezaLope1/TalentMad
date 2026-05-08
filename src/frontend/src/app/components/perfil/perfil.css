@@ -1,0 +1,135 @@
+.dark .contenedor-cuenta{
+    background: white;
+}
+
+.light .contenedor-cuenta{
+    background: #121212;
+}
+
+.contenedor-principal {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.contenedor-cuenta {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+    
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .contenedor-cuenta {
+        grid-template-columns: 1fr;
+    }
+}
+
+.panel-lateral {
+    background: linear-gradient(135deg, #1829af 0%, #7765c8 100%);
+    color: white;
+    padding: 30px 20px;
+}
+
+.info-usuario {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 40px;
+    border: 3px solid rgba(255,255,255,0.3);
+}
+
+.menu-cuenta {
+    list-style: none;
+}
+
+.menu-cuenta li {
+    margin-bottom: 10px;
+}
+
+.menu-cuenta a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.menu-cuenta a:hover,
+.menu-cuenta a.activo {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.contenido-principal {
+    padding: 40px;
+}
+
+.grupo-formulario {
+    margin-bottom: 25px;
+}
+
+.grupo-formulario label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+.grupo-formulario input,
+.grupo-formulario select {
+    width: 100%;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.grupo-formulario input:focus {
+    border-color: #B30622;
+    box-shadow: 0 0 0 3px rgba(179, 6, 34, 0.1);
+    outline: none;
+}
+
+.btn-guardar {
+    background: linear-gradient(135deg, #1829af 0%, #7765c8 100%);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-guardar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(179, 6, 34, 0.3);
+}
+
+.btn-guardar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}

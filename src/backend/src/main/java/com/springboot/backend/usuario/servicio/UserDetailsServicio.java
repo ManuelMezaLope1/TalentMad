@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.backend.rol.modelo.Rol;
 import com.springboot.backend.usuario.modelo.Usuario;
@@ -20,6 +21,7 @@ public class UserDetailsServicio implements UserDetailsService{
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
 
+    @Transactional(readOnly=true)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 

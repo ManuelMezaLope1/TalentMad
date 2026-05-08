@@ -15,19 +15,19 @@
 
         <div class="user-menu" *ngIf="authServicio.logueado()">
             <button class="btn-user" (click)="toggleUserMenu()">
-                <i class="fas fa-user-circle"></i>
-                <span>Username</span>
+                <span class="material-icons">account_circle</span>
+                <span *ngIf="usuario">{{usuario.nombre}}</span>
                 <i class="fas fa-chevron-down" [class.rotated]="menuOpen"></i>
             </button>
-            <div class="dropdown-menu" *ngIf="menuOpen">
+            <div class="drop-menu" *ngIf="menuOpen">
                 <a routerLink="/perfil">
-                    <i class="fas fa-id-card"></i> Mi perfil
+                    <i class="material-icons">badge</i> <span>Mi perfil</span>
                 </a>
                 <a routerLink="/mis-resultados">
-                    <i class="fas fa-chart-bar"></i> Mis tests
+                    <i class="material-icons">bar_chart</i> Mis tests
                 </a>
                 <div class="dropdown-divider"></div>
-                <button (click)="logout()" class="dropdown-logout">Cerrar sesión</button>
+                <button (click)="logout()" class="dropdown-logout"><i class="material-icons">logout</i>Cerrar sesión</button>
             </div>
         </div>
     </div>

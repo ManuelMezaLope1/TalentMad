@@ -11,7 +11,7 @@ import com.springboot.backend.nivelinteres.repositorio.NivelInteresRepositorio;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/public")
 public class NivelInteresControlador {
     @Autowired
     private NivelInteresRepositorio nivelInteresRepositorio;

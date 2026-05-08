@@ -126,7 +126,7 @@
     transform: rotate(180deg);
 }
 
-.dropdown-menu {
+.drop-menu {
     position: absolute;
     top: 100%;
     right: 0;
@@ -140,8 +140,8 @@
     border: 1px solid #e2e8f0;
 }
 
-.dropdown-menu a,
-.dropdown-menu button {
+.drop-menu a,
+.drop-menu button {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -157,13 +157,13 @@
     transition: background 0.2s;
 }
 
-.dropdown-menu a:hover,
-.dropdown-menu button:hover {
+.drop-menu a:hover,
+.drop-menu button:hover {
     background: #f8fafc;
 }
 
-.dropdown-menu a i,
-.dropdown-menu button i {
+.drop-menu a i,
+.drop-menu button i {
     width: 20px;
     color: #64748b;
 }

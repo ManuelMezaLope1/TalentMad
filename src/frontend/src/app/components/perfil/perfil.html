@@ -1,0 +1,89 @@
+<div class="contenedor-principal">
+    <div class="contenedor-cuenta">
+        <div class="panel-lateral">
+            <div class="info-usuario" *ngIf="usuario">
+                <div class="avatar">
+                    <span class="material-icons">person</span>
+                </div>
+                <h2>{{usuario.nombre}}</h2>
+                <p>{{usuario.username}}</p>
+            </div>
+
+            <ul class="menu-cuenta">
+                <li class="border border-light rounded">
+                    <a [ngClass]="active == 'informacion' ? 'nav-link active' : 'nav-link'" id="tab-registro"
+                        (click)="onInformacionTab()"><span class="material-icons">person</span>Información Personal</a>
+                </li>
+
+                <li class="border border-light rounded">
+                    <a [ngClass]="active == 'historial' ? 'nav-link active' : 'nav-link'" id="tab-historial"
+                        (click)="onHistorialTab()"><span class="material-icons">list</span>Historial</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="contenedor-principal tab-content">
+            <div [ngClass]="active == 'informacion' ? 'tab-pane fade show active' : 'tab-pane fade'">
+                <div *ngIf="usuario">
+                    <h1 class="text-center">Mi Cuenta</h1>
+                    <form (ngSubmit)="onSubmit()">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="grupo-formulario">
+                                    <label>Nombre: </label>
+                                    <input type="text" class="form-control" id="nombre" [(ngModel)]="usuario.nombre"
+                                        name="nombre" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="grupo-formulario">
+                                    <label>Apellido: </label>
+                                    <input type="text" class="form-control" id="apellido" [(ngModel)]="usuario.apellido"
+                                        name="apellido" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="grupo-formulario">
+                                    <label>Teléfono</label>
+                                    <input type="text" class="form-control" id="telefono" [(ngModel)]="usuario.telefono"
+                                        name="telefono" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="grupo-formulario">
+                                    <label>Nivel de Ínteres</label>
+                                    <select class="form-control" name="interes" id="interes" [(ngModel)]="usuario.nivelInteres" [compareWith]="compararNivelInteres" required>
+                                        <option *ngFor="let nivint of interes" [ngValue]="nivint">{{nivint.nombre}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="grupo-formulario">
+                                    <label>Correo: </label>
+                                    <input type="text" class="form-control" id="username" [(ngModel)]="usuario.username"
+                                        name="username" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-guardar">Guardar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div [ngClass]="active == 'historial' ? 'tab-pane fade show active' : 'tab-pane fade'">
+                <h1 class="text-center">Historial</h1>
+
+                <p>Próximamente</p>
+            </div>
+        </div>
+    </div>
+</div>

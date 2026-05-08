@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthServicio } from '../../../servicios/auth/auth-servicio';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -12,20 +13,29 @@ import { AuthServicio } from '../../../servicios/auth/auth-servicio';
   styleUrls: ['./login.css']
 })
 export class LoginComponent {
-  form={
-    username:'',
-    password:''
+  form = {
+    username: '',
+    password: ''
   }
 
-  error='';
+  error = '';
 
-  constructor(private authServicio: AuthServicio, private router: Router){}
+  constructor(private authServicio: AuthServicio, private router: Router) { }
 
   login() {
     this.authServicio.login(this.form).subscribe({
       next: res => {
         this.authServicio.guardarToken(res.token);
-        this.router.navigate(['/preguntas']);
+        Swal.fire({
+          title: 'Login éxitoso',
+          text: 'Inicio sesión correctamente',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/preguntas']);
+          }
+        })
       },
       error: err => {
         this.error = 'Credenciales incorrectas';

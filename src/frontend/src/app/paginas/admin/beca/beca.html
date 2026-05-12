@@ -1,0 +1,42 @@
+<div class="container">
+    <button class="btn btn-primary" (click)="registrarBeca()">Agregar beca</button>&nbsp;
+    <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>
+    <br><br>
+    <div *ngFor="let car of carreras$ | async">
+        <div class="alpha-header">
+            <h2>{{car.nombre}}</h2>
+        </div>
+        <br>
+        <div class="beca-grid">
+            <div class="row">
+                <div class="col-md-4 mb-4" *ngFor="let be of (car.beca || []).sort((a,b) => a.nombre.localeCompare(b.nombre))">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h2>{{be.nombre}}</h2>
+                            <span class="tipo-beca">{{be.tipoBeca}}</span>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Universidad Nacional</strong></p>
+                            <p><strong>Descripción:</strong> {{be.descripcion}}</p>
+                            <p><strong>Obligación:</strong>{{be.obligacion}}</p>
+                            <p><strong>Requisitos:</strong> {{be.requisito}}</p>
+                            <p><strong>Restricción:</strong>{{be.restriccion}}</p>
+                            <p><strong>Monto/Cobertura:</strong> Matrícula completa, alojamiento y transporte.</p>
+                            <p><strong>Duración:</strong> {{be.duracion}} semestres</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-center">
+                            <button class="btn btn-sm btn-primary" (click)="actualizarBeca(be.id)">Actualizar</button>&nbsp;
+                            <button class="btn btn-sm btn-danger" (click)="eliminarBeca(be.id)">Eliminar</button>&nbsp;
+                            <a href="#" class="btn btn-sm btn-success">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!car.beca || car.beca.length===0">
+            <p class="text-center">No hay becas en esta carrera</p>
+        </div>
+    </div>
+
+</div>

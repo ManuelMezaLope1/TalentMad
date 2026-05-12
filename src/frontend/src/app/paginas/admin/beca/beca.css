@@ -1,0 +1,71 @@
+.beca-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.alpha-header {
+  position: sticky;
+  top: 0;
+  background: #2319ac;
+  color: white;
+  padding: 10px;
+  z-index: 1000;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    width: 350px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+.card-header {
+    background-color: #3498db;
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.tipo-beca {
+    background-color: #2ecc71;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.card-body {
+    padding: 20px;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.card-body p {
+    margin: 10px 0;
+}
+
+.btn {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}

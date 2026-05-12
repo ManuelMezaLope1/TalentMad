@@ -1,0 +1,101 @@
+<div class="col-md-6 offset-md-3">
+    <h3 class="text-center">Edición de Becas</h3>
+    <form (ngSubmit)="onSubmit()" #categoriaForm="ngForm">
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label>Nombre : </label>
+                    <input type="text" class="form-control" id="nombre" [(ngModel)]="beca.nombre" name="nombre" required
+                        pattern="^[A-Z][a-zA-ZáéíóúÁÉÍÓÚÑñ\s,]+$" minlength="4" maxlength="60"
+                        placeholder="Digite su nombre " #nombre="ngModel" />
+                    <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                        <div *ngIf="nombre.errors?.['required']">
+                            Digite su nombre por favor
+                        </div>
+                        <div *ngIf="nombre.errors?.['minlength']">
+                            El nombre tiene que contener como mínimo 4 caracteres
+                        </div>
+                        <div *ngIf="nombre.errors?.['maxlength']">
+                            El nombre tiene que tener como máximo 60 caracteres
+                        </div>
+                        <div *ngIf="nombre.errors?.['pattern']">
+                            El nombre debe tener sólamente letras.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        <label>Duración: </label>
+                        <input type="number" class="form-control" id="duracion" min="1" [(ngModel)]="beca.duracion"
+                            name="duracion" required #duracion="ngModel">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <label>Tipo: </label>
+                    <select class="form-control" name="tiposBec" id="tiposBec" [(ngModel)]="beca.tipoBeca" required
+                        (change)="actualizarTipoBeca($event)">
+                        <option [ngValue]="null">--Seleccione el tipo--</option>
+                        <option *ngFor="let ti of tipos" [ngValue]="ti">{{ti}}</option>
+                    </select>
+                    <input type="hidden" class="form-control" name="tipoBeca" id="tipoBeca" [(ngModel)]="beca.tipoBeca"
+                        required #tipoBeca="ngModel">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Descripción: </label>
+            <input type="text" class="form-control" id="descripcion" [(ngModel)]="beca.descripcion" name="descripcion"
+                required maxlength="200" #descripcion="ngModel">
+            <div class="alert alert-danger" *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+                <div *ngIf="descripcion.errors?.['required']">
+                    Digite la descripción por favor
+                </div>
+                <div *ngIf="descripcion.errors?.['maxlength']">
+                    La descripción tiene que tener como máximo 200 carácteres
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label>Carrera: </label>
+                    <select class="form-control" name="carrera" id="carrera" [(ngModel)]="carreraSeleccionada" required [compareWith]="compararCarrera"
+                        #carrera="ngModel">
+                        <option *ngFor="let car of carreras" [ngValue]=car>{{car.nombre}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label>Obligaciones: </label>
+                    <input type="text" class="form-control" id="obligacion" name="obligacion" [(ngModel)]="beca.obligacion" required #obligacion="ngModel">
+                </div>
+
+                <div class="col">
+                    <label>Requisitos: </label>
+                    <input type="text" class="form-control" id="requisito" name="requisito" [(ngModel)]="beca.requisito" required #requisito="ngModel">
+                </div>
+
+                <div class="col">
+                    <label>Restricciones: </label>
+                    <input type="text" class="form-control" id="restriccion" name="restriccion" [(ngModel)]="beca.restriccion" required #restriccion="ngModel">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Url: </label>
+            <input class="form-control" type="text" id="url" name="url" [(ngModel)]="beca.url" required #url="ngModel">
+        </div>
+
+        <button class="btn btn-success" [disabled]="!categoriaForm.form.valid">Guardar</button>
+    </form>
+</div>

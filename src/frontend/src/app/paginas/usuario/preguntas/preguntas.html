@@ -1,0 +1,40 @@
+<div class="container">
+    <h1 class="text-center">Test Vocacional</h1>
+
+    <div class="row">
+        <div *ngFor="let cate of categoriaPreguntas$ | async" class="categoria-card">
+            <div class="alpha-header">
+                <h2>{{cate.nombre}}</h2>
+            </div>
+            <div *ngFor="let pre of cate.preguntas; let i = index" class="pregunta-card">
+                <h3>{{pre.preguntas}}</h3>
+                <div class="opciones">
+                    <div *ngFor="let resp of pre.respuestas" class="opcion">
+                        <label>
+                            <input type="radio" [name]="pre.preguntas" [value]="resp.nombre"
+                                [(ngModel)]="respuestas[pre.preguntas]" (ngModelChange)="actualizarAlmacen()">
+                            {{resp.nombre}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<h1>Test Vocacional con IA</h1>
+
+    <div>
+        <p>1. Describe qué te gusta hacer:</p>
+        <input type="text" [(ngModel)]="respuestas[0]" (ngModelChange)="actualizarAlmacen()">
+
+        <p>2. ¿Qué actividades haces con tanto gusto que pierdes la noción del tiempo?</p>
+        <input type="text" [(ngModel)]="respuestas[1]" (ngModelChange)="actualizarAlmacen()">
+    </div>
+
+    <br>-->
+
+    <textarea [(ngModel)]="respuestass" rows="5" cols="150"></textarea><br><br>
+
+    <button (click)="enviar()">Obtener recomendación</button>
+
+    <div class="resultado" [innerHTML]="resultadoHtml"></div>
+</div>

@@ -1,0 +1,34 @@
+<div class="col-md-6 offset-md-3">
+    <h3 class="text-center">Registro de Preguntas</h3>
+    <form (ngSubmit)="onSubmit()" #categoriaForm="ngForm">
+        <div class="form-group">
+            <label>Nombre : </label>
+            <input type="text" class="form-control" id="preguntas" [(ngModel)]="pregunta.preguntas" name="preguntas" required
+                pattern="^[¿]?[A-ZÁÉÍÓÚÑ][a-zA-ZáéíóúÁÉÍÓÚÑñ\s¿?]+[?]?$" minlength="4" maxlength="60" placeholder="Digite su nombre " #preguntas="ngModel" />
+            <div class="alert alert-danger" *ngIf="preguntas.invalid && (preguntas.dirty || preguntas.touched)">
+                <div *ngIf="preguntas.errors?.['required']">
+                    Digite su nombre por favor
+                </div>
+                <div *ngIf="preguntas.errors?.['minlength']">
+                    La pregunta tiene que contener como mínimo 4 caracteres
+                </div>
+                <div *ngIf="preguntas.errors?.['maxlength']">
+                    La pregunta tiene que tener como máximo 60 caracteres
+                </div>
+                <div *ngIf="preguntas.errors?.['pattern']">
+                    La pregunta debe tener sólamente letras.
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Categoría</label>
+            <select class="form-control" name="categoriaPreguntas" id="categoriaPreguntas" [(ngModel)]="pregunta.categoriaPreguntas" required>
+                <option [ngValue]="null">--Seleccione la categoría--</option>
+                <option *ngFor="let cat of categorias" [ngValue]="cat">{{cat.nombre}}</option>
+            </select>
+        </div>
+
+        <button class="btn btn-success" [disabled]="!categoriaForm.form.valid">Guardar</button>
+    </form>
+</div>

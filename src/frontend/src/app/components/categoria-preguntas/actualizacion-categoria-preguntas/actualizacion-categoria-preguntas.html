@@ -1,0 +1,26 @@
+<div class="col-md-6 offset-md-3">
+    <h3 class="text-center">Registro de Categorías de Preguntas</h3>
+    <form (ngSubmit)="onSubmit()" #categoriaForm="ngForm">
+        <div class="form-group">
+            <label>Nombre : </label>
+            <input type="text" class="form-control" id="nombre" [(ngModel)]="categoria.nombre" name="nombre" required
+                pattern="^[A-Z][a-zA-ZáéíóúÁÉÍÓÚÑñ\s]+$" minlength="4" maxlength="60" placeholder="Digite su nombre " #nombre="ngModel" />
+            <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                <div *ngIf="nombre.errors?.['required']">
+                    Digite su nombre por favor
+                </div>
+                <div *ngIf="nombre.errors?.['minlength']">
+                    El nombre tiene que contener como mínimo 4 caracteres
+                </div>
+                <div *ngIf="nombre.errors?.['maxlength']">
+                    El nombre tiene que tener como máximo 60 caracteres
+                </div>
+                <div *ngIf="nombre.errors?.['pattern']">
+                    El nombre debe tener sólamente letras.
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-success" [disabled]="!categoriaForm.form.valid">Guardar</button>
+    </form>
+</div>

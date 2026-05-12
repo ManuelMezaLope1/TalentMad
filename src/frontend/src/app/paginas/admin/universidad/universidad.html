@@ -1,0 +1,203 @@
+<div class="container">
+    <h1 class="titulo">Universidades</h1>
+    <button (click)="registrarUniversidad()" class="btn btn-primary">Agregar universidad</button>&nbsp;
+    <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>
+    <br><br>
+    <div *ngFor="let depart of departamentos$ | async">
+        <div>
+            <div class="alpha-header">
+                <h2>{{depart.nombre}}</h2>
+            </div>
+            <br>
+            <div class="universidad-grid">
+                <div class="row">
+                    <div class="col-md-4 mb-3" *ngFor="let uni of depart.universidad?.sort((a,b) => a.nombre.localeCompare(b.nombre))">
+                        <div class="card">
+                            <div class="img-container">
+                                <div *ngIf="uni.nombre.startsWith('Pontificia Universidad Católica del Perú')">
+                                    <img src="pucp.jpg" alt="Imagen de la PUCP">
+                                </div>
+
+                                <div *ngIf="uni.nombre.startsWith('Universidad Andina del Cusco')">
+                                    <img src="uac.jpg" alt="Imagen de la UAC">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Antonio Ruiz de Montoya')">
+                                    <img src="uarm.jpg" alt="Imagen de la UARM">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Católica de Trujillo')">
+                                    <img src="uct.jpg" alt="Imagen de la UCT">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Católica de San Pablo')">
+                                    <img src="ucsp.jpeg" alt="Imagen de la UCSP">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Peruana de Ciencias Aplicadas')">
+                                    <img src="upc.jpeg" alt="Imagen de la UPC">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad César Vallejo')">
+                                    <img src="ucv.jpg" alt="Imagen de la UCV">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Científica del Sur')">
+                                    <img src="ucs.jpeg" alt="">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Continental')">
+                                    <img src="uc.jpg" alt="Imagen de la UC">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad de Ingeniería y Tecnología')">
+                                    <img src="utec.jpg" alt="Imagen de la UTEC">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad de Lima')">
+                                    <img src="ul.jpg" alt="Imagen de la UL">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad de Piura')">
+                                    <img src="up.jpg" alt="Imagen de la UP">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad de San Martín de Porres')">
+                                    <img src="usmp.jpg" alt="Imagen de la USMP">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Esan')">
+                                    <img src="esan.jpg" alt="Imagen de la ESAN">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Peruana Cayetano Heredia')">
+                                    <img src="upch.jpeg" alt="Imagen de la UPCH">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Católica Sedes Sapientiae')">
+                                    <img src="ucss.jpg" alt="Imagen de la UCSS">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Peruana Los Andes')">
+                                    <img src="upla.jpeg" alt="Imagen de la UPLA">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Privada Antenor Orrego')">
+                                    <img src="upao.jpeg" alt="Imagen de la UPAO">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Privada de Tacna')">
+                                    <img src="upt.jpg" alt="Imagen de la UPT">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Privada del Norte')">
+                                    <img src="upn.jpeg" alt="Imagen de la UPN">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Privada San Ignacio de Loyola')">
+                                    <img src="usil.jpg" alt="Imagen de la USIL">
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Tecnológica del Perú')">
+                                    <img src="utp.jpeg" alt="Imagen de la UTP">
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <h3>{{uni.nombre}}</h3>
+                                <p class="precio">Costo Mensual: S/.{{uni.costoMensualMinimo}} -
+                                    S/.{{uni.costoMensualMaximo}}</p>
+                                <span>Tipo: {{uni.tipoUniversidad?.nombre}}</span>
+                            </div>
+
+                            <div class="card-footer d-flex justify-content-center">
+                                <button class="btn btn-primary"
+                                    (click)="actualizarUniversidad(uni.id)">Actualizar</button>&nbsp;
+                                <button class="btn btn-danger"
+                                    (click)="eliminarUniversidad(uni.id)">Eliminar</button>&nbsp;
+
+                                <div *ngIf="uni.nombre.startsWith('Pontificia Universidad Católica del Perú')">
+                                    <a type="button" class="btn btn-success" href="https://www.pucp.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Andina del Cusco')">
+                                    <a type="button" class="btn btn-success" href="https://www.uandina.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Antonio Ruiz de Montoya')">
+                                    <a type="button" class="btn btn-success" href="https://www.uarm.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Católica de Trujillo')">
+                                    <a type="button" class="btn btn-success" href="https://uct.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Católica de San Pablo')">
+                                    <a type="button" class="btn btn-success" href="https://ucsp.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Peruana de Ciencias Aplicadas')">
+                                    <a type="button" class="btn btn-success" href="https://www.upc.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+
+                                <div *ngIf="uni.nombre.startsWith('Universidad César Vallejo')">
+                                    <a type="button" class="btn btn-success" href="https://www.ucv.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Científica del Sur')">
+                                    <a type="button" class="btn btn-success" href="https://www.cientifica.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Continental')">
+                                    <a type="button" class="btn btn-success" href="https://ucontinental.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad de Ingeniería y Tecnología')">
+                                    <a type="button" class="btn btn-success" href="https://utec.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad de Lima')">
+                                    <a type="button" class="btn btn-success" href="https://www.ulima.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad de Piura')">
+                                    <a type="button" class="btn btn-success" href="https://www.udep.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad de San Martín de Porres')">
+                                    <a type="button" class="btn btn-success" href="https://usmp.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Esan')">
+                                    <a type="button" class="btn btn-success" href="https://www.ue.edu.pe/pregrado/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Peruana Cayetano Heredia')">
+                                    <a type="button" class="btn btn-success" href="https://cayetano.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+
+                                <div *ngIf="uni.nombre.startsWith('Universidad Católica Sedes Sapientiae')">
+                                    <a type="button" class="btn btn-success" href="https://www.ucss.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Peruana Los Andes')">
+                                    <a type="button" class="btn btn-success" href="https://upla.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Privada Antenor Orrego')">
+                                    <a type="button" class="btn btn-success" href="https://upao.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Privada de Tacna')">
+                                    <a type="button" class="btn btn-success"
+                                        href="https://portal.upt.edu.pe/site/web/contenido/inicio" target="_blank">Ver
+                                        más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Privada del Norte')">
+                                    <a type="button" class="btn btn-success" href="https://www.upn.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Privada San Ignacio de Loyola')">
+                                    <a type="button" class="btn btn-success" href="https://usil.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad Tecnológica del Perú')">
+                                    <a type="button" class="btn btn-success" href="https://www.utp.edu.pe/"
+                                        target="_blank">Ver más</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!depart.universidad || depart.universidad.length === 0">
+            <p class="text-center">No hay universidades en este departamento</p>
+        </div>
+        <br><br>
+    </div>
+    <br><br>
+
+</div>

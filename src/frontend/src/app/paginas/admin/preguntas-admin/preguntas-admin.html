@@ -1,0 +1,88 @@
+<div class="container">
+    <div>
+        <div class="row">
+            <div class="col-6">
+                <h1>Listado de Categorías de Preguntas</h1>
+            </div>
+
+            <div class="col-2"></div>
+            <div class="col-2"></div>
+
+            <div class="col-2 btn btn-sm-3 d-flex justify-content-end">
+                <button (click)="volverDashboard()" class="btn btn-primary">Dashboard</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-3">
+                <button (click)="registrarCategoriaPregunta()" class="btn btn-primary btm-sm-3">Agregar
+                    categoría</button>
+            </div>
+        </div>
+        <br>
+        <table class="table text-center table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center" scope="col">Nombre</th>
+                    <th class="text-center" scope="col">Preguntas</th>
+                    <th class="text-center" scope="col">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let cate of categoriaPreguntas$ | async">
+                    <td class="align-middle text-center">{{cate.nombre}}</td>
+                    <td class="align-middle text-center">
+                        <div *ngFor="let pre of cate.preguntas">
+                            {{ pre.preguntas }}
+                        </div>
+                    </td>
+
+                    <td class="align-middle text-center">
+                        <button (click)="actualizarCategoriaPregunta(cate.id)" class="btn btn-info">Editar</button>
+                        <button (click)="eliminarCategoriaPregunta(cate.id)" class="btn btn-danger"
+                            style="margin-left : 10px;">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <hr><br>
+    <div>
+        <div class="row">
+            <div class="col-6">
+                <h1>Listado de Preguntas</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-3">
+                <button (click)="registrarPregunta()" class="btn btn-primary btm-sm-3">Agregar pregunta</button>
+            </div>
+        </div>
+        <br>
+        <table class="table text-center table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center" scope="col">Pregunta</th>
+                    <th class="text-center" scope="col">Categoría</th>
+                    <th class="text-center" scope="col">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let pre of preguntas$ | async">
+                    <td class="align-middle text-center">{{pre.preguntas}}</td>
+                    <td class="align-middle text-center">{{pre.categoriaPreguntas?.nombre}}</td>
+
+                    <td class="align-middle text-center">
+                        <button (click)="actualizarPregunta(pre.id)" class="btn btn-info">Editar</button>
+                        <button (click)="eliminarPregunta(pre.id)" class="btn btn-danger"
+                            style="margin-left : 10px;">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

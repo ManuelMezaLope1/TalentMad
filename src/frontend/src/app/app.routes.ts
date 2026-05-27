@@ -4,6 +4,7 @@ import { LoginComponent } from './components/auth/login/login';
 import { Registro } from './components/auth/registro/registro';
 import { AuthGuard } from './guards/auth-guard';
 import { Preguntas } from './paginas/usuario/preguntas/preguntas';
+import { Resultado } from './paginas/usuario/resultado/resultado';
 import { Perfil } from './paginas/usuario/perfil/perfil';
 import { Dashboard } from './paginas/admin/dashboard/dashboard';
 import { PreguntasAdmin } from './paginas/admin/preguntas-admin/preguntas-admin';
@@ -30,6 +31,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: Registro },
   { path: 'preguntas', component: Preguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_USER'] } },
+  { path: 'resultado', component: Resultado, canActivate: [AuthGuard], data: { roles: ['ROLE_USER'] } },
   { path: 'perfil', component: Perfil, canActivate: [AuthGuard], data: { roles: ['ROLE_USER', 'ROLE_ADMIN'] } },
   { path: 'dashboard', component: Dashboard, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'preguntas-admin', component: PreguntasAdmin, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
@@ -57,6 +59,6 @@ export const routes: Routes = [
   { path: 'actualizacion-respuesta/:id', component: ActualizacionRespuesta, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } }
 ];
 
-RouterModule.forRoot(routes, {
+export const routing = RouterModule.forRoot(routes, {
   scrollPositionRestoration: 'enabled'
-})
+});

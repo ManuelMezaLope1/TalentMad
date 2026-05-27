@@ -654,3 +654,27 @@ button:focus-visible {
 .bg-white.rounded-3xl {
   animation: fadeIn 0.4s ease-out;
 }
+
+.bg-purple-600 {
+  background-color: #9333ea !important;
+}
+
+.text-white {
+  color: #ffffff !important;
+}
+
+.bg-gray-200 {
+  background-color: #e5e7eb !important;
+}
+
+.bg-gray-300 {
+  background-color: #d1d5db !important;
+}
+
+.text-gray-700 {
+  color: #374151 !important;
+}
+
+.text-gray-500 {
+  color: #6b7280 !important;
+}

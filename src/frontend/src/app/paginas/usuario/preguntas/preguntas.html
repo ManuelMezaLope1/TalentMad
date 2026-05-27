@@ -5,10 +5,10 @@
     <div class="text-center mb-8">
       <div class="flex items-center justify-center gap-2 mb-4">
         <span class="text-2xl font-bold text-gray-700">
-          Test Vocacional
+          Test Vocacional RIASEC
         </span>
       </div>
-      <p class="text-gray-600">Descubre tu perfil profesional según el modelo Holland</p>
+      <p class="text-gray-600">Responde "Sí" o "No" a cada pregunta para descubrir tu perfil profesional</p>
     </div>
 
     <!-- Loading State -->
@@ -45,8 +45,8 @@
       <!-- Question Card -->
       <div class="bg-white rounded-3xl p-8 shadow-xl mb-6">
         <div class="mb-4 text-center">
-          <span class="text-sm text-gray-500" *ngIf="currentCategory">
-            Pregunta {{ currentQuestionIndex + 1 }} de {{ currentCategory.preguntas?.length || 0 }}
+          <span class="text-sm text-gray-500">
+            Pregunta {{ obtenerNumeroPreguntaGlobal() }} de {{ totalPreguntas }}
             <span *ngIf="categoriaPreguntas.length > 1">
               | Categoría {{ currentCategoryIndex + 1 }} de {{ categoriaPreguntas.length }}
             </span>
@@ -57,40 +57,33 @@
           {{ currentQuestion?.preguntas }}
         </h2>
 
-        <!-- Rating Scale -->
+        <!-- Rating Scale (Sí/No) -->
         <div class="space-y-3 mb-8">
-          <button *ngFor="let value of ratingValues; let i = index"
-            (click)="handleAnswer(value)"
+          <button *ngFor="let opcion of opcionesRespuesta"
+            (click)="handleAnswer(opcion.valor)"
             class="w-full p-4 rounded-xl border-2 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-            [class.border-purple-600]="selectedAnswer === ratingLabels[i]"
-            [class.bg-gradient-to-r]="selectedAnswer === ratingLabels[i]"
-            [class.from-purple-50]="selectedAnswer === ratingLabels[i]"
-            [class.to-blue-50]="selectedAnswer === ratingLabels[i]"
-            [class.shadow-md]="selectedAnswer === ratingLabels[i]"
-            [class.border-gray-200]="selectedAnswer !== ratingLabels[i]"
-            [class.hover:border-purple-300]="selectedAnswer !== ratingLabels[i]"
-            [class.hover:bg-purple-50]="selectedAnswer !== ratingLabels[i]">
+            [class.border-purple-600]="selectedAnswer === opcion.valor"
+            [class.bg-gradient-to-r]="selectedAnswer === opcion.valor"
+            [class.from-purple-50]="selectedAnswer === opcion.valor"
+            [class.to-blue-50]="selectedAnswer === opcion.valor"
+            [class.shadow-md]="selectedAnswer === opcion.valor"
+            [class.border-gray-200]="selectedAnswer !== opcion.valor"
+            [class.hover:border-purple-300]="selectedAnswer !== opcion.valor"
+            [class.hover:bg-purple-50]="selectedAnswer !== opcion.valor">
             
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-4">
                 <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all"
-                  [class.border-purple-600]="selectedAnswer === ratingLabels[i]"
-                  [class.bg-purple-600]="selectedAnswer === ratingLabels[i]"
-                  [class.border-gray-300]="selectedAnswer !== ratingLabels[i]">
-                  <div *ngIf="selectedAnswer === ratingLabels[i]" class="w-3 h-3 bg-white rounded-full"></div>
+                  [class.border-purple-600]="selectedAnswer === opcion.valor"
+                  [class.bg-purple-600]="selectedAnswer === opcion.valor"
+                  [class.border-gray-300]="selectedAnswer !== opcion.valor">
+                  <div *ngIf="selectedAnswer === opcion.valor" class="w-3 h-3 bg-white rounded-full"></div>
                 </div>
-                <span class="font-medium transition-colors"
-                  [class.text-purple-600]="selectedAnswer === ratingLabels[i]"
-                  [class.text-gray-700]="selectedAnswer !== ratingLabels[i]">
-                  {{ ratingLabels[i] }}
+                <span class="font-medium text-xl transition-colors"
+                  [class.text-purple-600]="selectedAnswer === opcion.valor"
+                  [class.text-gray-700]="selectedAnswer !== opcion.valor">
+                  {{ opcion.etiqueta }}
                 </span>
-              </div>
-              <div class="flex gap-1">
-                <div *ngFor="let dot of [].constructor(value)" 
-                  class="w-2 h-2 rounded-full transition-colors"
-                  [class.bg-purple-600]="selectedAnswer === ratingLabels[i]"
-                  [class.bg-gray-300]="selectedAnswer !== ratingLabels[i]">
-                </div>
               </div>
             </div>
           </button>
@@ -99,7 +92,7 @@
         <!-- Navigation Buttons -->
         <div class="flex gap-4">
           <button (click)="handlePrevious()"
-            [disabled]="currentCategoryIndex === 0 && currentQuestionIndex === 0"
+            [disabled]="!puedeIrAtras"
             class="flex items-center gap-2 px-6 py-3 border-2 border-gray-300 rounded-xl font-semibold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -108,7 +101,8 @@
           </button>
           
           <button (click)="handleNext()"
-            class="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all">
+            [disabled]="!puedeIrAdelante"
+            class="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
             {{ (currentCategoryIndex === categoriaPreguntas.length - 1 && 
                currentQuestionIndex === (currentCategory?.preguntas?.length || 0) - 1) ? 'Ver resultados' : 'Siguiente' }}
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,33 +112,29 @@
         </div>
       </div>
 
-      <!-- Quick Navigation -->
-      <div class="bg-white rounded-2xl p-4 shadow-lg" *ngIf="categoriaPreguntas.length > 0">
-        <p class="text-sm font-medium text-gray-700 mb-3 text-center">Navegación rápida</p>
-        <div class="flex flex-wrap justify-center gap-2">
-          <ng-container *ngFor="let categoria of categoriaPreguntas; let catIndex = index">
-            <ng-container *ngFor="let pregunta of categoria.preguntas; let preIndex = index">
-              <button (click)="goToQuestion(catIndex, preIndex)"
-  class="w-8 h-8 rounded-full text-xs font-medium transition-all"
-  [class.bg-purple-600]="catIndex === currentCategoryIndex && preIndex === currentQuestionIndex"
-  [class.text-gray-100]="catIndex === currentCategoryIndex && preIndex === currentQuestionIndex"
-  [class.bg-purple-200]="isQuestionAnswered(catIndex, preIndex) && (catIndex !== currentCategoryIndex || preIndex !== currentQuestionIndex)"
-  [class.bg-gray-200]="!isQuestionAnswered(catIndex, preIndex) && (catIndex !== currentCategoryIndex || preIndex !== currentQuestionIndex)"
-  [class.text-gray-600]="!isQuestionAnswered(catIndex, preIndex)">
-  {{ preIndex + 1 }}
-</button>
-            </ng-container>
-          </ng-container>
+      <!-- Quick Navigation - Solo 5 números (2 anteriores, actual, 2 siguientes) -->
+      <div class="bg-white rounded-2xl p-4 shadow-lg" *ngIf="totalPreguntas > 0">
+        <p class="text-sm font-medium text-gray-700 mb-3 text-center">
+          Pregunta {{ obtenerNumeroPreguntaGlobal() }} de {{ totalPreguntas }}
+        </p>
+        <div class="flex justify-center gap-2">
+          <button *ngFor="let num of mostrarNumerosNavegacion; let idx = index"
+            (click)="irAPreguntaPorNumero(num)"
+            [disabled]="!puedeNavegarANumero(num)"
+            class="w-12 h-12 rounded-full text-base font-medium transition-all"
+            [class.bg-purple-600]="num === obtenerNumeroPreguntaGlobal()"
+            [class.text-white]="num === obtenerNumeroPreguntaGlobal()"
+            [class.bg-green-500]="num !== obtenerNumeroPreguntaGlobal() && estaRespondidaPorNumero(num) && puedeNavegarANumero(num)"
+            [class.bg-gray-200]="num !== obtenerNumeroPreguntaGlobal() && !estaRespondidaPorNumero(num) && puedeNavegarANumero(num)"
+            [class.bg-gray-300]="!puedeNavegarANumero(num)"
+            [class.text-gray-500]="!puedeNavegarANumero(num)"
+            [class.text-gray-700]="num !== obtenerNumeroPreguntaGlobal() && puedeNavegarANumero(num)"
+            [class.cursor-not-allowed]="!puedeNavegarANumero(num)"
+            [class.opacity-50]="!puedeNavegarANumero(num)">
+            {{ num }}
+          </button>
         </div>
       </div>
-    </div>
-
-    <!-- Resultados -->
-    <div *ngIf="resultadoHtml" class="mt-8 bg-white rounded-3xl p-8 shadow-xl">
-      <h3 class="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-        Tus Resultados
-      </h3>
-      <div [innerHTML]="resultadoHtml" class="prose max-w-none"></div>
     </div>
 
     <!-- Mensaje si no hay preguntas -->

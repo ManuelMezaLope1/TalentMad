@@ -38,7 +38,7 @@ public class UsuarioControlador {
         usuarioExistente.setNombre(detallesUsuario.getNombre());
         usuarioExistente.setApellido(detallesUsuario.getApellido());
         usuarioExistente.setTelefono(detallesUsuario.getTelefono());
-        usuarioExistente.setNivelInteres(detallesUsuario.getNivelInteres());
+        usuarioExistente.setDepartamento((detallesUsuario.getDepartamento()));
         usuarioExistente.setUsername(detallesUsuario.getUsername());
 
         Usuario usuarioActualizado=usuarioRepositorio.save(usuarioExistente);

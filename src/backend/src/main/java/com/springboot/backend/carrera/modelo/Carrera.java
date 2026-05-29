@@ -19,7 +19,7 @@ public class Carrera {
     @Column(name="nombre", nullable = false, length=70)
     private String nombre;
 
-    @Column(name="descripcion", nullable = false, length = 200)
+    @Column(name="descripcion", nullable = false, length = 500)
     private String descripcion;
 
     @Column(name="duracion", nullable = false)

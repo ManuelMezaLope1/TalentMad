@@ -3,10 +3,10 @@ import { Router } from '@angular/router';
 import { UsuarioServicio } from '../../../servicios/usuario/usuario-servicio';
 import { tap, catchError, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { NivelinteresServicio } from '../../../servicios/nivelinteres/nivelinteres-servicio';
-import { Interes } from '../../../servicios/nivelinteres/Interes';
+import { FormsModule } from '@angular/forms'
 import Swal from 'sweetalert2';
+import { Departamento } from '../../../servicios/departamento/Departamento';
+import { DepartamentoServicio } from '../../../servicios/departamento/departamento-servicio';
 
 @Component({
   selector: 'app-perfil',
@@ -17,9 +17,9 @@ import Swal from 'sweetalert2';
 export class Perfil {
   usuario: any;
   username: string;
-  interes: Interes[]=[];
+  departamento: Departamento[]=[];
 
-  constructor(private usuarioServicio: UsuarioServicio, private nivelInteresServicio: NivelinteresServicio, private cd: ChangeDetectorRef, private router: Router) { }
+  constructor(private usuarioServicio: UsuarioServicio, private departamentoServicio: DepartamentoServicio, private cd: ChangeDetectorRef, private router: Router) { }
 
   active: string = "informacion";
 
@@ -43,10 +43,13 @@ export class Perfil {
       })
     ).subscribe();
 
-    this.nivelInteresServicio.obtenerListaDeNivelesDeInteres().subscribe(dato => { this.interes = dato });
+    this.departamentoServicio.obtenerListaDeTipoDeDepartamento().subscribe(dato => { 
+      this.departamento = dato 
+      this.cd.detectChanges();
+    });
   }
 
-  compararNivelInteres(c1: any, c2: any): boolean {
+  compararDepartamento(c1: any, c2: any): boolean {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 

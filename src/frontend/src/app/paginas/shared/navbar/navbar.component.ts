@@ -81,4 +81,8 @@ export class NavbarComponent implements OnInit {
     this.authServicio.logout();
     this.router.navigate(['/login']);
   }
+
+  irDashboard(){
+    this.router.navigate(['dashboard']);
+  }
 }

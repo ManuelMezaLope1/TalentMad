@@ -30,7 +30,7 @@ export const routes: Routes = [
   { path: 'inicio', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: Registro },
-  { path: 'preguntas', component: Preguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_USER'] } },
+  { path: 'preguntas', component: Preguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_USER','ROLE_ADMIN'] } },
   { path: 'resultado', component: Resultado, canActivate: [AuthGuard], data: { roles: ['ROLE_USER'] } },
   { path: 'perfil', component: Perfil, canActivate: [AuthGuard], data: { roles: ['ROLE_USER', 'ROLE_ADMIN'] } },
   { path: 'dashboard', component: Dashboard, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },

@@ -16,7 +16,7 @@ public class Pregunta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="preguntas", nullable = false, length=100)
+    @Column(name="preguntas", nullable = false, length=200)
     private String preguntas;
 
     @ManyToOne

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { NivelinteresServicio } from './nivelinteres-servicio';
+import { CarreraBecaServicio } from './carrera-beca-servicio';
 
-describe('NivelinteresServicio', () => {
-  let service: NivelinteresServicio;
+describe('CarreraBecaServicio', () => {
+  let service: CarreraBecaServicio;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(NivelinteresServicio);
+    service = TestBed.inject(CarreraBecaServicio);
   });
 
   it('should be created', () => {

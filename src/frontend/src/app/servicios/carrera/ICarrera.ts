@@ -6,6 +6,7 @@ export class ICarrera{
     descripcion:string;
     duracion:string;
     tipoCarrera:any;
-    universidad:any;
+    universidad:ICarrera[];
+    combinacion:string;
     beca: IBeca[];
 }

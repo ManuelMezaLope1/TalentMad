@@ -18,24 +18,16 @@ import Swal from 'sweetalert2';
 export class ActualizacionCarrera {
   id: number;
   carrera: ICarrera = new ICarrera();
-  universidades: IUniversidad[] = [];
-  universidadSeleccionada: IUniversidad | null = null;
 
-  constructor(private carreraServicio: CarreraServicio, private universidadServicio: UniversidadServicio, private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) { }
+  constructor(private carreraServicio: CarreraServicio, private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
-    this.universidadSeleccionada = this.carrera.universidad;
 
-    this.universidadServicio.obtenerListaDeUniversidad().subscribe(dato => {
-      this.universidades = dato;
+    this.carreraServicio.obtenerCarreraPorId(this.id).subscribe(carrera => {
+      this.carrera = carrera;
 
-      this.carreraServicio.obtenerCarreraPorId(this.id).subscribe(carrera => {
-        this.carrera = carrera;
-        this.universidadSeleccionada = carrera.universidad?.[0] || null;
-
-        this.cd.detectChanges();
-      });
+      this.cd.detectChanges();
     });
   }
 
@@ -44,15 +36,10 @@ export class ActualizacionCarrera {
   }
 
   tipos = [
-    'Arquitectura','Carreras Artísticas', 'Ciencias de la Salud', 'Ciencias Puras',
-    'Ciencias Sociales y Humanidades', 'Comunicaciones', 'Derecho',
-    'Educación', 'Ingeniería', 'Negocios', 'Tecnología'
+    'Administración', 'Arquitectura', 'Arte y Diseño', 'Artes Escénicas', 'Ciencias Básicas', 'Ciencias de la Salud',
+    'Ciencias Económicas', 'Ciencias Sociales', 'Computación', 'Comunicaciones',  'Derecho', 'Educación', 'Gastronomía, Hotelería y Turismo',
+    'Gestión y Alta Dirección', 'Ingeniería', 'Letras y Ciencias Humanas', 'Medicina', 'Negocios', 'Psicología'
   ];
-
-  actualizarTipoCarrera(event: any) {
-    const tipoSeleccionado = event.target.value;
-    this.carrera.tipoCarrera = tipoSeleccionado || '';
-  }
 
   irALaListaDeCarrera() {
     this.router.navigate(['/carrera'])

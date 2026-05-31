@@ -3,7 +3,9 @@ package com.springboot.backend.departamento.modelo;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.springboot.backend.universidad.modelo.Universidad;
+import com.springboot.backend.usuario.modelo.Usuario;
 
 import jakarta.persistence.*;
 
@@ -20,17 +22,23 @@ public class Departamento {
     @OneToMany(mappedBy = "departamento", fetch=FetchType.EAGER)
     private List<Universidad> universidad;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "departamento", fetch=FetchType.EAGER)
+    private List<Usuario> usuario;
+
     public Departamento(){}
 
-    public Departamento(Long id, String nombre, List<Universidad> universidad) {
+    public Departamento(Long id, String nombre, List<Universidad> universidad, List<Usuario> usuario) {
         this.id = id;
         this.nombre = nombre;
         this.universidad = universidad;
+        this.usuario=usuario;
     }
 
-    public Departamento(String nombre, List<Universidad> universidad) {
+    public Departamento(String nombre, List<Universidad> universidad, List<Usuario> usuario) {
         this.nombre = nombre;
         this.universidad = universidad;
+        this.usuario=usuario;
     }
 
     public Long getId() {
@@ -55,6 +63,14 @@ public class Departamento {
 
     public void setUniversidad(List<Universidad> universidad) {
         this.universidad = universidad;
+    }
+
+    public List<Usuario> getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(List<Usuario> usuario) {
+        this.usuario = usuario;
     }
 
     @Override

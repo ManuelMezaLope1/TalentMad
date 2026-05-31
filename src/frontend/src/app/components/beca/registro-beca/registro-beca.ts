@@ -17,24 +17,8 @@ import { CommonModule } from '@angular/common';
 })
 export class RegistroBeca {
   beca: IBeca = new IBeca();
-  carreras: ICarrera[] = [];
-  carreraSeleccionada: ICarrera | null = null;
 
-  constructor(private becaServicio: BecaServicio, private carreraServicio: CarreraServicio, private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) { }
-
-  ngOnInit(): void {
-    this.carreraServicio.obtenerListaDeCarrera().subscribe(dato => {
-      const unique = new Map();
-      dato.forEach(u => {
-        if (!unique.has(u.nombre)) {
-          unique.set(u.nombre, u);
-        }
-      });
-
-      this.carreras = Array.from(unique.values());
-      this.cd.detectChanges();
-    })
-  }
+  constructor(private becaServicio: BecaServicio, private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) { }
 
   tipos = ['Excelencia Académica','Deportiva'];
 
@@ -43,20 +27,12 @@ export class RegistroBeca {
     this.beca.tipoBeca = tipoSeleccionado || '';
   }
 
-  actualizarCarrera(event: any) {
-    this.carreraSeleccionada = event.target.value;
-    this.beca.carrera = this.carreraSeleccionada ? (this.carreraSeleccionada) : [];
-  }
-
   guardarBeca() {
-    this.beca.carrera = this.carreraSeleccionada ? [this.carreraSeleccionada] : [];
-
     this.becaServicio.registrarBeca(this.beca).pipe(
       tap(dato => {
         this.irALaListaDeBecas();
       }),
       catchError(err => {
-        console.log(this.beca);
         console.log("ERROR COMPLETO:", err);
         console.log("STATUS:", err.status);
         console.log("BODY:", err.error);

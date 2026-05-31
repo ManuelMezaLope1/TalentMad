@@ -56,9 +56,9 @@
 
                             <div class="col-md-6">
                                 <div class="grupo-formulario">
-                                    <label>Nivel de Ínteres</label>
-                                    <select class="form-control" name="interes" id="interes" [(ngModel)]="usuario.nivelInteres" [compareWith]="compararNivelInteres" required>
-                                        <option *ngFor="let nivint of interes" [ngValue]="nivint">{{nivint.nombre}}</option>
+                                    <label>Departamento</label>
+                                    <select class="form-control" name="departamento" id="departamento" [(ngModel)]="usuario.departamento" [compareWith]="compararDepartamento" required>
+                                        <option *ngFor="let dep of departamento" [ngValue]="dep">{{dep.nombre}}</option>
                                     </select>
                                 </div>
                             </div>

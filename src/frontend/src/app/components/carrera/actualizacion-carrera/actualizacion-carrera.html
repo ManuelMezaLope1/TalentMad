@@ -4,7 +4,7 @@
         <div class="form-group">
             <label>Nombre : </label>
             <input type="text" class="form-control" id="nombre" [(ngModel)]="carrera.nombre" name="nombre" required
-                pattern="^[A-Z][a-zA-ZáéíóúÁÉÍÓÚÑñ\s]+$" minlength="4" maxlength="60" placeholder="Digite su nombre " #nombre="ngModel" />
+                pattern="^[A-Z][a-zA-ZáéíóúÁÉÍÓÚÑñü,\s]+$" minlength="4" maxlength="60" placeholder="Digite su nombre " #nombre="ngModel" />
             <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
                 <div *ngIf="nombre.errors?.['required']">
                     Digite su nombre por favor
@@ -24,13 +24,13 @@
         <div class="form-group">
             <label>Descripción: </label>
             <input type="text" class="form-control" id="descripcion" [(ngModel)]="carrera.descripcion" name="descripcion" required
-                maxlength="200" #descripcion="ngModel">
+                maxlength="500" #descripcion="ngModel">
             <div class="alert alert-danger" *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
                 <div *ngIf="descripcion.errors?.['required']">
                     Digite la descripción por favor
                 </div>
                 <div *ngIf="descripcion.errors?.['maxlength']">
-                    La descripción tiene que tener como máximo 200 carácteres
+                    La descripción tiene que tener como máximo 500 carácteres
                 </div>
             </div>
         </div>
@@ -42,17 +42,15 @@
 
         <div class="form-group">
             <label>Tipo: </label>
-            <select class="form-control" name="tiposCarre" id="tiposCarre" [(ngModel)]="carrera.tipoCarrera" required (change)="actualizarTipoCarrera($event)">
+            <select class="form-control" name="tiposCarre" id="tiposCarre" [(ngModel)]="carrera.tipoCarrera" required>
                 <option *ngFor="let ti of tipos" [ngValue]="ti">{{ti}}</option>
             </select>
             <input type="hidden" class="form-control" name="tipoCarrera" id="tipoCarrera" [(ngModel)]="carrera.tipoCarrera" required #tipoCarrera="ngModel">
         </div>
 
         <div class="form-group">
-            <label>Universidad: </label>
-            <select class="form-control" name="universidad" id="universidad"[(ngModel)]="universidadSeleccionada" required #universidad="ngModel" [compareWith]="compararUniversidad">
-                <option *ngFor="let uni of universidades"[ngValue]=uni>{{uni.nombre}}</option>
-            </select>
+            <label>Combinación: </label>
+            <input type="text" class="form-control" name="combinacion" id="combinacion" [(ngModel)]="carrera.combinacion" required #combinacion="ngModel">
         </div>
 
         <button class="btn btn-success" [disabled]="!categoriaForm.form.valid">Guardar</button>

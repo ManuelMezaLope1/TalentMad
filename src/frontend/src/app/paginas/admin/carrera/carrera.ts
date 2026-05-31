@@ -26,7 +26,13 @@ export class Carrera {
   universidades$!: Observable<IUniversidad[]>;
 
   ngOnInit(): void {
-    this.carreras$ = this.carreraServicio.obtenerListaDeCarrera();
+    this.carreras$ = this.carreraServicio.obtenerListaDeCarrera().pipe(
+      map(carreras=>
+        carreras.sort((a,b,)=>
+        a.nombre.localeCompare(b.nombre))
+      )
+    );
+    
     this.universidades$ = this.universidadServicio.obtenerListaDeUniversidad().pipe(
       map(universidades =>
         universidades.sort((a, b) =>

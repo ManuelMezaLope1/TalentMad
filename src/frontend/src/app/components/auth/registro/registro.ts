@@ -1,26 +1,28 @@
-import { Component } from '@angular/core';
-import { NivelinteresServicio } from '../../../servicios/nivelinteres/nivelinteres-servicio';
-import { Interes } from '../../../servicios/nivelinteres/Interes';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { DepartamentoServicio } from '../../../servicios/departamento/departamento-servicio';
+import { Departamento } from '../../../servicios/departamento/Departamento';
 
 @Component({
   selector: 'app-registro',
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './registro.html',
   styleUrl: './registro.css',
 })
 export class Registro {
-  niveles: Interes[]=[];
+  departamentos: Departamento[] = [];
+  departamento: number | null = null;
 
-  constructor(private nivelInteresServicio: NivelinteresServicio,private http: HttpClient, private router: Router){}
+  constructor(private departamentoServicio: DepartamentoServicio,private http: HttpClient, private router: Router, private cd: ChangeDetectorRef){}
 
   ngOnInit(): void{
-    this.nivelInteresServicio.obtenerListaDeNivelesDeInteres().subscribe(dato=>{
-      this.niveles=dato;
+    this.departamentoServicio.obtenerListaDeTipoDeDepartamento().subscribe(dato=>{
+      this.departamentos=dato;
+      this.cd.detectChanges();
     })
   }
 
@@ -29,34 +31,16 @@ export class Registro {
   username:string='';
   password:string='';
   telefono:string='';
-  interesId:string='';
-
-  /*formulario=new FormGroup({
-    nombre: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]),
-    apellido: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]),
-    telefono: new FormControl('', [Validators.required, Validators.pattern('^9[0-9]{8}$')]),
-    username: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@gmail\\.com$')]),
-    password: new FormControl('', Validators.required)
-  })*/
 
   registro(){
     const usuario={
       nombre:this.nombre,
       apellido:this.apellido,
       telefono:this.telefono,
-      interesId:{id:this.interesId},
+      departamento:this.departamento,
       username:this.username,
       password:this.password
     };
-
-    /*if(this.formulario.invalid){
-      Swal.fire({
-        icon:'error',
-        title:'Oops...',
-        text: 'Complete correctamente el formulario'
-      });
-      return;
-    }*/
 
     this.http.post('http://localhost:8080/auth/registro',usuario).subscribe({
       next:()=>{
@@ -65,9 +49,11 @@ export class Registro {
         this.nombre='';
         this.apellido='';
         this.telefono='';
-        this.interesId='';
+        this.departamento=null;
         this.username='';
         this.password='';
+
+        console.log(usuario);
 
         this.router.navigate(['/login']);
       },

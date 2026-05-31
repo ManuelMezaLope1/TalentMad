@@ -38,6 +38,11 @@ export class LoginComponent {
         })
       },
       error: err => {
+        Swal.fire({
+          title: 'Oops...',
+          text: 'Usuario o contraseña incorrecto',
+          icon: 'warning',
+        })
         this.error = 'Credenciales incorrectas';
       }
     });

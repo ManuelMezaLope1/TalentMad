@@ -19,7 +19,7 @@ public class Carrera {
     @Column(name="nombre", nullable = false, length=70)
     private String nombre;
 
-    @Column(name="descripcion", nullable = false, length = 200)
+    @Column(name="descripcion", nullable = false, length = 500)
     private String descripcion;
 
     @Column(name="duracion", nullable = false)
@@ -41,10 +41,13 @@ public class Carrera {
     @JsonIgnoreProperties({"carrera"})
     private List<Beca> beca;
 
+    @Column(name="combinacion", nullable = false)
+    private String combinacion;
+
     public Carrera(){}
 
     public Carrera(Long id, String nombre, String descripcion, Integer duracion, String tipoCarrera,
-            List<Universidad> universidad, List<Beca> beca) {
+            List<Universidad> universidad, List<Beca> beca, String combinacion) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -52,16 +55,18 @@ public class Carrera {
         this.tipoCarrera = tipoCarrera;
         this.universidad = universidad;
         this.beca = beca;
+        this.combinacion=combinacion;
     }
 
     public Carrera(String nombre, String descripcion, Integer duracion, String tipoCarrera,
-            List<Universidad> universidad, List<Beca> beca) {
+            List<Universidad> universidad, List<Beca> beca, String combinacion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
         this.tipoCarrera = tipoCarrera;
         this.universidad = universidad;
         this.beca = beca;
+        this.combinacion=combinacion;
     }
     
     public Long getId() {
@@ -118,6 +123,14 @@ public class Carrera {
 
     public void setBeca(List<Beca> beca) {
         this.beca = beca;
+    }
+
+    public String getCombinacion() {
+        return combinacion;
+    }
+
+    public void setCombinacion(String combinacion) {
+        this.combinacion = combinacion;
     }
 
     @Override

@@ -24,14 +24,16 @@ import { ActualizacionBeca } from './components/beca/actualizacion-beca/actualiz
 import { RegistroRespuesta } from './components/respuesta/registro-respuesta/registro-respuesta';
 import { ActualizacionRespuesta } from './components/respuesta/actualizacion-respuesta/actualizacion-respuesta';
 import { Respuesta } from './paginas/admin/respuesta/respuesta';
+import { UniversidadCarrera } from './paginas/admin/universidad-carrera/universidad-carrera';
+import { CarreraBeca } from './paginas/admin/carrera-beca/carrera-beca';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
   { path: 'inicio', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: Registro },
-  { path: 'preguntas', component: Preguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_USER'] } },
-  { path: 'resultado', component: Resultado, canActivate: [AuthGuard], data: { roles: ['ROLE_USER'] } },
+  { path: 'preguntas', component: Preguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_USER','ROLE_ADMIN'] } },
+  { path: 'resultado', component: Resultado, canActivate: [AuthGuard], data: { roles: ['ROLE_USER', 'ROLE_ADMIN'] } },
   { path: 'perfil', component: Perfil, canActivate: [AuthGuard], data: { roles: ['ROLE_USER', 'ROLE_ADMIN'] } },
   { path: 'dashboard', component: Dashboard, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'preguntas-admin', component: PreguntasAdmin, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
@@ -39,6 +41,8 @@ export const routes: Routes = [
   { path: 'carrera', component: Carrera, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'beca', component: Beca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'respuesta', component: Respuesta, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'universidad-carrera', component: UniversidadCarrera, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'carrera-beca', component: CarreraBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
 
   { path: 'creacion-categoria-preguntas', component: RegistroCategoriaPreguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'actualizacion-categoria-preguntas/:id', component: ActualizacionCategoriaPreguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },

@@ -24,8 +24,8 @@ public class Beca {
     @Column(name="duracion", nullable = false)
     private Integer duracion;
 
-    @Column(name="obligacion", nullable = false, length=500)
-    private String obligacion;
+    @Column(name="beneficio", nullable = false, length=500)
+    private String beneficio;
 
     @Column(name="requisito", nullable = false, length=500)
     private String requisito;
@@ -50,13 +50,13 @@ public class Beca {
 
     public Beca(){}
 
-    public Beca(Long id, String nombre, String descripcion, Integer duracion, String obligacion, String requisito,
+    public Beca(Long id, String nombre, String descripcion, Integer duracion, String beneficio, String requisito,
             String restriccion, String url, String tipoBeca, List<Carrera> carrera) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
-        this.obligacion = obligacion;
+        this.beneficio = beneficio;
         this.requisito = requisito;
         this.restriccion = restriccion;
         this.url = url;
@@ -64,12 +64,12 @@ public class Beca {
         this.carrera = carrera;
     }
 
-    public Beca(String nombre, String descripcion, Integer duracion, String obligacion, String requisito,
+    public Beca(String nombre, String descripcion, Integer duracion, String beneficio, String requisito,
             String restriccion, String url, String tipoBeca, List<Carrera> carrera) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
-        this.obligacion = obligacion;
+        this.beneficio = beneficio;
         this.requisito = requisito;
         this.restriccion = restriccion;
         this.url = url;
@@ -109,12 +109,12 @@ public class Beca {
         this.duracion = duracion;
     }
 
-    public String getObligacion() {
-        return obligacion;
+    public String getBeneficio() {
+        return beneficio;
     }
 
-    public void setObligacion(String obligacion) {
-        this.obligacion = obligacion;
+    public void setBeneficio(String beneficio) {
+        this.beneficio = beneficio;
     }
 
     public String getRequisito() {

@@ -50,6 +50,7 @@ public class CarreraControlador {
         carreraExistente.setDuracion(detallesCarrera.getDuracion());
         carreraExistente.setTipoCarrera(detallesCarrera.getTipoCarrera());
         carreraExistente.setUniversidad(detallesCarrera.getUniversidad());
+        carreraExistente.setCombinacion(detallesCarrera.getCombinacion());
 
         Carrera carreraActualizada=carreraRepositorio.save(carreraExistente);
 

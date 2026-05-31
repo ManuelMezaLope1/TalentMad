@@ -18,30 +18,16 @@ import { tap, catchError, of } from 'rxjs';
 export class ActualizacionBeca {
   id: number;
   beca: IBeca = new IBeca();
-  carreras: ICarrera[] = [];
-  carreraSeleccionada: ICarrera | null = null;
 
-  constructor(private becaServicio: BecaServicio, private carreraServicio: CarreraServicio, private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) { }
+  constructor(private becaServicio: BecaServicio, private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
 
-    this.carreraSeleccionada = this.beca.carrera;
-
-    this.carreraServicio.obtenerListaDeCarrera().subscribe(dato => {
-      this.carreras = dato;
-
-      this.becaServicio.obtenerBecaPorId(this.id).subscribe(beca => {
-        this.beca = beca;
-        this.carreraSeleccionada = beca.carrera?.[0] || null;
-
-        this.cd.detectChanges();
-      })
+    this.becaServicio.obtenerBecaPorId(this.id).subscribe(beca => {
+      this.beca = beca;
+      this.cd.detectChanges();
     })
-  }
-
-  compararCarrera(c1: any, c2: any): boolean {
-    return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 
   tipos = ['Excelencia Académica', 'Deportiva'];

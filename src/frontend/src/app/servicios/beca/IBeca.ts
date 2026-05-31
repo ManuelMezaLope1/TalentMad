@@ -3,7 +3,7 @@ export class IBeca{
     nombre: string;
     descripcion: string;
     duracion:string;
-    obligacion:string;
+    beneficio:string;
     requisito:string;
     restriccion:string;
     url:string;

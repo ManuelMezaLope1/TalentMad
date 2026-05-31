@@ -1,0 +1,153 @@
+<br>
+<div class="container">
+    <div class="">
+        <h1 class="text-center">Registro de Carreras y Universidades</h1>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col">
+            <br>
+            <label class="form-label">Seleccione una universidad</label>
+            <select class="form-control" name="universidad" id="universidad" [(ngModel)]="universidadSeleccionada">
+                <option [ngValue]="null">--Seleccione una universidad--</option>
+                <option *ngFor="let uni of universidades$ | async" [ngValue]="uni">{{uni.nombre}}</option>
+            </select>
+            <br>
+            <div *ngIf="universidadSeleccionada">
+                <div class="universidad-card">
+                    <div class="universidad-header">🎓 Universidad Recomendada</div>
+
+                    <div class="universidad-body" style="height: 50vh;">
+                        <h3 class="universidad-nombre">{{universidadSeleccionada.nombre}}</h3>
+
+                        <div class="ubicacion">📍 {{universidadSeleccionada.departamento.nombre}}</div>
+
+                        <div class="costo-box">
+                            <span class="costo-label">Costo mensual</span>
+                            <span class="costo">S/. {{universidadSeleccionada.costoMensualMinimo}} - S/.
+                                {{universidadSeleccionada.costoMensualMaximo}}</span>
+                        </div>
+
+                        <button class="btn-ver">Ver más información</button>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="btn btn-success w-100" (click)="agregarUniversidad()">Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="!universidadSeleccionada">
+                <div class="universidad-vacia">
+                    <div class="icono">🎓</div>
+                    <h4>Ninguna universidad seleccionada</h4>
+                    <p>Selecciona una universidad de la lista para visualizar su información, descripción y costos.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <br>
+            <label class="form-label">Seleccione una carrera</label>
+            <select class="form-control" name="carrera" id="carrera" [(ngModel)]="carreraSeleccionada">
+                <option [ngValue]="null">--Seleccione una carrera--</option>
+                <option *ngFor="let car of carreras$ | async" [ngValue]="car">{{car.nombre}}</option>
+            </select>
+            <br>
+            <div class="carrera-card" *ngIf="carreraSeleccionada">
+                <div class="carrera-header">💼 Carrera Recomendada</div>
+
+                <div class="carrera-body" style="height: 50vh;">
+                    <h3 class="carrera-titulo">{{carreraSeleccionada.nombre}} - {{carreraSeleccionada.id}}</h3>
+                    <p class="carrera-descripcion" style="height: 20vh;">{{carreraSeleccionada.descripcion}}</p>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">⏳ Duración</span>
+                            <span class="valor">{{carreraSeleccionada.duracion}}</span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="label">🎓 Tipo</span>
+                            <span class="valor">{{carreraSeleccionada.tipoCarrera}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button class="btn btn-success w-100" (click)="agregarCarrera()">Agregar</button>
+                </div>
+            </div>
+
+            <div class="carrera-vacia" *ngIf="!carreraSeleccionada">
+                <div class="icono">📚</div>
+                <h4>Ninguna carrera seleccionada</h4>
+                <p>Elige una carrera para visualizar su descripción, duración y tipo de formación.</p>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <h1 class="text-center">Relación</h1>
+    <br>
+    <div class="row">
+        <div class="col" *ngIf="universidadAgregada" style="width: 100%;">
+            <div class="universidad-card">
+                <div class="universidad-header">🎓 Universidad Recomendada</div>
+
+                <div class="universidad-body" style="height: 33vh;">
+                    <h3 class="universidad-nombre">{{universidadAgregada.nombre}}</h3>
+
+                    <div class="ubicacion">📍 {{universidadAgregada.departamento}}</div>
+
+                    <div class="costo-box">
+                        <span class="costo-label">Costo mensual</span>
+                        <span class="costo">S/. {{universidadAgregada.costoMensualMinimo}} - S/.
+                            {{universidadAgregada.costoMensualMaximo}}</span>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+        <div class="carrera-grid">
+            <div class="carrera-card" *ngFor="let item of carreraAgregada; let i = index">
+                <div class="carrera-header">💼 Carrera Recomendada</div>
+
+                <div class="carrera-body" style="height: 60vh;">
+                    <h3 class="carrera-titulo">{{item.nombre}} - {{item.id}}</h3>
+                    <p class="carrera-descripcion" style="height: 20vh;">{{item.descripcion}}</p>
+                    <br>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">⏳ Duración</span>
+                            <span class="valor">{{item.duracion}}</span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="label">🎓 Tipo</span>
+                            <span class="valor">{{item.tipoCarrera}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button class="btn btn-danger" (click)="quitarCarrera(i)">Eliminar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12" *ngIf="!universidadAgregada || !carreraAgregada">
+            <div class="seleccion-vacia">
+                <div class="icono">🎯</div>
+                <h4>Sin resultados seleccionados</h4>
+                <p>Selecciona al menos una universidad o una carrera para visualizar la información recomendada.</p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <hr>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-success" (click)="guardarRelaciones()">Registrar</button>
+    </div>
+</div>

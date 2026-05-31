@@ -17,24 +17,15 @@ import Swal from 'sweetalert2';
 })
 export class RegistroCarrera {
   carrera: ICarrera = new ICarrera();
-  universidades: IUniversidad[] = [];
-  universidadSeleccionada: IUniversidad | null = null;
 
-  constructor(private carreraServicio: CarreraServicio, private universidadServicio: UniversidadServicio, private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) {
+  constructor(private carreraServicio: CarreraServicio, private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) {
     this.carrera.universidad = [];
   }
 
-  ngOnInit(): void {
-    this.universidadServicio.obtenerListaDeUniversidad().subscribe(dato => {
-      this.universidades = dato;
-      this.cd.detectChanges();
-    })
-  }
-
   tipos = [
-    'Arquitectura','Carreras Artísticas', 'Ciencias de la Salud', 'Ciencias Puras',
-    'Ciencias Sociales y Humanidades', 'Comunicaciones', 'Derecho',
-    'Educación', 'Ingeniería', 'Negocios', 'Tecnología'
+    'Administración', 'Arquitectura','Arte y Diseño','Artes Escénicas', 'Ciencias Básicas', 'Ciencias de la Salud', 
+    'Ciencias Económicas', 'Ciencias Sociales', 'Computación', 'Comunicaciones','Derecho', 'Educación', 'Gastronomía, Hotelería y Turismo', 
+    'Gestión y Alta Dirección', 'Ingeniería', 'Letras y Ciencias Humanas', 'Medicina', 'Negocios', 'Psicología'
   ];
 
   actualizarTipoCarrera(event: any) {
@@ -42,20 +33,12 @@ export class RegistroCarrera {
     this.carrera.tipoCarrera = tipoSeleccionado || '';
   }
 
-  actualizarUniversidad(event: any) {
-    this.universidadSeleccionada = event.target.value;
-    this.carrera.universidad = this.universidadSeleccionada ? [this.universidadSeleccionada] : [];
-  }
-
   guardarCarrera() {
-    this.carrera.universidad = this.universidadSeleccionada ? [this.universidadSeleccionada] : [];
-
     this.carreraServicio.registrarCarrera(this.carrera).pipe(
       tap(dato => {
         this.irALaListaDeCarreras();
       }),
       catchError(err => {
-        console.log(this.carrera);
         console.log("ERROR COMPLETO:", err);
         console.log("STATUS:", err.status);
         console.log("BODY:", err.error);

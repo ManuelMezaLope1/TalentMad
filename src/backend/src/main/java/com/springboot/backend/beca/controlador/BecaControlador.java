@@ -49,7 +49,7 @@ public class BecaControlador {
         becaExistente.setNombre(detallesBeca.getNombre());
         becaExistente.setDescripcion(detallesBeca.getDescripcion());
         becaExistente.setDuracion(detallesBeca.getDuracion());;
-        becaExistente.setObligacion(detallesBeca.getObligacion());
+        becaExistente.setBeneficio(detallesBeca.getBeneficio());
         becaExistente.setRequisito(detallesBeca.getRequisito());
         becaExistente.setRestriccion(detallesBeca.getRestriccion());
         becaExistente.setUrl(detallesBeca.getUrl());

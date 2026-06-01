@@ -1,0 +1,207 @@
+<br>
+<div class="container">
+    <div class="">
+        <h1 class="text-center">Registro de Carreras y Becas</h1>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <br>
+            <label class="form-label">Seleccione una carrera</label>
+            <select class="form-control" name="carrera" id="carrera" [(ngModel)]="carreraSeleccionada">
+                <option [ngValue]="null">--Seleccione una carrera--</option>
+                <option *ngFor="let car of carreras$ | async" [ngValue]="car">{{car.nombre}}</option>
+            </select>
+            <br>
+            <div class="carrera-card" *ngIf="carreraSeleccionada">
+                <div class="carrera-header">💼 Carrera Recomendada</div>
+
+                <div class="carrera-body" style="height: 50vh;">
+                    <h3 class="carrera-titulo">{{carreraSeleccionada.nombre}} - {{carreraSeleccionada.id}}</h3>
+                    <p class="carrera-descripcion" style="height: 20vh;">{{carreraSeleccionada.descripcion}}</p>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">⏳ Duración</span>
+                            <span class="valor">{{carreraSeleccionada.duracion}}</span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="label">🎓 Tipo</span>
+                            <span class="valor">{{carreraSeleccionada.tipoCarrera}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button class="btn btn-success w-100" (click)="agregarCarrera()">Agregar</button>
+                </div>
+            </div>
+
+            <div class="carrera-vacia" *ngIf="!carreraSeleccionada">
+                <div class="icono">📚</div>
+                <h4>Ninguna carrera seleccionada</h4>
+                <p>Elige una carrera para visualizar su descripción, duración y tipo de formación.</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <br>
+            <label class="form-label">Seleccione una beca</label>
+            <select class="form-control" name="beca" id="beca" [(ngModel)]="becaSeleccionada">
+                <option [ngValue]="null">--Seleccione una beca--</option>
+                <option *ngFor="let be of becas$ | async" [ngValue]="be">{{be.nombre}}</option>
+            </select>
+            <br>
+            <div class="beca-detalle-card" *ngIf="becaSeleccionada">
+                <div class="beca-detalle-header">🎓 Beca Seleccionada</div>
+                <div class="beca-detalle-body">
+                    <h3 class="beca-titulo">{{becaSeleccionada.nombre}}</h3>
+                    <p class="beca-descripcion">{{becaSeleccionada.descripcion}}</p>
+
+                    <div class="info-beca">
+                        <div class="info-item">
+                            <span class="info-label">⏳ Duración</span>
+                            <span class="info-value">
+                                {{becaSeleccionada.duracion}} semestres
+                            </span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">💰 Beneficio</span>
+                            <span class="info-value">
+                                <ul class="lista">
+                                    <li *ngFor="let beneficio of becaSeleccionada.beneficio.split(',')"
+                                        [class.completo]="beneficio.trim().length > 30">
+                                        ✅ {{ beneficio.trim() }}
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">✅ Requisitos</span>
+                            <span class="info-value">
+                                <ul class="lista">
+                                    <li *ngFor="let requisito of becaSeleccionada.requisito.split(',')">
+                                        ✅ {{ requisito.trim() }}
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">⚠ Restricciones</span>
+                            <span class="info-value">
+                                <ul class="lista">
+                                    <li *ngFor="let restriccion of becaSeleccionada.restriccion.split(',')">
+                                        ✅ {{ restriccion.trim() }}
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="acciones">
+                        <button class="btn btn-success flex-fill" (click)="agregarBeca()">Agregar</button>
+                        <a [href]="becaSeleccionada.url" target="_blank" class="btn btn-primary flex-fill">Ver
+                            más</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estado vacío -->
+            <div class="beca-vacia" *ngIf="!becaSeleccionada">
+                <div class="icono">🎓</div>
+                <h4>Ninguna beca seleccionada</h4>
+
+                <p>Selecciona una beca de la lista para visualizar su información, beneficios y requisitos.</p>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <h1 class="text-center">Relación</h1>
+    <br>
+    <div class="row">
+        <div class="carrera-card" *ngIf="carreraAgregada">
+            <div class="carrera-header">💼 Carrera Recomendada</div>
+
+            <div class="carrera-body">
+                <h3 class="carrera-titulo">{{carreraAgregada.nombre}}</h3>
+                <p class="carrera-descripcion">{{carreraAgregada.descripcion}}</p>
+                <br>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">⏳ Duración</span>
+                        <span class="valor">{{carreraAgregada.duracion}}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="label">🎓 Tipo</span>
+                        <span class="valor">{{carreraAgregada.tipoCarrera}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="beca-grid">
+            <div class="beca-detalle-card" *ngFor="let item of becaAgregada; let i=index">
+                <div class="beca-detalle-header">🎓 Beca Seleccionada</div>
+                <div class="beca-detalle-body">
+                    <h3 class="beca-titulo">{{item.nombre}}</h3>
+                    <p class="beca-descripcion">{{item.descripcion}}</p>
+
+                    <div class="info-beca">
+                        <div class="info-item">
+                            <span class="info-label">⏳ Duración</span>
+                            <span class="info-value">
+                                {{item.duracion}} semestres
+                            </span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">💰 Beneficio</span>
+                            <span class="info-value">
+                                <ul class="lista">
+                                    <li *ngFor="let beneficio of item.beneficio.split(',')"
+                                        [class.completo]="beneficio.trim().length > 30">
+                                        ✅ {{ beneficio.trim() }}
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">✅ Requisitos</span>
+                            <span class="info-value">
+                                <ul class="lista">
+                                    <li *ngFor="let requisito of item.requisito.split(',')">
+                                        ✅ {{ requisito.trim() }}
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">⚠ Restricciones</span>
+                            <span class="info-value">
+                                <ul class="lista">
+                                    <li *ngFor="let restriccion of item.restriccion.split(',')">
+                                        ✅ {{ restriccion.trim() }}
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <hr>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-success" (click)="guardarRelaciones()">Registrar</button>
+    </div>
+</div>

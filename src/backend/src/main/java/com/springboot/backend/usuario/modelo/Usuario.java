@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.springboot.backend.nivelinteres.modelo.NivelInteres;
+import com.springboot.backend.departamento.modelo.Departamento;
 import com.springboot.backend.rol.modelo.Rol;
 
 import jakarta.persistence.Entity;
@@ -28,11 +28,6 @@ public class Usuario {
     private String apellido;
     private String telefono;
 
-    @ManyToOne
-    @JoinColumn(name="nivelinteres_id")
-    @JsonIgnoreProperties({"usuario"})
-    private NivelInteres nivelInteres;
-
     @ManyToMany
     @JoinTable(
         name = "usuario_rol", 
@@ -42,30 +37,35 @@ public class Usuario {
     @JsonIgnoreProperties({"usuario"})
     private List<Rol> roles;
 
+    @ManyToOne
+    @JoinColumn(name="departamento_id")
+    @JsonIgnoreProperties({"usuario"})
+    private Departamento departamento;
+
     private String username;
     private String password;
 
     public Usuario(){}
 
-    public Usuario(Long id, String nombre, String apellido, String telefono, NivelInteres nivelInteres, List<Rol> roles,
+    public Usuario(Long id, String nombre, String apellido, String telefono, List<Rol> roles, Departamento departamento,
             String username, String password) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
-        this.nivelInteres = nivelInteres;
         this.roles = roles;
+        this.departamento = departamento;
         this.username = username;
         this.password = password;
     }
 
-    public Usuario(String nombre, String apellido, String telefono, NivelInteres nivelInteres, List<Rol> roles,
+    public Usuario(String nombre, String apellido, String telefono, List<Rol> roles, Departamento departamento,
             String username, String password) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
-        this.nivelInteres = nivelInteres;
         this.roles = roles;
+        this.departamento = departamento;
         this.username = username;
         this.password = password;
     }
@@ -102,20 +102,20 @@ public class Usuario {
         this.telefono = telefono;
     }
 
-    public NivelInteres getNivelInteres() {
-        return nivelInteres;
-    }
-
-    public void setNivelInteres(NivelInteres nivelInteres) {
-        this.nivelInteres = nivelInteres;
-    }
-
     public List<Rol> getRoles() {
         return roles;
     }
 
     public void setRoles(List<Rol> roles) {
         this.roles = roles;
+    }
+
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
     }
 
     public String getUsername() {

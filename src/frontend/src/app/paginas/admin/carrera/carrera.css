@@ -1,0 +1,35 @@
+.carrera-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.alpha-header {
+  position: sticky;
+  top: 0;
+  background: #2319ac;
+  color: white;
+  padding: 10px;
+  z-index: 1000;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+
+.card {
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.badge {
+  font-size: 0.85rem;
+}

@@ -1,0 +1,51 @@
+<div class="container">
+    <button class="btn btn-primary" (click)="registrarBeca()">Agregar beca</button>&nbsp;
+    <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>
+    <br><br>
+
+    <div class="beca-grid">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4" *ngFor="let be of becas$ | async">
+                <div class="beca-card h-100">
+                    <div class="beca-header">
+                        <h4>{{be.nombre}}</h4>
+                        <br>
+                        <div class="beca-badge">🎓 {{be.tipoBeca}}</div>
+                    </div>
+
+                    <div class="beca-body">
+                        <div class="detalle">
+                            <span class="label">📖 Descripción</span>
+                            <p>{{be.descripcion}}</p>
+                        </div>
+
+                        <div class="detalle">
+                            <span class="label">💰 Beneficios</span>
+                            <p>{{be.beneficio}}</p>
+                        </div>
+
+                        <div class="detalle">
+                            <span class="label">✅ Requisitos</span>
+                            <p>{{be.requisito}}</p>
+                        </div>
+
+                        <div class="detalle">
+                            <span class="label">⚠ Restricciones</span>
+                            <p>{{be.restriccion}}</p>
+                        </div>
+
+                        <div class="duracion-box">
+                            ⏳ Duración: <strong>{{be.duracion}} semestres</strong>
+                        </div>
+                    </div>
+
+                    <div class="beca-footer">
+                        <button class="btn btn-primary" (click)="actualizarBeca(be.id)">Editar</button>
+                        <button class="btn btn-danger" (click)="eliminarBeca(be.id)">Eliminar</button>
+                        <a [href]="be.url" target="_blank" class="btn btn-success">Ver más</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

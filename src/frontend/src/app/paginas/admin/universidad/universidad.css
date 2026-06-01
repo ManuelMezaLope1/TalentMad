@@ -1,0 +1,101 @@
+.dark .menu-container{
+  background: #fff7f0;
+}
+
+.titulo {
+  text-align: center;
+  font-size: 40px;
+  color: #ff5a00;
+  margin-bottom: 20px;
+}
+
+.alpha-header{
+  position: sticky;
+  top: 0;
+  background: #2319ac;
+  color: white;
+  padding: 10px;
+  z-index: 1000;
+  box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+  border-radius: 20px;
+}
+
+.universidad {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #d94f00;
+}
+
+.universidad-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+}
+
+.img-container {
+  position: relative;
+}
+
+.img-container img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ff5a00;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.tag.recomendado {
+  background: #ff8800;
+}
+
+.tag.oferta {
+  background: #e63946;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.card-body h3 {
+  margin: 10px 0;
+  color: #333;
+}
+
+.card-body p {
+  font-size: 14px;
+  color: #777;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.precio {
+  font-weight: bold;
+  color: #ff5a00;
+  font-size: 18px;
+}

@@ -1,0 +1,93 @@
+.dark :host ::ng-deep .texto {
+    color: white !important;
+}
+
+.light :host ::ng-deep .texto {
+    color: #121212 !important;
+}
+
+.dark :host ::ng-deep .card-body {
+    background: #121212 !important;
+}
+
+.dark :host ::ng-deep .accion-card {
+    border-color: white;
+}
+
+.dark :host ::ng-deep .accion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border-color: white;
+}
+
+.dark :host ::ng-deep .accion-descripcion {
+    color: white;
+}
+
+.dark :host ::ng-deep .accion-titulo {
+    color: white;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #ff8c42, #ff8c42);
+    border: none;
+    padding: 20px 25px;
+    font-weight: 600;
+}
+
+.accion-card {
+    border-radius: 15px;
+    padding: 25px;
+    text-decoration: none;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 3px solid transparent;
+}
+
+a {
+    text-decoration: none;
+}
+
+.acciones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 4fr));
+    gap: 20px;
+}
+
+.accion-icono {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #3498db;
+    text-align: center;
+}
+
+.accion-titulo {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.accion-descripcion {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.accion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border-color: #121212;
+}

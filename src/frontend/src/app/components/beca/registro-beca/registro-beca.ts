@@ -20,7 +20,7 @@ export class RegistroBeca {
 
   constructor(private becaServicio: BecaServicio, private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) { }
 
-  tipos = ['Excelencia Académica','Deportiva'];
+  tipos = ['Deportiva','Excelencia Académica','Socioeconómica'];
 
   actualizarTipoBeca(event: any) {
     const tipoSeleccionado = event.target.value;

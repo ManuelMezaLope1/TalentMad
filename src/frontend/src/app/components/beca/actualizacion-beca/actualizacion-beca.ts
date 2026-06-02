@@ -30,7 +30,7 @@ export class ActualizacionBeca {
     })
   }
 
-  tipos = ['Excelencia Académica', 'Deportiva'];
+  tipos = ['Deportiva','Excelencia Académica', 'Socioeconómica'];
 
   actualizarTipoBeca(event: any) {
     const tipoSeleccionado = event.target.value;

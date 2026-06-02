@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable, Subject } from 'rxjs';
 import { ICarrera } from '../../../servicios/carrera/ICarrera';
+import { CarreraServicio } from '../../../servicios/carrera/carrera-servicio';
 
 interface RespuestaGuardada {
   [preguntaTexto: string]: number;
@@ -33,6 +34,7 @@ export class Resultado implements OnInit, OnDestroy {
   carreras: ICarrera[] = [];
   carreras$!: Observable<ICarrera[]>;
   carrerasFiltradas$: Observable<any[]>;
+
   codigoRIASEC: string = '';
   top3: PuntajeItem[] = [];
   todosPuntajes: PuntajeItem[] = [];
@@ -75,9 +77,10 @@ export class Resultado implements OnInit, OnDestroy {
 
   private ordenRIASEC = ['Realista', 'Investigador', 'Artístico', 'Social', 'Emprendedor', 'Convencional'];
 
-  constructor(private router: Router) {}
+  constructor(private carreraServicio: CarreraServicio, private router: Router) { }
 
   ngOnInit(): void {
+    this.carreras$=this.carreraServicio.obtenerListaDeCarrera();
     this.cargarResultados();
   }
 
@@ -106,17 +109,20 @@ export class Resultado implements OnInit, OnDestroy {
       this.top3 = this.todosPuntajes.filter((item) => item.puntaje >= puntajeLimite);
 
       this.codigoRIASEC = this.generarCodigoRIASEC(this.top3);
-      this.buildRadarGeometry();
-      this.isLoading = false;
-
-this.carrerasFiltradas$ = this.carreras$.pipe(
+      console.log(this.codigoRIASEC);
+      this.carrerasFiltradas$ = this.carreras$.pipe(
         map(carreras =>
           carreras.filter(car =>
-            car.combinacion.includes(this.codigoRIASEC)
+            car.combinacion
+              .split(",")
+              .map(c => c.trim())
+              .includes(this.codigoRIASEC)
           )
         )
-      )
+      );
 
+      this.buildRadarGeometry();
+      this.isLoading = false;
     } catch (error) {
       console.error('Error al cargar resultados:', error);
       this.isLoading = false;
@@ -229,7 +235,7 @@ this.carrerasFiltradas$ = this.carreras$.pipe(
     localStorage.removeItem('categorias_test_riasec');
     this.router.navigate(['/preguntas']).then(() => window.location.reload());
   }
-obtenerUniversidadesUnicas(universidades: any[]) {
+  obtenerUniversidadesUnicas(universidades: any[]) {
     const mapa = new Map();
 
     universidades.forEach(u => {

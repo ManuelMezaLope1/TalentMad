@@ -26,6 +26,7 @@ import { ActualizacionRespuesta } from './components/respuesta/actualizacion-res
 import { Respuesta } from './paginas/admin/respuesta/respuesta';
 import { UniversidadCarrera } from './paginas/admin/universidad-carrera/universidad-carrera';
 import { CarreraBeca } from './paginas/admin/carrera-beca/carrera-beca';
+import { UniversidadBeca } from './paginas/admin/universidad-beca/universidad-beca';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
@@ -43,6 +44,7 @@ export const routes: Routes = [
   { path: 'respuesta', component: Respuesta, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'universidad-carrera', component: UniversidadCarrera, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'carrera-beca', component: CarreraBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'universidad-beca', component: UniversidadBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
 
   { path: 'creacion-categoria-preguntas', component: RegistroCategoriaPreguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'actualizacion-categoria-preguntas/:id', component: ActualizacionCategoriaPreguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },

@@ -1,17 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
+import { ICarrera } from '../../../servicios/carrera/ICarrera';
+import { CarreraServicio } from '../../../servicios/carrera/carrera-servicio';
 
 interface RespuestaGuardada {
-  [preguntaTexto: string]: boolean;
+  [preguntaTexto: string]: number;
 }
 
 interface CategoriaPregunta {
   id: number;
   nombre: string;
   preguntas: { preguntas: string }[];
+}
+
+interface PuntajeItem {
+  categoria: string;
+  puntaje: number;
+  puntajeMaximo: number;
+  id: number;
 }
 
 @Component({
@@ -22,28 +30,60 @@ interface CategoriaPregunta {
   styleUrls: ['./resultado.css']
 })
 export class Resultado implements OnInit, OnDestroy {
-  resultadoHtml: SafeHtml = "";
-  codigoRIASEC: string = "";
-  top3: { categoria: string, puntaje: number, id: number }[] = [];
-  todosPuntajes: { categoria: string, puntaje: number, id: number }[] = [];
+
+  carreras: ICarrera[] = [];
+  carreras$!: Observable<ICarrera[]>;
+  carrerasFiltradas$: Observable<any[]>;
+
+  universidadBecas: any[] = [];
+  becas: any[] = [];
+
+  codigoRIASEC: string = '';
+  top3: PuntajeItem[] = [];
+  todosPuntajes: PuntajeItem[] = [];
   isLoading: boolean = true;
   private destroy$ = new Subject<void>();
-  
+
+  axisLines: { x1: number; y1: number; x2: number; y2: number }[] = [];
+  radarVertices: { x: number; y: number }[] = [];
+  radarLabels: { x: number; y: number; text: string }[] = [];
+
+  private readonly RADAR_RADIUS = 120;
+  private readonly LABEL_OFFSET = 22;
+
+  private barColors = [
+    'linear-gradient(90deg, #f97316, #fb923c)',
+    'linear-gradient(90deg, #6366f1, #818cf8)',
+    'linear-gradient(90deg, #22c55e, #4ade80)',
+    'linear-gradient(90deg, #14b8a6, #2dd4bf)',
+    'linear-gradient(90deg, #eab308, #facc15)',
+    'linear-gradient(90deg, #a855f7, #c084fc)',
+  ];
+
+  private descripciones: { [key: string]: string } = {
+    'Realista': 'Personas prácticas, físicas y mecánicas. Prefieren actividades concretas con resultados tangibles. Son honestos, estables y persistentes.',
+    'Investigador': 'Analíticos, curiosos e intelectualmente orientados. Disfrutan resolver problemas complejos y comprender el mundo a través de la ciencia y la investigación.',
+    'Artístico': 'Creativos, expresivos e imaginativos. Valoran la originalidad y prefieren entornos sin estructura rígida donde puedan crear y explorar libremente.',
+    'Social': 'Empáticos, cooperativos y orientados a las personas. Disfrutan ayudar, enseñar y trabajar en equipo para mejorar el bienestar de los demás.',
+    'Emprendedor': 'Ambiciosos, persuasivos y orientados al liderazgo. Les gusta influenciar, liderar proyectos y asumir riesgos calculados para alcanzar metas.',
+    'Convencional': 'Ordenados, precisos y orientados a los detalles. Prefieren entornos estructurados con procedimientos claros y resultados medibles y verificables.',
+  };
+
   mapaLetras: { [key: string]: string } = {
     'Realista': 'R',
     'Investigador': 'I',
     'Artístico': 'A',
     'Social': 'S',
     'Emprendedor': 'E',
-    'Convencional': 'C'
+    'Convencional': 'C',
   };
 
-  constructor(
-    private sanitizer: DomSanitizer,
-    private router: Router
-  ) {}
+  private ordenRIASEC = ['Realista', 'Investigador', 'Artístico', 'Social', 'Emprendedor', 'Convencional'];
+
+  constructor(private carreraServicio: CarreraServicio, private router: Router) { }
 
   ngOnInit(): void {
+    this.carreras$ = this.carreraServicio.obtenerListaDeCarrera();
     this.cargarResultados();
   }
 
@@ -56,113 +96,222 @@ export class Resultado implements OnInit, OnDestroy {
     try {
       const respuestasGuardadas = localStorage.getItem('respuestas_test_riasec');
       const categoriasGuardadas = localStorage.getItem('categorias_test_riasec');
-      
+
       if (!respuestasGuardadas || !categoriasGuardadas) {
         this.router.navigate(['/preguntas']);
         return;
       }
-      
+
       const respuestas: RespuestaGuardada = JSON.parse(respuestasGuardadas);
       const categorias: CategoriaPregunta[] = JSON.parse(categoriasGuardadas);
-      
+
       this.todosPuntajes = this.calcularPuntajesPorCategoria(respuestas, categorias);
+
       const primeros3 = this.todosPuntajes.slice(0, 3);
+      const puntajeLimite = primeros3[2]?.puntaje ?? 0;
+      this.top3 = this.todosPuntajes.filter((item) => item.puntaje >= puntajeLimite);
 
-// Puntaje del tercer lugar
-const puntajeLimite = primeros3[2]?.puntaje ?? 0;
-
-// Incluir todos los que empaten con el tercer puesto
-this.top3 = this.todosPuntajes.filter(
-  item => item.puntaje >= puntajeLimite
-);
       this.codigoRIASEC = this.generarCodigoRIASEC(this.top3);
-      
-      this.generarResultadosHTMLSimple();
+      console.log(this.codigoRIASEC);
+      this.carrerasFiltradas$ = this.carreras$.pipe(
+        map(carreras =>
+          carreras.filter(car =>
+            car.combinacion
+              .split(",")
+              .map(c => c.trim())
+              .includes(this.codigoRIASEC)
+          )
+        )
+      );
+
+      this.buildRadarGeometry();
       this.isLoading = false;
     } catch (error) {
       console.error('Error al cargar resultados:', error);
       this.isLoading = false;
-      this.resultadoHtml = this.sanitizer.bypassSecurityTrustHtml('<p>Error al cargar los resultados. Por favor, reinicia el test.</p>');
     }
   }
 
-  calcularPuntajesPorCategoria(respuestas: RespuestaGuardada, categorias: CategoriaPregunta[]): { categoria: string, puntaje: number, id: number }[] {
-    const puntajes: { [categoriaId: number]: { nombre: string, puntaje: number } } = {};
-    
-    categorias.forEach(categoria => {
-      puntajes[categoria.id] = { nombre: categoria.nombre, puntaje: 0 };
+  calcularPuntajesPorCategoria(
+    respuestas: RespuestaGuardada,
+    categorias: CategoriaPregunta[]
+  ): PuntajeItem[] {
+    const puntajes: { [id: number]: { nombre: string; puntaje: number; puntajeMaximo: number } } = {};
+
+    // Máximo teórico = número de preguntas de la categoría × 5
+    categorias.forEach((cat) => {
+      const cantidadPreguntas = cat.preguntas?.length ?? 0;
+      puntajes[cat.id] = {
+        nombre: cat.nombre,
+        puntaje: 0,
+        puntajeMaximo: cantidadPreguntas * 5,
+      };
     });
-    
+
+    // Acumular respuestas en su categoría
     for (const [preguntaTexto, respuesta] of Object.entries(respuestas)) {
-      if (respuesta === true) {
-        for (const categoria of categorias) {
-          const preguntaEncontrada = categoria.preguntas?.find(p => p.preguntas === preguntaTexto);
-          if (preguntaEncontrada) {
-            puntajes[categoria.id].puntaje++;
-            break;
-          }
+      for (const categoria of categorias) {
+        const encontrada = categoria.preguntas?.find((p) => p.preguntas === preguntaTexto);
+        if (encontrada) {
+          puntajes[categoria.id].puntaje += Number(respuesta);
+          break;
         }
       }
     }
-    
+
     return Object.entries(puntajes)
-      .map(([id, data]) => ({ 
-        categoria: data.nombre, 
+      .map(([id, data]) => ({
+        categoria: data.nombre,
         puntaje: data.puntaje,
-        id: parseInt(id)
+        puntajeMaximo: data.puntajeMaximo,
+        id: parseInt(id),
       }))
       .sort((a, b) => b.puntaje - a.puntaje);
   }
 
-  generarCodigoRIASEC(top3: { categoria: string }[]): string {
-    return top3.map(item => this.mapaLetras[item.categoria] || item.categoria.charAt(0)).join('');
+  generarCodigoRIASEC(top3: PuntajeItem[]): string {
+    return top3.map((item) => this.mapaLetras[item.categoria] || item.categoria.charAt(0)).join('');
   }
 
-  generarResultadosHTMLSimple(): void {
-    const top3Items = this.top3.map((item, index) => {
-      const medalla = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-      return `<strong>${medalla} ${item.categoria}</strong>: ${item.puntaje} respuestas`;
-    }).join('<br>');
+  buildRadarGeometry(): void {
+    const n = 6;
+    this.axisLines = [];
+    this.radarVertices = [];
+    this.radarLabels = [];
 
-    const otrosItems = this.todosPuntajes.slice(3).map(item => {
-      return `<strong>${item.categoria}</strong>: ${item.puntaje} respuestas`;
-    }).join('<br>');
+    for (let i = 0; i < n; i++) {
+      const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
+      const x2 = Math.cos(angle) * this.RADAR_RADIUS;
+      const y2 = Math.sin(angle) * this.RADAR_RADIUS;
+      this.axisLines.push({ x1: 0, y1: 0, x2, y2 });
 
-    const resultadosHTML = `
-      <div style="font-family: system-ui, -apple-system, sans-serif; line-height: 1.6;">
-        <h1 style="text-align: center; color: #4a5568; margin-bottom: 1rem;">Resultados de tu Test Vocacional RIASEC </h1>
-        
-        <h2 style="text-align: center; color: #9333ea; margin: 1.5rem 0;">Tu código de personalidad es: <strong style="font-size: 2rem;">${this.codigoRIASEC}</strong></h2>
-        
-        <hr style="margin: 1.5rem 0; border: 1px solid #e5e7eb;">
-        
-        <h3 style="color: #4a5568; margin-bottom: 1rem;">Puntajes por categoría:</h3>
-        <div style="background: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
-          ${top3Items}
-          ${otrosItems ? `<br><br>${otrosItems}` : ''}
-        </div>
-        
-      </div>
-    `;
+      const lx = Math.cos(angle) * (this.RADAR_RADIUS + this.LABEL_OFFSET);
+      const ly = Math.sin(angle) * (this.RADAR_RADIUS + this.LABEL_OFFSET);
+      this.radarLabels.push({ x: lx, y: ly, text: this.ordenRIASEC[i] });
+    }
 
-    this.resultadoHtml = this.sanitizer.bypassSecurityTrustHtml(resultadosHTML);
+    // Radar usa porcentaje teórico por categoría
+    const puntajeMap = Object.fromEntries(this.todosPuntajes.map((p) => [p.categoria, p]));
+
+    for (let i = 0; i < n; i++) {
+      const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
+      const cat = this.ordenRIASEC[i];
+      const item = puntajeMap[cat];
+      const ratio = item && item.puntajeMaximo > 0 ? item.puntaje / item.puntajeMaximo : 0;
+      const r = ratio * this.RADAR_RADIUS;
+      this.radarVertices.push({ x: Math.cos(angle) * r, y: Math.sin(angle) * r });
+    }
   }
 
-  // Volver al test SIN limpiar respuestas
+  getHexPoints(r: number): string {
+    return Array.from({ length: 6 }, (_, i) => {
+      const angle = (Math.PI * 2 * i) / 6 - Math.PI / 2;
+      return `${Math.cos(angle) * r},${Math.sin(angle) * r}`;
+    }).join(' ');
+  }
+
+  getRadarPoints(): string {
+    return this.radarVertices.map((v) => `${v.x},${v.y}`).join(' ');
+  }
+
+  // Porcentaje real: puntaje obtenido / máximo teórico de ESA categoría
+  getPorcentaje(item: PuntajeItem): number {
+    if (!item || item.puntajeMaximo === 0) return 0;
+    return Math.round((item.puntaje / item.puntajeMaximo) * 100);
+  }
+
+  getBarColor(index: number): string {
+    return this.barColors[index % this.barColors.length];
+  }
+
+  getDescripcion(categoria: string): string {
+    return this.descripciones[categoria] ?? '';
+  }
+
   volverATest(): void {
     this.router.navigate(['/preguntas']);
   }
 
-  // Reiniciar test - Limpiar TODO y usar replaceUrl para evitar caché
   reiniciarTest(): void {
+    localStorage.removeItem('respuestas_test_riasec');
+    localStorage.removeItem('currentProgress_riasec');
+    localStorage.removeItem('categorias_test_riasec');
+    this.router.navigate(['/preguntas']).then(() => window.location.reload());
+  }
 
-  localStorage.removeItem('respuestas_test_riasec');
-  localStorage.removeItem('currentProgress_riasec');
-  localStorage.removeItem('categorias_test_riasec');
+  obtenerUniversidadesUnicas(universidades: any[]): any[] {
 
-  this.router.navigate(['/preguntas']).then(() => {
-    window.location.reload();
-  });
+    const mapa = new Map<string, any>();
 
-}
+    universidades.forEach(uni => {
+
+      const nombrePrincipal = uni.nombre
+        .split(' - ')[0]
+        .trim();
+
+      if (!mapa.has(nombrePrincipal)) {
+
+        mapa.set(nombrePrincipal, {
+          ...uni,
+          nombre: nombrePrincipal,
+          beca: [...(uni.beca || [])]
+        });
+
+      } else {
+
+        const existente = mapa.get(nombrePrincipal);
+
+        existente.beca = [
+          ...new Map(
+            [
+              ...existente.beca,
+              ...(uni.beca || [])
+            ].map((beca: any) => [beca.id, beca])
+          ).values()
+        ];
+
+        existente.costoMensualMinimo = Math.min(
+          existente.costoMensualMinimo,
+          uni.costoMensualMinimo
+        );
+
+        existente.costoMensualMaximo = Math.max(
+          existente.costoMensualMaximo,
+          uni.costoMensualMaximo
+        );
+
+      }
+
+    });
+
+    return Array.from(mapa.values());
+
+  }
+
+  obtenerPromedioUniversidad(universidad: any): number {
+    return (
+      universidad.costoMensualMinimo +
+      universidad.costoMensualMaximo
+    ) / 2;
+  }
+
+  obtenerTop5Universidades(universidades: any[]): any[] {
+    return [...this.obtenerUniversidadesUnicas(universidades)]
+      .sort((a, b) =>
+        this.obtenerPromedioUniversidad(b) -
+        this.obtenerPromedioUniversidad(a)
+      )
+      .slice(0, 5);
+  }
+
+  obtenerBecasPorUniversidad(idUniversidad: number): any[] {
+    const idsBecas = this.universidadBecas
+      .filter(ub => ub.universidad.id === idUniversidad)
+      .map(ub => ub.beca.id);
+
+    return this.becas.filter(
+      beca => idsBecas.includes(beca.id)
+    );
+
+  }
 }

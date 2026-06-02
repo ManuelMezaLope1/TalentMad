@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.springboot.backend.beca.modelo.Beca;
 import com.springboot.backend.carrera.modelo.Carrera;
 import com.springboot.backend.departamento.modelo.Departamento;
 import com.springboot.backend.tipouniversidad.modelo.TipoUniversidad;
@@ -40,11 +41,20 @@ public class Universidad {
     @JsonIgnoreProperties({ "universidad" })
     private List<Carrera> carrera;
 
+    @ManyToMany
+    @JoinTable(
+        name="universidad_beca",
+        joinColumns = @JoinColumn(name="universidad_id"),
+        inverseJoinColumns = @JoinColumn(name="beca_id")
+    )
+    @JsonIgnoreProperties({"universidad"})
+    private List<Beca> beca;
+
     public Universidad() {
     }
 
     public Universidad(Long id, String nombre, Departamento departamento, double costoMensualMinimo,
-            double costoMensualMaximo, TipoUniversidad tipoUniversidad, List<Carrera> carrera) {
+            double costoMensualMaximo, TipoUniversidad tipoUniversidad, List<Carrera> carrera, List<Beca> beca) {
         this.id = id;
         this.nombre = nombre;
         this.departamento = departamento;
@@ -52,16 +62,18 @@ public class Universidad {
         this.costoMensualMaximo = costoMensualMaximo;
         this.tipoUniversidad = tipoUniversidad;
         this.carrera = carrera;
+        this.beca=beca;
     }
 
     public Universidad(String nombre, Departamento departamento, double costoMensualMinimo, double costoMensualMaximo,
-            TipoUniversidad tipoUniversidad, List<Carrera> carrera) {
+            TipoUniversidad tipoUniversidad, List<Carrera> carrera, List<Beca> beca) {
         this.nombre = nombre;
         this.departamento = departamento;
         this.costoMensualMinimo = costoMensualMinimo;
         this.costoMensualMaximo = costoMensualMaximo;
         this.tipoUniversidad = tipoUniversidad;
         this.carrera = carrera;
+        this.beca=beca;
     }
 
     public Long getId() {
@@ -118,6 +130,14 @@ public class Universidad {
 
     public void setCarrera(List<Carrera> carrera) {
         this.carrera = carrera;
+    }
+
+    public List<Beca> getBeca(){
+        return beca;
+    }
+
+    public void setBeca(List<Beca> beca){
+        this.beca=beca;
     }
 
     @Override

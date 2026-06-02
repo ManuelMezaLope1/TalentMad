@@ -1,43 +1,136 @@
-<div class="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 py-8 px-4">
-  <div class="w-full max-3xl mx-auto">
-    
+<div class="resultado-page">
+  <div class="resultado-container">
+
     <!-- Loading State -->
-    <div *ngIf="isLoading" class="bg-white rounded-2xl p-12 shadow-lg text-center">
-      <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-purple-600 border-t-transparent"></div>
-      <p class="mt-4 text-gray-600">Cargando tus resultados...</p>
+    <div *ngIf="isLoading" class="loading-card">
+      <div class="spinner"></div>
+      <p class="loading-text">Analizando tu perfil vocacional...</p>
     </div>
 
     <!-- Resultados -->
-    <div *ngIf="!isLoading && resultadoHtml" class="bg-white rounded-3xl p-8 shadow-xl">
-      <div class="text-center mb-6">
-        <div class="inline-block px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full">
-          <span class="text-white font-bold text-xl">{{ codigoRIASEC }}</span>
+    <div *ngIf="!isLoading && todosPuntajes.length > 0" class="results-wrapper">
+
+      <!-- Header -->
+      <div class="results-header">
+        <h1 class="header-title">Perfil RIASEC</h1>
+      </div>
+
+      <!-- Main Card -->
+      <div class="main-card">
+
+        <!-- Código RIASEC badge -->
+        <div class="codigo-badge">
+          <span class="codigo-label">Tu código</span>
+          <span class="codigo-valor">{{ codigoRIASEC }}</span>
+        </div>
+
+        <!-- Layout de dos columnas -->
+        <div class="main-card-content">
+
+          <!-- Radar Chart - actualizado a colores azules con etiquetas alineadas -->
+          <div class="radar-section">
+            <svg class="radar-chart" viewBox="0 0 400 360" xmlns="http://www.w3.org/2000/svg">
+              <!-- Fondo claro del radar -->
+              <defs>
+                <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#eff6ff;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="radarFill" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.4" />
+                  <stop offset="100%" style="stop-color:#93c5fd;stop-opacity:0.25" />
+                </linearGradient>
+              </defs>
+
+              <!-- Background -->
+              <rect width="400" height="360" rx="16" fill="url(#bgGrad)" />
+
+              <!-- Grid hexagons (4 niveles) -->
+              <g [attr.transform]="'translate(200,185)'">
+                <!-- Nivel 4 (100%) - radio 120 -->
+                <polygon [attr.points]="getHexPoints(120)" fill="none" stroke="#94a3b8" stroke-opacity="0.3"
+                  stroke-width="1" />
+                <!-- Nivel 3 (75%) - radio 90 -->
+                <polygon [attr.points]="getHexPoints(90)" fill="none" stroke="#94a3b8" stroke-opacity="0.25"
+                  stroke-width="1" />
+                <!-- Nivel 2 (50%) - radio 60 -->
+                <polygon [attr.points]="getHexPoints(60)" fill="none" stroke="#94a3b8" stroke-opacity="0.2"
+                  stroke-width="1" />
+                <!-- Nivel 1 (25%) - radio 30 -->
+                <polygon [attr.points]="getHexPoints(30)" fill="none" stroke="#94a3b8" stroke-opacity="0.15"
+                  stroke-width="1" />
+
+                <!-- Ejes -->
+                <line *ngFor="let axis of axisLines" [attr.x1]="axis.x1" [attr.y1]="axis.y1" [attr.x2]="axis.x2"
+                  [attr.y2]="axis.y2" stroke="#94a3b8" stroke-opacity="0.3" stroke-width="1" />
+
+                <!-- Etiquetas de nivel - alineadas correctamente -->
+                <!-- Etiqueta 100% (en el vértice superior, y = -120) -->
+                <text x="0" y="-125" fill="#64748b" fill-opacity="0.8" font-size="10"
+                  font-family="'DM Sans', sans-serif" text-anchor="middle">100</text>
+
+                <!-- Etiqueta 75% (y = -90) -->
+                <text x="0" y="-95" fill="#64748b" fill-opacity="0.7" font-size="9" font-family="'DM Sans', sans-serif"
+                  text-anchor="middle">75</text>
+
+                <!-- Etiqueta 50% (y = -60) -->
+                <text x="0" y="-65" fill="#64748b" fill-opacity="0.6" font-size="9" font-family="'DM Sans', sans-serif"
+                  text-anchor="middle">50</text>
+
+                <!-- Etiqueta 25% (y = -30) -->
+                <text x="0" y="-35" fill="#64748b" fill-opacity="0.5" font-size="9" font-family="'DM Sans', sans-serif"
+                  text-anchor="middle">25</text>
+
+                <!-- Área de datos -->
+                <polygon [attr.points]="getRadarPoints()" fill="url(#radarFill)" stroke="#3b82f6" stroke-width="2.5"
+                  stroke-opacity="0.9" />
+
+                <!-- Puntos en vértices -->
+                <circle *ngFor="let pt of radarVertices" [attr.cx]="pt.x" [attr.cy]="pt.y" r="4.5" fill="#3b82f6"
+                  stroke="#ffffff" stroke-width="2" />
+
+                <!-- Etiquetas de categorías -->
+                <text *ngFor="let lbl of radarLabels" [attr.x]="lbl.x" [attr.y]="lbl.y" fill="#1e293b" font-size="11"
+                  font-weight="600" font-family="'DM Sans', sans-serif" text-anchor="middle" dominant-baseline="middle">
+                  {{ lbl.text }}
+                </text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Columna derecha: Progress bars -->
+          <div class="bars-column">
+            <div class="bars-section">
+              <div class="bar-item" *ngFor="let item of todosPuntajes; let i = index">
+                <div class="bar-header">
+                  <span class="bar-label">{{ item.categoria }}</span>
+                  <span class="bar-pct">{{ getPorcentaje(item) }}%</span>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill" [style.width.%]="getPorcentaje(item)" [style.background]="getBarColor(i)">
+                  </div>
+                </div>
+                <p class="bar-descripcion">{{ getDescripcion(item.categoria) }}</p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
-      
-      <div [innerHTML]="resultadoHtml" class="prose max-w-none"></div>
-      
-      <!-- Botones de acción -->
-      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-        <button (click)="volverATest()"
-          class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all">
-          ← Volver al Test
-        </button>
-        
-        <button (click)="reiniciarTest()"
-          class="px-6 py-3 border-2 border-purple-600 text-purple-600 rounded-xl font-semibold hover:bg-purple-50 transition-all">
-          ↻ Reiniciar Test
-        </button>
+
+      <!-- Action buttons -->
+      <div class="action-buttons">
+        <button (click)="volverATest()" class="btn-primary">← Volver al Test</button>
+        <button (click)="reiniciarTest()" class="btn-secondary">↻ Reiniciar Test</button>
       </div>
+
     </div>
 
-    <!-- Error -->
-    <div *ngIf="!isLoading && !resultadoHtml" class="bg-white rounded-2xl p-12 shadow-lg text-center">
-      <p class="text-gray-600">No se encontraron resultados. Por favor, completa el test primero.</p>
-      <button (click)="volverATest()"
-        class="mt-4 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all">
-        Ir al Test
-      </button>
+    <!-- Error / no data -->
+    <div *ngIf="!isLoading && todosPuntajes.length === 0" class="loading-card">
+      <p class="loading-text">No se encontraron resultados. Por favor, completa el test primero.</p>
+      <button (click)="volverATest()" class="btn-primary" style="margin-top:1.5rem">Ir al Test</button>
     </div>
+
   </div>
 </div>

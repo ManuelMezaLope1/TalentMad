@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
+import { ICarrera } from '../../../servicios/carrera/ICarrera';
+import { CarreraServicio } from '../../../servicios/carrera/carrera-servicio';
 
 interface RespuestaGuardada {
   [preguntaTexto: string]: number;
@@ -16,7 +18,7 @@ interface CategoriaPregunta {
 interface PuntajeItem {
   categoria: string;
   puntaje: number;
-  puntajeMaximo: number; // máximo teórico = cantidad preguntas × 5
+  puntajeMaximo: number;
   id: number;
 }
 
@@ -28,6 +30,14 @@ interface PuntajeItem {
   styleUrls: ['./resultado.css']
 })
 export class Resultado implements OnInit, OnDestroy {
+
+  carreras: ICarrera[] = [];
+  carreras$!: Observable<ICarrera[]>;
+  carrerasFiltradas$: Observable<any[]>;
+
+  universidadBecas: any[] = [];
+  becas: any[] = [];
+
   codigoRIASEC: string = '';
   top3: PuntajeItem[] = [];
   todosPuntajes: PuntajeItem[] = [];
@@ -70,9 +80,10 @@ export class Resultado implements OnInit, OnDestroy {
 
   private ordenRIASEC = ['Realista', 'Investigador', 'Artístico', 'Social', 'Emprendedor', 'Convencional'];
 
-  constructor(private router: Router) {}
+  constructor(private carreraServicio: CarreraServicio, private router: Router) { }
 
   ngOnInit(): void {
+    this.carreras$ = this.carreraServicio.obtenerListaDeCarrera();
     this.cargarResultados();
   }
 
@@ -101,6 +112,18 @@ export class Resultado implements OnInit, OnDestroy {
       this.top3 = this.todosPuntajes.filter((item) => item.puntaje >= puntajeLimite);
 
       this.codigoRIASEC = this.generarCodigoRIASEC(this.top3);
+      console.log(this.codigoRIASEC);
+      this.carrerasFiltradas$ = this.carreras$.pipe(
+        map(carreras =>
+          carreras.filter(car =>
+            car.combinacion
+              .split(",")
+              .map(c => c.trim())
+              .includes(this.codigoRIASEC)
+          )
+        )
+      );
+
       this.buildRadarGeometry();
       this.isLoading = false;
     } catch (error) {
@@ -214,5 +237,81 @@ export class Resultado implements OnInit, OnDestroy {
     localStorage.removeItem('currentProgress_riasec');
     localStorage.removeItem('categorias_test_riasec');
     this.router.navigate(['/preguntas']).then(() => window.location.reload());
+  }
+
+  obtenerUniversidadesUnicas(universidades: any[]): any[] {
+
+    const mapa = new Map<string, any>();
+
+    universidades.forEach(uni => {
+
+      const nombrePrincipal = uni.nombre
+        .split(' - ')[0]
+        .trim();
+
+      if (!mapa.has(nombrePrincipal)) {
+
+        mapa.set(nombrePrincipal, {
+          ...uni,
+          nombre: nombrePrincipal,
+          beca: [...(uni.beca || [])]
+        });
+
+      } else {
+
+        const existente = mapa.get(nombrePrincipal);
+
+        existente.beca = [
+          ...new Map(
+            [
+              ...existente.beca,
+              ...(uni.beca || [])
+            ].map((beca: any) => [beca.id, beca])
+          ).values()
+        ];
+
+        existente.costoMensualMinimo = Math.min(
+          existente.costoMensualMinimo,
+          uni.costoMensualMinimo
+        );
+
+        existente.costoMensualMaximo = Math.max(
+          existente.costoMensualMaximo,
+          uni.costoMensualMaximo
+        );
+
+      }
+
+    });
+
+    return Array.from(mapa.values());
+
+  }
+
+  obtenerPromedioUniversidad(universidad: any): number {
+    return (
+      universidad.costoMensualMinimo +
+      universidad.costoMensualMaximo
+    ) / 2;
+  }
+
+  obtenerTop5Universidades(universidades: any[]): any[] {
+    return [...this.obtenerUniversidadesUnicas(universidades)]
+      .sort((a, b) =>
+        this.obtenerPromedioUniversidad(b) -
+        this.obtenerPromedioUniversidad(a)
+      )
+      .slice(0, 5);
+  }
+
+  obtenerBecasPorUniversidad(idUniversidad: number): any[] {
+    const idsBecas = this.universidadBecas
+      .filter(ub => ub.universidad.id === idUniversidad)
+      .map(ub => ub.beca.id);
+
+    return this.becas.filter(
+      beca => idsBecas.includes(beca.id)
+    );
+
   }
 }

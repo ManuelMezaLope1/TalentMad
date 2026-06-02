@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
+import { ICarrera } from '../../../servicios/carrera/ICarrera';
 
 interface RespuestaGuardada {
   [preguntaTexto: string]: number;
@@ -16,7 +17,7 @@ interface CategoriaPregunta {
 interface PuntajeItem {
   categoria: string;
   puntaje: number;
-  puntajeMaximo: number; // máximo teórico = cantidad preguntas × 5
+  puntajeMaximo: number;
   id: number;
 }
 
@@ -28,6 +29,10 @@ interface PuntajeItem {
   styleUrls: ['./resultado.css']
 })
 export class Resultado implements OnInit, OnDestroy {
+
+  carreras: ICarrera[] = [];
+  carreras$!: Observable<ICarrera[]>;
+  carrerasFiltradas$: Observable<any[]>;
   codigoRIASEC: string = '';
   top3: PuntajeItem[] = [];
   todosPuntajes: PuntajeItem[] = [];
@@ -103,6 +108,15 @@ export class Resultado implements OnInit, OnDestroy {
       this.codigoRIASEC = this.generarCodigoRIASEC(this.top3);
       this.buildRadarGeometry();
       this.isLoading = false;
+
+this.carrerasFiltradas$ = this.carreras$.pipe(
+        map(carreras =>
+          carreras.filter(car =>
+            car.combinacion.includes(this.codigoRIASEC)
+          )
+        )
+      )
+
     } catch (error) {
       console.error('Error al cargar resultados:', error);
       this.isLoading = false;
@@ -215,4 +229,41 @@ export class Resultado implements OnInit, OnDestroy {
     localStorage.removeItem('categorias_test_riasec');
     this.router.navigate(['/preguntas']).then(() => window.location.reload());
   }
+obtenerUniversidadesUnicas(universidades: any[]) {
+    const mapa = new Map();
+
+    universidades.forEach(u => {
+
+      const nombrePrincipal =
+        u.nombre.split(' - ')[0].trim();
+
+      if (!mapa.has(nombrePrincipal)) {
+        mapa.set(nombrePrincipal, {
+          ...u,
+          nombre: nombrePrincipal
+        });
+      }
+
+    });
+
+    return Array.from(mapa.values());
+  }
+
+  obtenerPromedioUniversidad(universidad: any): number {
+    return (
+      universidad.costoMensualMinimo +
+      universidad.costoMensualMaximo
+    ) / 2;
+  }
+
+  obtenerTop5Universidades(universidades: any[]): any[] {
+    return [...this.obtenerUniversidadesUnicas(universidades)]
+      .sort((a, b) =>
+        this.obtenerPromedioUniversidad(b) -
+        this.obtenerPromedioUniversidad(a)
+      )
+      .slice(0, 5);
+  }
+
 }
+

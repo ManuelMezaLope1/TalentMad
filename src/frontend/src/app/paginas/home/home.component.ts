@@ -1,24 +1,27 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthServicio } from '../../servicios/auth/auth-servicio';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, CommonModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  
+  constructor(public authServicio: AuthServicio){}
+
   // Método para manejar el acordeón FAQ
 toggleFaq(event: Event): void {
   const questionElement = event.currentTarget as HTMLElement;
   const answerElement = questionElement.nextElementSibling as HTMLElement;
   const icon = questionElement.querySelector('i');
-  
+
   if (answerElement) {
     answerElement.classList.toggle('show');
-    
+
     if (icon) {
       if (answerElement.classList.contains('show')) {
         icon.style.transform = 'rotate(180deg)';  // <-- CIERRA LA COMILLA

@@ -8,8 +8,8 @@
         <a (click)="scrollToSection('beneficios')">Beneficios</a>
         <a (click)="scrollToSection('pasos')">Cómo funciona</a>
         <a (click)="scrollToSection('testimonios')">Testimonios</a>
-        
-        
+
+
         <div *ngIf="!authServicio.logueado()">
             <a routerLink="/login" class="btn-nav">✨ Comenzar test</a>
         </div>
@@ -23,9 +23,6 @@
             <div class="drop-menu" *ngIf="menuOpen">
                 <a routerLink="/perfil">
                     <i class="material-icons">badge</i> <span>Mi perfil</span>
-                </a>
-                <a routerLink="/mis-resultados">
-                    <i class="material-icons">bar_chart</i> Mis tests
                 </a>
                 <div class="dropdown-divider"></div>
                 <button (click)="logout()" class="dropdown-logout"><i class="material-icons">logout</i>Cerrar sesión</button>
@@ -51,7 +48,6 @@
 
     <ng-container *ngIf="authServicio.logueado()">
         <a routerLink="/perfil" (click)="closeMobileMenu()">Mi perfil</a>
-        <a routerLink="/mis-resultados" (click)="closeMobileMenu()">Mis tests</a>
         <button (click)="logout()" class="mobile-btn-logout">Cerrar sesión</button>
     </ng-container>
 </div>

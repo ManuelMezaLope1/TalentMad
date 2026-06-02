@@ -12,9 +12,18 @@
         segura sobre tu futuro profesional.
       </p>
       <div class="hero-buttons">
-        <a routerLink="/preguntas" class="btn-primary">
-          <i class="fas fa-arrow-right"></i> Iniciar test ahora
-        </a>
+        <div *ngIf="authServicio.logueado()">
+          <a routerLink="/preguntas" class="btn-primary">
+            <i class="fas fa-arrow-right"></i> Iniciar test ahora
+          </a>
+        </div>
+
+        <div *ngIf="!authServicio.logueado()">
+          <a routerLink="/login" class="btn-primary">
+            <i class="fas fa-arrow-right"></i> Iniciar test ahora
+          </a>
+        </div>
+
         <a (click)="scrollToSection('pasos')" class="btn-secondary">
           <i class="fas fa-play"></i> Cómo funciona
         </a>
@@ -171,8 +180,17 @@
   <div class="cta-section">
     <h2>¿Listo para descubrir tu vocación?</h2>
     <p>Sin costo, sin spam, solo responde lo que realmente te gusta.</p>
-    <a routerLink="/test" class="btn-primary">
-      <i class="fas fa-rocket"></i> Comenzar test gratuito
-    </a>
+
+    <div *ngIf="authServicio.logueado()">
+      <a routerLink="/preguntas" class="btn-primary">
+        <i class="fas fa-rocket"></i> Comenzar test gratuito
+      </a>
+    </div>
+
+    <div *ngIf="!authServicio.logueado()">
+      <a routerLink="/login" class="btn-primary">
+        <i class="fas fa-rocket"></i> Comenzar test gratuito
+      </a>
+    </div>
   </div>
 </div>

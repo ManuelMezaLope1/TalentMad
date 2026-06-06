@@ -185,7 +185,7 @@
 }
 
 .beca-vacia {
-  min-height: 350px;
+  min-height: 300px;
   border: 2px dashed #a7f3d0;
   border-radius: 20px;
   background: #f0fdf4;
@@ -247,4 +247,229 @@
   color: #64748b;
   max-width: 400px;
   margin: 0;
+}
+
+@media(max-width: 1500px) {
+  .beca-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .beca-agregada-descripcion {
+    color: #6b7280;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    height: 110px;
+  }
+
+  .info-beca-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 260px;
+    text-align: center;
+  }
+
+  .info-requisito-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 360px;
+    text-align: center;
+  }
+
+  .info-restriccion-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 270px;
+    text-align: center;
+  }
+
+  .universidad-agregada-body{
+    padding: 25px;
+    height: 200px;
+  }
+}
+
+@media(max-width: 1115px){
+  .universidad-body{
+    height: 356px;
+  }
+}
+
+@media(max-width: 995px) {
+  .beca-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+  }
+
+  .beca-agregada-descripcion {
+    color: #6b7280;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    height: 100px;
+  }
+
+  .info-beca-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 250px;
+    text-align: center;
+  }
+
+  .info-requisito-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 350px;
+    text-align: center;
+  }
+
+  .info-restriccion-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 240px;
+    text-align: center;
+  }
+
+  .universidad-agregada-body{
+    padding: 25px;
+    height: 230px;
+  }
+
+  .universidad-body{
+    height: 389px;
+  }
+}
+
+@media(max-width: 768px) {
+  .beca-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+  }
+
+  .beca-agregada-descripcion {
+    color: #6b7280;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    height: 100px;
+  }
+
+  .info-beca-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 280px;
+    text-align: center;
+  }
+
+  .info-requisito-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 370px;
+    text-align: center;
+  }
+
+  .info-restriccion-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 280px;
+    text-align: center;
+  }
+}
+
+@media(max-width: 415px) {
+  .beca-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+  }
+
+  .beca-agregada-descripcion {
+    color: #6b7280;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    height: 150px;
+  }
+
+  .info-beca-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 280px;
+    text-align: center;
+  }
+
+  .info-requisito-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 370px;
+    text-align: center;
+  }
+
+  .info-restriccion-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 360px;
+    text-align: center;
+  }
+
+  .universidad-agregada-body{
+    padding: 25px;
+    height: 260px;
+  }
+}
+
+@media(max-width: 375px) {
+  .beca-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+  }
+
+  .beca-agregada-descripcion {
+    color: #6b7280;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    height: 150px;
+  }
+
+  .info-beca-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 320px;
+    text-align: center;
+  }
+
+  .info-requisito-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 450px;
+    text-align: center;
+  }
+
+  .info-restriccion-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    height: 390px;
+    text-align: center;
+  }
+
+  .universidad-agregada-body{
+    padding: 25px;
+    height: 260px;
+  }
 }

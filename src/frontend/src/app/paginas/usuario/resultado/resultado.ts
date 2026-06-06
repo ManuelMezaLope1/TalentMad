@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, Observable, Subject } from 'rxjs';
+import { catchError, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { ICarrera } from '../../../servicios/carrera/ICarrera';
 import { CarreraServicio } from '../../../servicios/carrera/carrera-servicio';
+import * as bootstrap from 'bootstrap';
+import { FormsModule } from '@angular/forms';
+import { Historial } from '../../../servicios/historial/Historial';
+import { UsuarioServicio } from '../../../servicios/usuario/usuario-servicio';
 
 interface RespuestaGuardada {
   [preguntaTexto: string]: number;
@@ -25,7 +29,7 @@ interface PuntajeItem {
 @Component({
   selector: 'app-resultado',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './resultado.html',
   styleUrls: ['./resultado.css']
 })
@@ -35,8 +39,19 @@ export class Resultado implements OnInit, OnDestroy {
   carreras$!: Observable<ICarrera[]>;
   carrerasFiltradas$: Observable<any[]>;
 
+  historial: Historial = new Historial();
+  usuario: any = null;
+  histcar: any = null
+
   universidadBecas: any[] = [];
   becas: any[] = [];
+
+  abierto = false;
+  abierto1 = false;
+  abierto2 = false;
+  abierto3 = false;
+
+  tipoFiltro: 'caraUnico' | 'caraSedes' | 'barataUnico' | 'barataSedes' | 'todos' | 'sedes' | 'nombreUnico' | 'nombreSedes' = 'caraUnico';
 
   codigoRIASEC: string = '';
   top3: PuntajeItem[] = [];
@@ -80,11 +95,29 @@ export class Resultado implements OnInit, OnDestroy {
 
   private ordenRIASEC = ['Realista', 'Investigador', 'Artístico', 'Social', 'Emprendedor', 'Convencional'];
 
-  constructor(private carreraServicio: CarreraServicio, private router: Router) { }
+  constructor(private carreraServicio: CarreraServicio, private router: Router, private usuarioServicio: UsuarioServicio, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.carreras$ = this.carreraServicio.obtenerListaDeCarrera();
     this.cargarResultados();
+
+    this.usuarioServicio.obtenerPerfil().pipe(
+      tap(data => {
+        this.usuario = data;
+        this.historial.usuario = {
+          id: this.usuario.id
+        };
+        console.log(this.historial.usuario);
+        console.log(this.usuario.id);
+        this.cd.detectChanges();
+      }),
+      catchError(error => {
+        console.error(error);
+        this.usuario = null;
+        return of(null);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -112,7 +145,7 @@ export class Resultado implements OnInit, OnDestroy {
       this.top3 = this.todosPuntajes.filter((item) => item.puntaje >= puntajeLimite);
 
       this.codigoRIASEC = this.generarCodigoRIASEC(this.top3);
-      console.log(this.codigoRIASEC);
+
       this.carrerasFiltradas$ = this.carreras$.pipe(
         map(carreras =>
           carreras.filter(car =>
@@ -123,6 +156,15 @@ export class Resultado implements OnInit, OnDestroy {
           )
         )
       );
+
+      this.historial.codigo = this.codigoRIASEC;
+      this.historial.fecha = new Date().toLocaleString();
+
+      this.carrerasFiltradas$.subscribe(carreras => {
+        this.historial.carreras = carreras
+          .map(car => car.nombre)
+          .join(', ');
+      });
 
       this.buildRadarGeometry();
       this.isLoading = false;
@@ -240,7 +282,6 @@ export class Resultado implements OnInit, OnDestroy {
   }
 
   obtenerUniversidadesUnicas(universidades: any[]): any[] {
-
     const mapa = new Map<string, any>();
 
     universidades.forEach(uni => {
@@ -285,7 +326,6 @@ export class Resultado implements OnInit, OnDestroy {
     });
 
     return Array.from(mapa.values());
-
   }
 
   obtenerPromedioUniversidad(universidad: any): number {
@@ -296,22 +336,339 @@ export class Resultado implements OnInit, OnDestroy {
   }
 
   obtenerTop5Universidades(universidades: any[]): any[] {
-    return [...this.obtenerUniversidadesUnicas(universidades)]
-      .sort((a, b) =>
-        this.obtenerPromedioUniversidad(b) -
-        this.obtenerPromedioUniversidad(a)
-      )
-      .slice(0, 5);
+    const universidadesUnicas = [...this.obtenerUniversidadesUnicas(universidades)];
+
+    if (!universidades) return [];
+
+    switch (this.tipoFiltro) {
+      case 'caraUnico':
+        return universidadesUnicas
+          .sort((a, b) =>
+            this.obtenerPromedioUniversidad(b) -
+            this.obtenerPromedioUniversidad(a)
+          ).slice(0, 5);
+
+      case 'caraSedes':
+        return universidades.sort((a, b) =>
+          this.obtenerPromedioUniversidad(b) -
+          this.obtenerPromedioUniversidad(a)
+        ).slice(0, 5);
+
+      case 'barataUnico':
+        return universidadesUnicas
+          .sort((a, b) =>
+            this.obtenerPromedioUniversidad(a) -
+            this.obtenerPromedioUniversidad(b)
+          )
+          .slice(0, 5);
+
+      case 'barataSedes':
+        return universidades.sort((a, b) =>
+          this.obtenerPromedioUniversidad(a) -
+          this.obtenerPromedioUniversidad(b)
+        )
+          .slice(0, 5);
+
+      case 'todos':
+        return universidadesUnicas
+          .sort((a, b) =>
+            this.obtenerPromedioUniversidad(b) -
+            this.obtenerPromedioUniversidad(a)
+          )
+
+      case 'sedes':
+        return universidades
+          .sort((a, b) =>
+            this.obtenerPromedioUniversidad(b) -
+            this.obtenerPromedioUniversidad(a)
+          )
+
+      case 'nombreUnico':
+        return universidadesUnicas.sort((a, b) => a.nombre.localeCompare(b.nombre))
+
+      case 'nombreSedes':
+        return universidades.sort((a, b) => a.nombre.localeCompare(b.nombre))
+
+      default:
+        return universidades;
+    }
   }
 
-  obtenerBecasPorUniversidad(idUniversidad: number): any[] {
-    const idsBecas = this.universidadBecas
-      .filter(ub => ub.universidad.id === idUniversidad)
-      .map(ub => ub.beca.id);
+  obtenerUniversidadesConBecas(universidades: any[]): any[] {
+    return this.obtenerTop5Universidades(universidades)
+      .filter(uni => uni.beca && uni.beca.length > 0);
+  }
 
-    return this.becas.filter(
-      beca => idsBecas.includes(beca.id)
+  menuOpenUniversidad = false;
+
+  abrirFiltrosUniversidad(event: Event): void {
+    const filtro = event.currentTarget as HTMLElement;
+    const filtroUni = filtro.nextElementSibling as HTMLElement;
+
+    if (filtroUni) {
+      filtroUni.classList.toggle('show');
+    }
+  }
+
+  @ViewChild('btnInfo')
+  btnInfo!: ElementRef;
+
+  @ViewChild('btnInfoNombre')
+  btnInfoNombre!: ElementRef;
+
+  @ViewChild('btnInfoNombreUnico')
+  btnInfoNombreUnico!: ElementRef
+
+  @ViewChild('btnInfoNombreSedes')
+  btnInfoNombreSedes!: ElementRef
+
+  @ViewChild('btnInfoCaras')
+  btnInfoCaras!: ElementRef
+
+  @ViewChild('btnInfoCaraUnico')
+  btnInfoCaraUnico!: ElementRef;
+
+  @ViewChild('btnInfoCaraSedes')
+  btnInfoCaraSedes!: ElementRef;
+
+  @ViewChild('btnInfoBaratas')
+  btnInfoBaratas!: ElementRef;
+
+  @ViewChild('btnInfoBarataUnico')
+  btnInfoBarataUnico!: ElementRef
+
+  @ViewChild('btnInfoBarataSedes')
+  btnInfoBarataSedes!: ElementRef
+
+
+
+  @ViewChild('btnInfoSedes')
+  btnInfoSedes!: ElementRef;
+
+  mostrarTooltip() {
+    if (!this.btnInfo?.nativeElement) {
+      return;
+    }
+
+    const tooltip = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfo.nativeElement
     );
 
+    tooltip.show();
+
+    setTimeout(() => {
+      try {
+        tooltip.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000);
+  }
+
+  mostrarTooltipNombre() {
+    if (!this.btnInfoNombre?.nativeElement) {
+      return;
+    }
+
+    const tooltipNombre = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoNombre.nativeElement
+    );
+
+    tooltipNombre.show();
+
+    setTimeout(() => {
+      try {
+        tooltipNombre.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000)
+  }
+
+  mostrarTooltipNombreUnico() {
+    if (!this.btnInfoNombreUnico?.nativeElement) {
+      return;
+    }
+
+    const tooltipNombreUnico = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoNombreUnico.nativeElement
+    );
+
+    tooltipNombreUnico.show();
+
+    setTimeout(() => {
+      try {
+        tooltipNombreUnico.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000)
+  }
+
+  mostrarTooltipNombreSedes() {
+    if (!this.btnInfoNombreSedes?.nativeElement) {
+      return;
+    }
+
+    const tooltipNombreSedes = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoNombreSedes.nativeElement
+    );
+
+    tooltipNombreSedes.show();
+
+    setTimeout(() => {
+      try {
+        tooltipNombreSedes.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000)
+  }
+
+  mostrarTooltipCaras() {
+    if (!this.btnInfoCaras?.nativeElement) {
+      return;
+    }
+
+    const tooltipCaras = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoCaras.nativeElement
+    );
+
+    tooltipCaras.show();
+
+    setTimeout(() => {
+      try {
+        tooltipCaras.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000)
+  }
+
+  mostrarTooltipCaraUnico() {
+    if (!this.btnInfoCaraUnico?.nativeElement) {
+      return;
+    }
+
+    const tooltipCaraUnico = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoCaraUnico.nativeElement,
+      {
+        trigger: 'manual'
+      }
+    );
+
+    tooltipCaraUnico.show();
+
+    setTimeout(() => {
+      try {
+        tooltipCaraUnico.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000)
+  }
+
+  mostrarTooltipCaraSedes() {
+    if (!this.btnInfoCaraSedes?.nativeElement) {
+      return;
+    }
+
+    const tooltipCaraSedes = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoCaraSedes.nativeElement
+    );
+
+    tooltipCaraSedes.show();
+
+    setTimeout(() => {
+      try {
+        tooltipCaraSedes.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000)
+  }
+
+  mostrarTooltipBaratas() {
+    if (!this.btnInfoCaraUnico?.nativeElement) {
+      return;
+    }
+
+    const tooltipBaratas = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoBaratas.nativeElement
+    );
+
+    tooltipBaratas.show();
+
+    setTimeout(() => {
+      try {
+        tooltipBaratas.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000)
+  }
+
+  mostrarTooltipBarataUnico() {
+    if (!this.btnInfoCaraUnico?.nativeElement) {
+      return;
+    }
+
+    const tooltipBarataUnico = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoBarataUnico.nativeElement
+    );
+
+    tooltipBarataUnico.show();
+
+    setTimeout(() => {
+      try {
+        tooltipBarataUnico.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000)
+  }
+
+  mostrarTooltipBarataSedes() {
+    if (!this.btnInfoCaraUnico?.nativeElement) {
+      return;
+    }
+
+    const tooltipBarataSedes = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoBarataSedes.nativeElement
+    );
+
+    tooltipBarataSedes.show();
+
+    setTimeout(() => {
+      try {
+        tooltipBarataSedes.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000)
+  }
+
+  mostrarTooltipSedes() {
+    if (!this.btnInfoCaraUnico?.nativeElement) {
+      return;
+    }
+
+    const tooltipSedes = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoSedes.nativeElement
+    );
+
+    tooltipSedes.show();
+
+    setTimeout(() => {
+      try {
+        tooltipSedes.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000)
+  }
+
+  onSubmit(){
+    console.log(this.historial);
   }
 }

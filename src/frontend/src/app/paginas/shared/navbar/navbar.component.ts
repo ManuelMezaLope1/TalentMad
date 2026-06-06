@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public authServicio: AuthServicio,
     private usuarioServicio: UsuarioServicio,
     private cd: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Solo carga el perfil si hay sesión activa

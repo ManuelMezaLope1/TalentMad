@@ -33,3 +33,79 @@
 .badge {
   font-size: 0.85rem;
 }
+
+.menu-radial {
+  display: flex;
+  justify-content: end;
+  position: relative;
+  width: 250px;
+  height: 150px;
+  margin: auto;
+}
+
+.btn-central {
+  margin-top: 50px;
+  position: absolute;
+  top: 10px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.btn-opcion {
+  margin-top: 50px;
+  position: absolute;
+  top: 10px;
+
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+
+  opacity: 0;
+  transition: all .4s ease;
+}
+
+.btn-opcion.activo {
+  opacity: 1;
+}
+
+@media(max-width:1500px) {
+  .carrera-nombre{
+    height: 50px;
+  }
+
+  .carrera-descripcion{
+    height: 170px;
+  }
+
+  .op1.activo {
+    transform: translateX(90px);
+  }
+
+  .op2.activo {
+    transform: translateX(180px);
+  }
+
+  .op3.activo {
+    transform: translateX(270px);
+  }
+
+  .op4.activo {
+    transform: translateX(360px);
+  }
+}
+
+@media(max-width: 993px){
+  .card-header{
+    height:130px;
+  }
+
+  .carrera-nombre{
+    height: 70px;
+  }
+
+  .carrera-descripcion{
+    height: 290px;
+  }
+}

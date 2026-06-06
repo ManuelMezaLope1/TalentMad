@@ -17,11 +17,11 @@
             </select>
             <br>
             <div class="carrera-card" *ngIf="carreraSeleccionada">
-                <div class="carrera-header">💼 Carrera Recomendada</div>
+                <div class="carrera-header">💼 Carrera Seleccionada</div>
 
-                <div class="carrera-body" style="height: 50vh;">
-                    <h3 class="carrera-titulo">{{carreraSeleccionada.nombre}} - {{carreraSeleccionada.id}}</h3>
-                    <p class="carrera-descripcion" style="height: 20vh;">{{carreraSeleccionada.descripcion}}</p>
+                <div class="carrera-body">
+                    <h3 class="carrera-titulo">{{carreraSeleccionada.nombre}}</h3>
+                    <p class="carrera-descripcion">{{carreraSeleccionada.descripcion}}</p>
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="label">⏳ Duración</span>
@@ -126,7 +126,7 @@
     <br>
     <div class="row">
         <div class="carrera-card" *ngIf="carreraAgregada">
-            <div class="carrera-header">💼 Carrera Recomendada</div>
+            <div class="carrera-header">💼 Carrera Agregada</div>
 
             <div class="carrera-body">
                 <h3 class="carrera-titulo">{{carreraAgregada.nombre}}</h3>
@@ -148,10 +148,10 @@
         <br>
         <div class="beca-grid">
             <div class="beca-detalle-card" *ngFor="let item of becaAgregada; let i=index">
-                <div class="beca-detalle-header">🎓 Beca Seleccionada</div>
+                <div class="beca-detalle-header">🎓 Beca Agregada</div>
                 <div class="beca-detalle-body">
                     <h3 class="beca-titulo">{{item.nombre}}</h3>
-                    <p class="beca-descripcion">{{item.descripcion}}</p>
+                    <p class="beca-agregada-descripcion">{{item.descripcion}}</p>
 
                     <div class="info-beca">
                         <div class="info-item">
@@ -161,7 +161,7 @@
                             </span>
                         </div>
 
-                        <div class="info-item">
+                        <div class="info-beca-item">
                             <span class="info-label">💰 Beneficio</span>
                             <span class="info-value">
                                 <ul class="lista">
@@ -173,7 +173,7 @@
                             </span>
                         </div>
 
-                        <div class="info-item">
+                        <div class="info-requisito-item">
                             <span class="info-label">✅ Requisitos</span>
                             <span class="info-value">
                                 <ul class="lista">
@@ -184,7 +184,7 @@
                             </span>
                         </div>
 
-                        <div class="info-item">
+                        <div class="info-restriccion-item">
                             <span class="info-label">⚠ Restricciones</span>
                             <span class="info-value">
                                 <ul class="lista">
@@ -196,6 +196,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="card-footer">
+                    <button class="btn btn-danger" (click)="quitarBeca(i)">Eliminar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12" *ngIf="!carreraAgregada || !carreraAgregada">
+            <div class="seleccion-vacia">
+                <div class="icono">🎯</div>
+                <br>
+                <h4>Sin resultados seleccionados</h4>
+                <p>Selecciona al menos una beca o una carrera para visualizar la información recomendada.</p>
             </div>
         </div>
     </div>

@@ -1,0 +1,50 @@
+.menu-radial {
+  display: flex;
+  justify-content: end;
+  position: relative;
+  width: 250px;
+  height: 150px;
+  margin: auto;
+}
+
+.btn-central {
+  position: absolute;
+  top: 80px;
+  left: 100px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.btn-opcion {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+
+  opacity: 0;
+  transition: all .4s ease;
+}
+
+.btn-opcion.activo {
+  opacity: 1;
+}
+
+/* Arriba */
+.op1.activo {
+  transform: translate(2px,-90px);
+}
+
+/* Derecha */
+.op2.activo {
+  transform: translate(90px,-15px);
+}
+
+/* Izquierda */
+.op4.activo {
+  transform: translate(-90px,-15px);
+}

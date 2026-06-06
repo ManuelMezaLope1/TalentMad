@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ICarrera } from '../../../servicios/carrera/ICarrera';
 import { Router } from '@angular/router';
 import { CarreraServicio } from '../../../servicios/carrera/carrera-servicio';
@@ -25,8 +25,17 @@ export class CarreraBeca {
   constructor(private carreraServicio: CarreraServicio, private becaServicio: BecaServicio, private carreraBecaServicio: CarreraBecaServicio, private router: Router) { }
 
   ngOnInit(): void {
-    this.carreras$ = this.carreraServicio.obtenerListaDeCarrera();
-    this.becas$ = this.becaServicio.obtenerListaDeBeca();
+    this.carreras$ = this.carreraServicio.obtenerListaDeCarrera().pipe(
+      map(carreras =>
+        carreras.sort((a, b) => a.nombre.localeCompare(b.nombre))
+      )
+    );
+
+    this.becas$ = this.becaServicio.obtenerListaDeBeca().pipe(
+      map(becas =>
+        becas.sort((a, b) => a.nombre.localeCompare(b.nombre))
+      )
+    );
   }
 
   volverDashboard() {
@@ -76,6 +85,10 @@ export class CarreraBeca {
         restriccion: this.becaSeleccionada.restriccion,
       });
     }
+  }
+
+  quitarBeca(index: number) {
+    this.becaAgregada.splice(index, 1);
   }
 
   guardarRelaciones() {

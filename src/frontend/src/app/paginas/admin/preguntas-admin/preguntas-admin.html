@@ -1,51 +1,63 @@
 <div class="container">
+    <br>
     <div>
-        <div class="row">
-            <div class="col-6">
-                <h1>Listado de Categorías de Preguntas</h1>
-            </div>
+        <h1>Listado de Categorías de Preguntas</h1>
 
-            <div class="col-2"></div>
-            <div class="col-2"></div>
+        <div class="menu-radial">
+            <button class="btn-central" (click)="abierto = !abierto" #btnInfo data-bs-toggle="tooltip"
+                title="Más acciones" (mouseenter)="mostrarTooltip()">
+                ➕
+            </button>
 
-            <div class="col-2 btn btn-sm-3 d-flex justify-content-end">
-                <button (click)="volverDashboard()" class="btn btn-primary">Dashboard</button>
-            </div>
+            <button class="btn-opcion op1 btn btn-success" #btnInfoAgregarCategoria (click)="registrarCategoriaPregunta();"
+                [class.activo]="abierto" (mouseenter)="mostrarTooltipAgregarCategoria()" title="Agregar categoría">
+                <i class="material-icons">add</i>
+            </button>
+
+            <button class="btn-opcion op2 btn btn-primary" #btnInfoDashboard (click)="volverDashboard()"
+                [class.activo]="abierto" (mouseenter)="mostrarTooltipDashboard()" title="Volver dashboard">
+                <i class="material-icons">dashboard</i>
+            </button>
+
+            <button class="btn-opcion op4 btn btn-success" #btnInfoAgregarPregunta (click)="registrarPregunta()"
+                [class.activo]="abierto" (mouseenter)="mostrarTooltipAgregarPregunta()" title="Agregar pregunta">
+                <i class="material-icons">add</i>
+            </button>
         </div>
 
-        <div class="row">
-            <div class="col-3">
-                <button (click)="registrarCategoriaPregunta()" class="btn btn-primary btm-sm-3">Agregar
-                    categoría</button>
-            </div>
-        </div>
-        <br>
-        <table class="table text-center table-striped table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th class="text-center" scope="col">Nombre</th>
-                    <th class="text-center" scope="col">Preguntas</th>
-                    <th class="text-center" scope="col">Acciones</th>
-                </tr>
-            </thead>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSourceCategoria"
+                class="table text-center table-striped table-bordered table-hover">
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> Nombre </th>
+                    <td mat-cell *matCellDef="let cate" class="text-center align-middle">{{ cate.nombre }}</td>
+                </ng-container>
 
-            <tbody>
-                <tr *ngFor="let cate of categoriaPreguntas$ | async">
-                    <td class="align-middle text-center">{{cate.nombre}}</td>
-                    <td class="align-middle text-center">
+                <ng-container matColumnDef="preguntas">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> Preguntas </th>
+                    <td mat-cell *matCellDef="let cate" class="text-center align-middle">
                         <div *ngFor="let pre of cate.preguntas">
                             {{ pre.preguntas }}
                         </div>
                     </td>
+                </ng-container>
 
-                    <td class="align-middle text-center">
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> Acciones </th>
+                    <td mat-cell *matCellDef="let cate" class="text-center align-middle">
                         <button (click)="actualizarCategoriaPregunta(cate.id)" class="btn btn-info">Editar</button>
                         <button (click)="eliminarCategoriaPregunta(cate.id)" class="btn btn-danger"
                             style="margin-left : 10px;">Eliminar</button>
                     </td>
-                </tr>
-            </tbody>
-        </table>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnasCategoria"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnasCategoria;"></tr>
+            </table>
+
+            <mat-paginator #paginadorCategoria [pageSize]="1" [pageSizeOptions]="[1,3,6]"
+                showFirstLastButtons></mat-paginator>
+        </div>
     </div>
     <br>
     <hr><br>
@@ -55,34 +67,36 @@
                 <h1>Listado de Preguntas</h1>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-3">
-                <button (click)="registrarPregunta()" class="btn btn-primary btm-sm-3">Agregar pregunta</button>
-            </div>
-        </div>
         <br>
-        <table class="table text-center table-striped table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th class="text-center" scope="col">Pregunta</th>
-                    <th class="text-center" scope="col">Categoría</th>
-                    <th class="text-center" scope="col">Acciones</th>
-                </tr>
-            </thead>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSourcePregunta"
+                class="table text-center table-striped table-bordered table-hover">
+                <ng-container matColumnDef="pregunta">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> Pregunta </th>
+                    <td mat-cell *matCellDef="let pre" class="text-center align-middle">{{ pre.preguntas }}</td>
+                </ng-container>
 
-            <tbody>
-                <tr *ngFor="let pre of preguntas$ | async">
-                    <td class="align-middle text-center">{{pre.preguntas}}</td>
-                    <td class="align-middle text-center">{{pre.categoriaPreguntas?.nombre}}</td>
+                <ng-container matColumnDef="categoria">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> Categoría </th>
+                    <td mat-cell *matCellDef="let pre" class="text-center align-middle">
+                        {{pre.categoriaPreguntas?.nombre}}</td>
+                </ng-container>
 
-                    <td class="align-middle text-center">
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> Acciones </th>
+                    <td mat-cell *matCellDef="let pre" class="text-center align-middle">
                         <button (click)="actualizarPregunta(pre.id)" class="btn btn-info">Editar</button>
                         <button (click)="eliminarPregunta(pre.id)" class="btn btn-danger"
                             style="margin-left : 10px;">Eliminar</button>
                     </td>
-                </tr>
-            </tbody>
-        </table>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnasPregunta"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnasPregunta;"></tr>
+            </table>
+
+            <mat-paginator #paginadorPregunta [pageSize]="10" [pageSizeOptions]="[10,30,60]"
+                showFirstLastButtons></mat-paginator>
+        </div>
     </div>
 </div>

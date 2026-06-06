@@ -57,7 +57,9 @@
                             <div class="col-md-6">
                                 <div class="grupo-formulario">
                                     <label>Departamento</label>
-                                    <select class="form-control" name="departamento" id="departamento" [(ngModel)]="usuario.departamento" [compareWith]="compararDepartamento" required>
+                                    <select class="form-control" name="departamento" id="departamento"
+                                        [(ngModel)]="usuario.departamento" [compareWith]="compararDepartamento"
+                                        required>
                                         <option *ngFor="let dep of departamento" [ngValue]="dep">{{dep.nombre}}</option>
                                     </select>
                                 </div>

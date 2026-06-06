@@ -17,7 +17,7 @@ import { DepartamentoServicio } from '../../../servicios/departamento/departamen
 export class Perfil {
   usuario: any;
   username: string;
-  departamento: Departamento[]=[];
+  departamento: Departamento[] = [];
 
   constructor(private usuarioServicio: UsuarioServicio, private departamentoServicio: DepartamentoServicio, private cd: ChangeDetectorRef, private router: Router) { }
 
@@ -31,7 +31,7 @@ export class Perfil {
     this.active = "historial";
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.usuarioServicio.obtenerPerfil().pipe(
       tap(data => {
         this.usuario = data;
@@ -43,8 +43,8 @@ export class Perfil {
       })
     ).subscribe();
 
-    this.departamentoServicio.obtenerListaDeTipoDeDepartamento().subscribe(dato => { 
-      this.departamento = dato 
+    this.departamentoServicio.obtenerListaDeTipoDeDepartamento().subscribe(dato => {
+      this.departamento = dato
       this.cd.detectChanges();
     });
   }

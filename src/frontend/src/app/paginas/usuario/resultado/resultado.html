@@ -450,12 +450,25 @@
         <form (ngSubmit)="onSubmit()">
           <div *ngIf="usuario">
             <input type="hidden" id="usuario" name="usuario" [(ngModel)]="historial.usuario.id">
+            <input type="hidden" id="username" name="username" [(ngModel)]="historial.username">
             <input type="hidden" id="codigo" name="codigo" [(ngModel)]="historial.codigo">
             <input type="hidden" id="carreras" name="carreras" [(ngModel)]="historial.carreras">
             <input type="hidden" id="fecha" name="fecha" [(ngModel)]="historial.fecha">
+            <input type="hidden" placeholder="Puntaje realizarista" name="puntaje_realista" id="puntaje_realista"
+              [(ngModel)]="historial.puntaje_realista">
+            <input type="hidden" placeholder="Puntaje investigador" name="puntaje_investigador"
+              id="puntaje_investigador" [(ngModel)]="historial.puntaje_investigador">
+            <input type="hidden" placeholder="Puntaje artistico" name="puntaje_artistico"
+              id="puntaje_artisticopuntaje_artistico" [(ngModel)]="historial.puntaje_artistico">
+            <input type="hidden" placeholder="Puntaje social" name="puntaje_social" id="puntaje_social"
+              [(ngModel)]="historial.puntaje_social">
+            <input type="hidden" placeholder="Puntaje emprendedor" name="puntaje_emprendedor" id="puntaje_emprendedor"
+              [(ngModel)]="historial.puntaje_emprendedor">
+            <input type="hidden" placeholder="Puntaje convencional" name="puntaje_convencional"
+              id="puntaje_convencional" [(ngModel)]="historial.puntaje_convencional">
           </div>
 
-          <button class="boton-terciario" [disabled]="!usuario">Guardar resultado</button>
+          <button class="boton-terciario" [disabled]="!usuario || (carrerasFiltradas$ | async)?.length === 0">Guardar resultado</button>
         </form>
       </div>
     </div>

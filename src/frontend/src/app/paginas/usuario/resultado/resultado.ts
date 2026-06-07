@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { catchError, map, Observable, of, Subject, takeUntil, tap, throwError } from 'rxjs';
 import { ICarrera } from '../../../servicios/carrera/ICarrera';
 import { CarreraServicio } from '../../../servicios/carrera/carrera-servicio';
 import * as bootstrap from 'bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Historial } from '../../../servicios/historial/Historial';
 import { UsuarioServicio } from '../../../servicios/usuario/usuario-servicio';
+import { HistorialServicio } from '../../../servicios/historial/historial-servicio';
+import Swal from 'sweetalert2';
 
 interface RespuestaGuardada {
   [preguntaTexto: string]: number;
@@ -95,7 +97,7 @@ export class Resultado implements OnInit, OnDestroy {
 
   private ordenRIASEC = ['Realista', 'Investigador', 'Artístico', 'Social', 'Emprendedor', 'Convencional'];
 
-  constructor(private carreraServicio: CarreraServicio, private router: Router, private usuarioServicio: UsuarioServicio, private cd: ChangeDetectorRef) { }
+  constructor(private carreraServicio: CarreraServicio, private router: Router, private usuarioServicio: UsuarioServicio, private historialServicio: HistorialServicio, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.carreras$ = this.carreraServicio.obtenerListaDeCarrera();
@@ -107,8 +109,7 @@ export class Resultado implements OnInit, OnDestroy {
         this.historial.usuario = {
           id: this.usuario.id
         };
-        console.log(this.historial.usuario);
-        console.log(this.usuario.id);
+        this.historial.username = this.usuario.username
         this.cd.detectChanges();
       }),
       catchError(error => {
@@ -156,6 +157,17 @@ export class Resultado implements OnInit, OnDestroy {
           )
         )
       );
+
+      const mapa = Object.fromEntries(
+        this.todosPuntajes.map(item => [item.categoria, item])
+      );
+
+      this.historial.puntaje_realista = mapa['Realista'].puntaje;
+      this.historial.puntaje_investigador = mapa['Investigador'].puntaje;
+      this.historial.puntaje_artistico = mapa['Artístico'].puntaje;
+      this.historial.puntaje_social = mapa['Social'].puntaje;
+      this.historial.puntaje_emprendedor = mapa['Emprendedor'].puntaje;
+      this.historial.puntaje_convencional = mapa['Convencional'].puntaje;
 
       this.historial.codigo = this.codigoRIASEC;
       this.historial.fecha = new Date().toLocaleString();
@@ -668,7 +680,25 @@ export class Resultado implements OnInit, OnDestroy {
     }, 1000)
   }
 
-  onSubmit(){
-    console.log(this.historial);
+  onSubmit() {
+    this.historialServicio.registrarHistorial(this.historial).pipe(
+      tap(dato => {
+        this.irAlFinal();
+      }),
+      catchError(err => {
+        console.log("ERROR COMPLETO:", err);
+        console.log("STATUS:", err.status);
+        console.log("BODY:", err.error);
+        return throwError(() => err);
+      })
+    ).subscribe()
+  }
+
+  irAlFinal() {
+    Swal.fire({
+      title: 'Carrera registrada',
+      text: `La carrera ha sido registrada con éxito`,
+      icon: `success`
+    })
   }
 }

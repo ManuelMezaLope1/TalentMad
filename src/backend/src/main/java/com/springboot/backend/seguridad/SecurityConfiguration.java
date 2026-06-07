@@ -38,6 +38,7 @@ public class SecurityConfiguration {
                .requestMatchers("/auth/**").permitAll()
                .requestMatchers("/api/v1/public/**").permitAll()
                .requestMatchers("/api/v1/private/perfil").hasAnyRole("USER","ADMIN")
+               .requestMatchers("/api/v1/private/historial").hasAnyRole("USER","ADMIN")
                .requestMatchers("/api/v1/private/**").authenticated()
                .requestMatchers("/inicio","/preguntas","/perfil").hasAnyRole("USER","ADMIN")
                .anyRequest().authenticated()

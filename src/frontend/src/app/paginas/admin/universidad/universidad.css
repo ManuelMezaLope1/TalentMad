@@ -1,11 +1,10 @@
-.dark .menu-container {
-  background: #fff7f0;
+.dark :host ::ng-deep h1{
+  transition: 1s;
+  color: #fff !important;
 }
 
-.titulo {
-  text-align: center;
-  font-size: 40px;
-  color: #ff5a00;
+.light :host ::ng-deep h1{
+  transition: 1s;
 }
 
 .alpha-header {

@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthServicio } from '../../../servicios/auth/auth-servicio';
 import Swal from 'sweetalert2';
+import { TemaServicio } from '../../../servicios/global/tema-servicio';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,7 @@ export class LoginComponent {
     private authServicio: AuthServicio,
     private router: Router,
     private cd: ChangeDetectorRef,
+    private temaServicio: TemaServicio
   ) {}
 
   login() {

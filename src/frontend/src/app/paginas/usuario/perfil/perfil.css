@@ -2,8 +2,35 @@
     background: white;
 }
 
+.dark :host ::ng-deep .cuenta-texto{
+    transition: 1s;
+    color: #fff !important;
+}
+
+.dark :host ::ng-deep label{
+    transition: 1s;
+    color: #fff !important;
+}
+
+.dark :host ::ng-deep .historial-nombre{
+    transition: 1s;
+    color: #fff !important;
+}
+
 .light .contenedor-cuenta {
     background: #121212;
+}
+
+.light :host ::ng-deep .cuenta-texto{
+    transition: 1s;
+}
+
+.light :host ::ng-deep label{
+    transition: 1s;
+}
+
+.light :host ::ng-deep .historial-nombre{
+    transition: 1s;
 }
 
 .contenedor-principal {

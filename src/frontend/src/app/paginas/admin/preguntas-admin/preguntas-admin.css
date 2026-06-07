@@ -1,3 +1,12 @@
+.dark :host ::ng-deep h1 {
+  transition: 1s;
+  color: white !important;
+}
+
+.light :host ::ng-deep h1 {
+  transition: 1s;
+}
+
 .menu-radial {
   display: flex;
   justify-content: end;
@@ -36,15 +45,15 @@
 
 /* Arriba */
 .op1.activo {
-  transform: translate(2px,-90px);
+  transform: translate(2px, -90px);
 }
 
 /* Derecha */
 .op2.activo {
-  transform: translate(90px,-15px);
+  transform: translate(90px, -15px);
 }
 
 /* Izquierda */
 .op4.activo {
-  transform: translate(-90px,-15px);
+  transform: translate(-90px, -15px);
 }

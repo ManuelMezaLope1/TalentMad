@@ -1,6 +1,34 @@
 /* resultados.css */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
+.dark :host ::ng-deep .resultado-page{
+  transition: 1s;
+  background: #222;
+}
+
+.dark :host ::ng-deep .header-title{
+  transition: 1s;
+  color: #fff;
+}
+
+.dark :host ::ng-deep .btn-secondary{
+  transition: 1s;
+  color: #fff;
+}
+
+.light :host ::ng-deep .resultado-page{
+  transition: 1s !important;
+}
+
+.light :host ::ng-deep .header-title{
+  transition: 1s !important;
+}
+
+.light :host ::ng-deep .btn-secondary{
+  transition: 1s;
+}
+
+
 /* ──────────────────────────────────────────
    PAGE WRAPPER - fondo azul claro/blanco
 ────────────────────────────────────────── */

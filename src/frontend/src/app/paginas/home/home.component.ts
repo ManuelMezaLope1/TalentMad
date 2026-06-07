@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthServicio } from '../../servicios/auth/auth-servicio';
 import { CommonModule } from '@angular/common';
+import { TemaServicio } from '../../servicios/global/tema-servicio';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  constructor(public authServicio: AuthServicio) { }
+  constructor(public authServicio: AuthServicio, public temaServicio: TemaServicio) { }
 
   // Método para manejar el acordeón FAQ
   toggleFaq(event: Event): void {

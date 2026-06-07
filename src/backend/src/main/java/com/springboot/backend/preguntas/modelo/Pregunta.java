@@ -1,11 +1,9 @@
 package com.springboot.backend.preguntas.modelo;
 
-import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.backend.categoriapreguntas.modelo.CategoriaPreguntas;
-import com.springboot.backend.respuesta.modelo.Respuesta;
 
 import jakarta.persistence.*;
 
@@ -24,22 +22,17 @@ public class Pregunta {
     @JsonIgnoreProperties({"preguntas"})
     private CategoriaPreguntas categoriaPreguntas;
 
-    @OneToMany(mappedBy = "respuestaPreguntas", fetch=FetchType.EAGER)
-    private List<Respuesta> respuestas;
-
     public Pregunta(){}
 
-    public Pregunta(Long id, String preguntas, CategoriaPreguntas categoriaPreguntas, List<Respuesta> respuestas) {
+    public Pregunta(Long id, String preguntas, CategoriaPreguntas categoriaPreguntas) {
         this.id = id;
         this.preguntas = preguntas;
         this.categoriaPreguntas = categoriaPreguntas;
-        this.respuestas = respuestas;
     }
 
-    public Pregunta(String preguntas, CategoriaPreguntas categoriaPreguntas, List<Respuesta> respuestas) {
+    public Pregunta(String preguntas, CategoriaPreguntas categoriaPreguntas) {
         this.preguntas = preguntas;
         this.categoriaPreguntas = categoriaPreguntas;
-        this.respuestas = respuestas;
     }
 
     public Long getId() {
@@ -64,14 +57,6 @@ public class Pregunta {
 
     public void setCategoriaPreguntas(CategoriaPreguntas categoriaPreguntas) {
         this.categoriaPreguntas = categoriaPreguntas;
-    }
-
-    public List<Respuesta> getRespuestas() {
-        return respuestas;
-    }
-
-    public void setRespuestas(List<Respuesta> respuestas) {
-        this.respuestas = respuestas;
     }
 
     @Override

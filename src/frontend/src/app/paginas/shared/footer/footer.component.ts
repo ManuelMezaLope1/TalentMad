@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TemaServicio } from '../../../servicios/global/tema-servicio';
 
 @Component({
   selector: 'app-footer',
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css']
 })
-export class FooterComponent {}
+export class FooterComponent {
+  constructor(public temaServicio: TemaServicio){}
+}

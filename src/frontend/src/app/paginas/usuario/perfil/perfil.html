@@ -1,3 +1,4 @@
+<br>
 <div class="contenedor-principal">
     <div class="contenedor-cuenta">
         <div class="panel-lateral">
@@ -25,7 +26,7 @@
         <div class="contenedor-principal tab-content">
             <div [ngClass]="active == 'informacion' ? 'tab-pane fade show active' : 'tab-pane fade'">
                 <div *ngIf="usuario">
-                    <h1 class="text-center">Mi Cuenta</h1>
+                    <h1 class="text-center cuenta-texto">Mi Cuenta</h1>
                     <form (ngSubmit)="onSubmit()">
                         <div class="row">
                             <div class="col-md-6">
@@ -254,3 +255,6 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<br>

@@ -12,6 +12,13 @@
 
         <div *ngIf="!authServicio.logueado()">
             <a routerLink="/login" class="btn-nav">✨ Comenzar test</a>
+            <button class="theme-switch theme-switch-logout" (click)="cambiarTema()">
+                <div class="switch-circle-logout" [class.active]="temaServicio.getTheme()==='dark'">
+                    <span class="material-icons">
+                        {{temaServicio.getTheme()==='dark' ? 'bedtime' : 'sunny'}}
+                    </span>
+                </div>
+            </button>
         </div>
 
         <div class="user-menu" *ngIf="authServicio.logueado()">
@@ -24,10 +31,19 @@
             </button>
 
             <div class="drop-menu" [class.open]="menuOpen">
-                <a routerLink="/perfil">
-                    <i class="material-icons">badge</i>
+                <a routerLink="/perfil" class="perfil">
+                    <i class="material-icons medalla">badge</i>
                     <span>Mi perfil</span>
                 </a>
+
+
+                <button class="theme-switch" (click)="cambiarTema()">
+                    <div class="switch-circle" [class.active]="temaServicio.getTheme()==='dark'">
+                        <span class="material-icons">
+                            {{temaServicio.getTheme()==='dark' ? 'bedtime' : 'sunny'}}
+                        </span>
+                    </div>
+                </button>
 
                 <div class="dropdown-divider"></div>
 
@@ -41,7 +57,7 @@
 
 
     <button class="mobile-menu-btn" [class.active]="mobileMenuOpen" (click)="toggleMobileMenu()">
-        <i class="material-icons">format_align_justify</i>
+        <i class="material-icons barra">format_align_justify</i>
     </button>
 </nav>
 
@@ -55,6 +71,14 @@
         <a routerLink="/login" class="mobile-btn-nav" (click)="closeMobileMenu()">
             ✨ Comenzar test
         </a>
+
+        <button class="theme-switch" (click)="cambiarTema()">
+            <div class="switch-circle" [class.active]="temaServicio.getTheme()==='dark'">
+                <span class="material-icons">
+                    {{temaServicio.getTheme()==='dark' ? 'bedtime' : 'sunny'}}
+                </span>
+            </div>
+        </button>
     </ng-container>
 
     <div class="dropdown-divider"></div>

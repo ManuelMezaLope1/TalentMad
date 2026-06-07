@@ -1,3 +1,112 @@
+.dark :host ::ng-deep .container {
+    transition: 1s;
+    background: #222;
+}
+
+.dark :host ::ng-deep .hero-content>h1 {
+    transition: 1s;
+    color: #fff !important;
+}
+
+.dark :host ::ng-deep .hero-content>p {
+    transition: 1s;
+    color: #fff !important;
+}
+
+.dark :host ::ng-deep .hero-buttons>a {
+    transition: 1s;
+    color: #fff !important;
+}
+
+.dark :host ::ng-deep .section-header>h2 {
+    transition: 1s;
+    color: #fff !important;
+}
+
+.dark :host ::ng-deep .section-header>p {
+    transition: 1s;
+    color: #fff !important;
+}
+
+.dark :host ::ng-deep #beneficios {
+    transition: 1s;
+    box-shadow: 0 12px 30px rgb(255, 255, 255);
+}
+
+.dark :host ::ng-deep #pasos {
+    transition: 1s;
+    background: #222;
+    box-shadow: 0 12px 30px rgb(255, 255, 255);
+}
+
+.dark :host ::ng-deep #testimonios {
+    transition: 1s;
+    box-shadow: 0 12px 30px rgb(255, 255, 255);
+}
+
+.dark :host ::ng-deep #faq {
+    transition: 1s;
+    box-shadow: 0 12px 30px rgb(255, 255, 255);
+}
+
+.dark :host ::ng-deep .faq-item {
+    transition: 1s;
+    color: #fff
+}
+
+.dark :host ::ng-deep .cta-section {
+    transition: 1s;
+    box-shadow: 0 12px 30px rgb(255, 255, 255);
+}
+
+.light :host ::ng-deep .container {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .hero-content>h1 {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .hero-content>p {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .hero-buttons>a {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .section-header>h2 {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .section-header>p {
+    transition: 1s;
+}
+
+.light :host ::ng-deep #beneficios {
+    transition: 1s;
+}
+
+.light :host ::ng-deep #pasos {
+    transition: 1s;
+}
+
+.light :host ::ng-deep #testimonios {
+    transition: 1s;
+}
+
+.light :host ::ng-deep #faq {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .faq-item {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .cta-section {
+    transition: 1s;
+}
+
 * {
     margin: 0;
     padding: 0;

@@ -1,3 +1,21 @@
+.dark :host ::ng-deep h1 {
+  transition: 1s;
+  color: white !important;
+}
+
+.light :host ::ng-deep h1 {
+  transition: 1s;
+}
+
+.dark :host ::ng-deep .form-label {
+  transition: 1s;
+  color: white !important;
+}
+
+.light :host ::ng-deep .form-label {
+  transition: 1s;
+}
+
 .carrera-card {
   background: #fff;
   border-radius: 20px;

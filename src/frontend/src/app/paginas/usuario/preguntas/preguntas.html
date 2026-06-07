@@ -1,10 +1,10 @@
-<div class="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 py-8 px-4">
+<div class="contenedor min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 py-8 px-4">
   <div class="w-full max-w-3xl mx-auto">
 
     <!-- Header -->
     <div class="text-center mb-8">
       <div class="flex items-center justify-center gap-2 mb-4">
-        <span class="text-2xl font-bold text-gray-700">
+        <span class="text-2xl font-bold text-gray-700 riasec">
           Test Vocacional RIASEC
         </span>
       </div>
@@ -24,7 +24,7 @@
       <!-- Progress Bar General -->
       <div class="bg-white rounded-2xl p-6 shadow-lg mb-6">
         <div class="flex items-center justify-between mb-3">
-          <span class="text-sm font-medium text-gray-700">
+          <span class="text-sm font-medium text-gray-700 progreso">
             Progreso total
           </span>
           <span class="text-sm font-medium text-purple-600">{{ totalProgress | number:'1.0-0' }}%</span>
@@ -38,7 +38,7 @@
 
       <!-- Información de categoría -->
       <div class="mb-4 text-center" *ngIf="currentCategory">
-        <span class="inline-block px-4 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-semibold">
+        <span class="inline-block px-4 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-semibold categoria">
           <h2>{{ currentCategory.nombre }}</h2>
         </span>
       </div>

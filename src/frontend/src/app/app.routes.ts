@@ -5,6 +5,7 @@ import { Registro } from './components/auth/registro/registro';
 import { AuthGuard } from './guards/auth-guard';
 import { Preguntas } from './paginas/usuario/preguntas/preguntas';
 import { Resultado } from './paginas/usuario/resultado/resultado';
+import { DetalleCarrera }  from './paginas/usuario/detallecarrera/detallecarrera';
 import { Perfil } from './paginas/usuario/perfil/perfil';
 import { Dashboard } from './paginas/admin/dashboard/dashboard';
 import { PreguntasAdmin } from './paginas/admin/preguntas-admin/preguntas-admin';
@@ -34,6 +35,7 @@ export const routes: Routes = [
   { path: 'registro', component: Registro },
   { path: 'preguntas', component: Preguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_USER','ROLE_ADMIN'] } },
   { path: 'resultado', component: Resultado, canActivate: [AuthGuard], data: { roles: ['ROLE_USER', 'ROLE_ADMIN'] } },
+  {path: 'detallecarrera/:id', component: DetalleCarrera, canActivate: [AuthGuard], data: { roles: ['ROLE_USER', 'ROLE_ADMIN'] } },
   { path: 'perfil', component: Perfil, canActivate: [AuthGuard], data: { roles: ['ROLE_USER', 'ROLE_ADMIN'] } },
   { path: 'dashboard', component: Dashboard, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'preguntas-admin', component: PreguntasAdmin, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },

@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthServicio } from '../../../servicios/auth/auth-servicio';
 import { UsuarioServicio } from '../../../servicios/usuario/usuario-servicio';
-import { tap, catchError, of } from 'rxjs';
+import { tap, catchError, of, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -12,16 +12,33 @@ import { tap, catchError, of } from 'rxjs';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   menuOpen = false;
   mobileMenuOpen = false;
-  usuario: any;
-  username: string;
+  usuario: any = null;
+  username: string = '';
+  private destroy$ = new Subject<void>();
 
-  constructor(private router: Router, public authServicio: AuthServicio, private usuarioServicio: UsuarioServicio, private cd: ChangeDetectorRef) { }
+  constructor(
+    private router: Router,
+    public authServicio: AuthServicio,
+    private usuarioServicio: UsuarioServicio,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
+    // Solo carga el perfil si hay sesión activa
+    if (this.authServicio.logueado()) {
+      this.cargarPerfil();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  cargarPerfil(): void {
     this.usuarioServicio.obtenerPerfil().pipe(
       tap(data => {
         this.usuario = data;
@@ -29,32 +46,23 @@ export class NavbarComponent implements OnInit {
       }),
       catchError(error => {
         console.error(error);
+        this.usuario = null;
         return of(null);
-      })
+      }),
+      takeUntil(this.destroy$)
     ).subscribe();
   }
 
-
   scrollToSection(sectionId: string): void {
     this.closeMobileMenu();
-
-
     if (this.router.url !== '/') {
       this.router.navigate(['/']).then(() => {
-
         setTimeout(() => {
-          const element = document.getElementById(sectionId);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-          }
+          document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
       });
     } else {
-
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
@@ -64,11 +72,7 @@ export class NavbarComponent implements OnInit {
 
   toggleMobileMenu() {
     this.mobileMenuOpen = !this.mobileMenuOpen;
-    if (this.mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = this.mobileMenuOpen ? 'hidden' : '';
   }
 
   closeMobileMenu() {
@@ -77,12 +81,21 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
+    // 1. Limpia las respuestas del test del usuario anterior
+    localStorage.removeItem('respuestas_test_riasec');
+    localStorage.removeItem('currentProgress_riasec');
+    localStorage.removeItem('categorias_test_riasec');
+
+    // 2. Limpia el usuario en memoria para que el navbar no lo muestre
+    this.usuario = null;
     this.menuOpen = false;
+
+    // 3. Cierra sesión y redirige
     this.authServicio.logout();
     this.router.navigate(['/login']);
   }
 
-  irDashboard(){
+  irDashboard() {
     this.router.navigate(['dashboard']);
   }
 }

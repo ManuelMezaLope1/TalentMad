@@ -1,10 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, Observable, Subject } from 'rxjs';
+import { catchError, map, Observable, of, Subject, takeUntil, tap, throwError } from 'rxjs';
 import { ICarrera } from '../../../servicios/carrera/ICarrera';
 import { CarreraServicio } from '../../../servicios/carrera/carrera-servicio';
 import { obtenerImagenCarrera } from '../../../servicios/carrera/imagenes-carrera';
+import * as bootstrap from 'bootstrap';
+import { FormsModule } from '@angular/forms';
+import { Historial } from '../../../servicios/historial/Historial';
+import { UsuarioServicio } from '../../../servicios/usuario/usuario-servicio';
+import { HistorialServicio } from '../../../servicios/historial/historial-servicio';
+import Swal from 'sweetalert2';
 
 interface RespuestaGuardada { [preguntaTexto: string]: number; }
 interface CategoriaPregunta {
@@ -19,7 +25,7 @@ interface PuntajeItem {
 @Component({
   selector: 'app-resultado',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './resultado.html',
   styleUrls: ['./resultado.css']
 })
@@ -66,7 +72,7 @@ export class Resultado implements OnInit, OnDestroy {
 
   private ordenRIASEC = ['Realista', 'Investigador', 'Artístico', 'Social', 'Emprendedor', 'Convencional'];
 
-  constructor(private carreraServicio: CarreraServicio, private router: Router) {}
+  constructor(private carreraServicio: CarreraServicio, private router: Router, private usuarioServicio: UsuarioServicio, private historialServicio: HistorialServicio, private cd: ChangeDetectorRef) { }
 
   // ── Imagen por carrera ────────────────────────────────────────────────────
   // Busca primero en el mapa por id; si no hay URL registrada, usa picsum con
@@ -77,6 +83,23 @@ export class Resultado implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.carreras$ = this.carreraServicio.obtenerListaDeCarrera();
     this.cargarResultados();
+
+    this.usuarioServicio.obtenerPerfil().pipe(
+      tap(data => {
+        this.usuario = data;
+        this.historial.usuario = {
+          id: this.usuario.id
+        };
+        this.historial.username = this.usuario.username
+        this.cd.detectChanges();
+      }),
+      catchError(error => {
+        console.error(error);
+        this.usuario = null;
+        return of(null);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -105,6 +128,36 @@ export class Resultado implements OnInit, OnDestroy {
           car.combinacion.split(',').map(c => c.trim()).includes(this.codigoRIASEC)
         ))
       );
+
+        map(carreras =>
+          carreras.filter(car =>
+            car.combinacion
+              .split(",")
+              .map(c => c.trim())
+              .includes(this.codigoRIASEC)
+          )
+        )
+      );
+
+      const mapa = Object.fromEntries(
+        this.todosPuntajes.map(item => [item.categoria, item])
+      );
+
+      this.historial.puntaje_realista = mapa['Realista'].puntaje;
+      this.historial.puntaje_investigador = mapa['Investigador'].puntaje;
+      this.historial.puntaje_artistico = mapa['Artístico'].puntaje;
+      this.historial.puntaje_social = mapa['Social'].puntaje;
+      this.historial.puntaje_emprendedor = mapa['Emprendedor'].puntaje;
+      this.historial.puntaje_convencional = mapa['Convencional'].puntaje;
+
+      this.historial.codigo = this.codigoRIASEC;
+      this.historial.fecha = new Date().toLocaleString();
+
+      this.carrerasFiltradas$.subscribe(carreras => {
+        this.historial.carreras = carreras
+          .map(car => car.nombre)
+          .join(', ');
+      });
 
       this.buildRadarGeometry();
       this.isLoading = false;

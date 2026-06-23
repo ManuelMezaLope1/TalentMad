@@ -1,3 +1,124 @@
+.dark :host ::ng-deep .navbar {
+    transition: 1s;
+    background: #222;
+}
+
+.dark :host ::ng-deep .nav-links>a {
+    transition: 1s;
+    color: #fff !important;
+}
+
+.dark :host ::ng-deep .logo-text {
+    transition: 1s;
+    color: #fff;
+}
+
+.dark :host ::ng-deep .barra {
+    transition: 1s;
+    color: #fff;
+}
+
+.dark :host ::ng-deep .perfil {
+    transition: 1s;
+    background: #222 !important;
+    color: #fff !important;
+}
+
+.dark :host ::ng-deep .medalla {
+    transition: 1s;
+    color: #fff !important;
+}
+
+.dark :host ::ng-deep .theme-switch {
+    transition: 1s;
+    background: #fff !important;
+}
+
+.dark :host ::ng-deep .drop-menu {
+    transition: 1s;
+    background: #222 !important;
+}
+
+.dark :host ::ng-deep .switch-circle {
+    transition: 1s;
+    border: 2px solid #222 !important;
+}
+
+.dark :host ::ng-deep .dropdown-logout {
+    transition: 1s;
+    background: #222 !important;
+}
+
+.dark :host ::ng-deep .mobile-menu {
+    transition: 1s;
+    background: #222 !important;
+}
+
+.dark :host ::ng-deep .mobile-menu>a {
+    transition: 1s;
+    color: #fff !important;
+}
+
+.dark :host ::ng-deep .theme-switch-logout {
+    transition: 1s;
+    background: #fff !important;
+}
+
+.light :host ::ng-deep .navbar {
+    transition: 1s;
+    background: #fff;
+}
+
+.light :host ::ng-deep .nav-links>a {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .logo-text {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .barra {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .perfil {
+    transition: 1s;
+    background: #fff !important;
+}
+
+.light :host ::ng-deep .medalla {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .theme-switch {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .drop-menu {
+    transition: 1s;
+    background: #fff !important;
+}
+
+.light :host ::ng-deep .switch-circle {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .dropdown-logout {
+    transition: 1s;
+    background: #fff !important;
+}
+
+.light :host ::ng-deep .mobile-menu {
+    transition: 1s;
+}
+
+.light :host ::ng-deep .mobile-menu>a {
+    transition: 1s !important;
+}
+
+.light :host ::ng-deep .theme-switch-logout {
+    transition: 1s;
+}
 
 .navbar {
     display: flex;
@@ -104,12 +225,12 @@
     cursor: pointer;
     font-weight: 500;
     color: #334155;
-    transition: all 0.2s;
+    transition: all 0.25s ease;
 }
 
 .btn-user:hover {
     background: #e2e8f0;
-    border-color: #cbd5e1;
+    transform: translateY(-1px);
 }
 
 .btn-user i:first-child {
@@ -126,6 +247,14 @@
     transform: rotate(180deg);
 }
 
+.btn-user .material-icons:last-child {
+    transition: transform 0.25s ease;
+}
+
+.rotated {
+    transform: rotate(180deg);
+}
+
 .drop-menu {
     position: absolute;
     top: 100%;
@@ -138,6 +267,24 @@
     z-index: 1000;
     overflow: hidden;
     border: 1px solid #e2e8f0;
+
+    /* Animación */
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease,
+        visibility 0.25s ease;
+}
+
+.drop-menu.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .drop-menu a,
@@ -174,6 +321,63 @@
     margin: 4px 0;
 }
 
+.theme-switch {
+    width: 70px;
+    height: 35px;
+    border: none;
+    border-radius: 50px;
+    background: #e2e8f0;
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+}
+
+.switch-circle {
+    width: 29px;
+    height: 29px;
+    background: white;
+    border: 2px solid #222;
+    border-radius: 50%;
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    transition: .3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.switch-circle.active {
+    left: 160px;
+}
+
+.switch-circle .material-icons {
+    font-size: 18px;
+}
+
+.switch-circle-logout{
+    width: 29px;
+    height: 29px;
+    background: white;
+    border: 2px solid #222;
+    border-radius: 50%;
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    transition: .3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.switch-circle-logout.active{
+    left: 35px;
+}
+
+.switch-circle-logout .material-icons {
+    font-size: 18px;
+}
+
 .dropdown-logout {
     color: #ef4444 !important;
 }
@@ -181,7 +385,6 @@
 .dropdown-logout i {
     color: #ef4444 !important;
 }
-
 
 
 .mobile-menu-btn {
@@ -194,19 +397,41 @@
     padding: 8px;
 }
 
+.mobile-menu-btn .material-icons {
+    transition: transform 0.3s ease;
+}
+
 .mobile-menu {
-    display: none;
     position: fixed;
     top: 80px;
     left: 0;
     right: 0;
     background: white;
     padding: 20px;
+    display: flex;
     flex-direction: column;
     gap: 12px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     z-index: 999;
     border-top: 1px solid #e2e8f0;
+
+    /* Estado cerrado */
+    opacity: 0;
+    transform: translateY(-20px);
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        visibility 0.3s ease;
+}
+
+.mobile-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .mobile-menu a,
@@ -264,5 +489,20 @@
 
     .mobile-menu {
         display: flex;
+    }
+
+    .theme-switch {
+        width: 727px;
+        height: 35px;
+        border: none;
+        border-radius: 50px;
+        background: #e2e8f0;
+        position: relative;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .switch-circle.active {
+        left: 695px;
     }
 }

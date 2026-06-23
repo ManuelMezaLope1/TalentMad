@@ -1,8 +1,17 @@
 footer {
     background: #f8fafc;
-    padding: 48px 0 24px;
-    margin-top: 40px;
+    padding: 0px 0 24px;
     text-align: center;
     color: #475569;
     font-size: 0.875rem;
+}
+
+.dark :host ::ng-deep .footer {
+    transition: 1s;
+    background: #222;
+    color: #fff;
+}
+
+.light :host ::ng-deep .footer {
+    transition: 1s;
 }

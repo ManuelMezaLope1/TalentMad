@@ -1,3 +1,12 @@
 main {
     min-height: calc(100vh - 200px);
 }
+
+.dark :host ::ng-deep .main {
+    transition: 1s;
+    background: #222;
+}
+
+.light :host ::ng-deep .main {
+    transition: 1s;
+}

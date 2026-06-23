@@ -1,19 +1,44 @@
 <div class="container">
+    <br>
     <h1 class="text-center">Carreras</h1>
-    <button (click)="registrarCarrera()" class="btn btn-primary">Agregar carrera</button>&nbsp;
-    <button (click)="volverDashboard()" class="btn btn-primary">Dashboard</button>
-    <br><br>
+
+    <div class="menu-radial d-flex justify-content-start ml-0">
+        <button class="btn-central" (click)="abierto = !abierto" #btnInfo data-bs-toggle="tooltip" title="Más acciones" (mouseenter)="mostrarTooltip()">
+            ➕
+        </button>
+
+        <button class="btn-opcion op1 btn btn-success" #btnInfoAgregar (click)="registrarCarrera();" [class.activo]="abierto"
+            (mouseenter)="mostrarTooltipAgregar()" title="Agregar carrera">
+            <i class="material-icons">add</i>
+        </button>
+
+        <button class="btn-opcion op2 btn btn-primary" #btnInfoDashboard (click)="volverDashboard()" [class.activo]="abierto"
+            (mouseenter)="mostrarTooltipDashboard()" title="Volver dashboard">
+            <i class="material-icons">dashboard</i>
+        </button>
+
+        <button class="btn-opcion op3 btn btn-warning" #btnInfoFacultad (click)="tipoFiltro='facultad'" [class.activo]="abierto"
+            (mouseenter)="mostrarTooltipFacultad()" title="Ordenar por facultad">
+            <i class="material-icons">apartment</i>
+        </button>
+
+        <button class="btn-opcion op4 btn btn-warning" #btnInfoNombre (click)="tipoFiltro='nombre'" [class.activo]="abierto"
+            (mouseenter)="mostrarTooltipNombre()" title="Ordenar por nombre">
+            <i class="material-icons">label</i>
+        </button>
+    </div>
 
     <div class="carrera-grid">
         <div class="row">
-            <div class="col-md-4 mb-4" *ngFor="let car of carreras$ | async">
+            <div class="col-md-4 mb-4" *ngFor="let car of obtenerCarrerasOrdenadas(carreras$ | async)">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0">{{ car.nombre }}</h5>
-                        <small class="text-light">{{ car.tipoCarrera }}</small>
+                        <h5 class="card-title mb-0 carrera-nombre">{{ car.nombre }}</h5>
+                        <small class="text-light carrera-tipo">{{ car.tipoCarrera }}</small>
                     </div>
                     <div class="card-body">
-                        <p class="card-text text-muted" style="height: 20vh;">{{ car.descripcion }}</p>
+                        <p class="card-text text-muted carrera-descripcion">{{ car.descripcion }}</p>
+
                         <br>
                         <p class="mb-1">
                             <i class="bi bi-clock"></i>

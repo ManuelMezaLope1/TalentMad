@@ -8,50 +8,85 @@
         <a (click)="scrollToSection('beneficios')">Beneficios</a>
         <a (click)="scrollToSection('pasos')">Cómo funciona</a>
         <a (click)="scrollToSection('testimonios')">Testimonios</a>
-        
-        
+
+
         <div *ngIf="!authServicio.logueado()">
             <a routerLink="/login" class="btn-nav">✨ Comenzar test</a>
+            <button class="theme-switch theme-switch-logout" (click)="cambiarTema()">
+                <div class="switch-circle-logout" [class.active]="temaServicio.getTheme()==='dark'">
+                    <span class="material-icons">
+                        {{temaServicio.getTheme()==='dark' ? 'bedtime' : 'sunny'}}
+                    </span>
+                </div>
+            </button>
         </div>
 
         <div class="user-menu" *ngIf="authServicio.logueado()">
             <button class="btn-user" (click)="toggleUserMenu()">
                 <span class="material-icons">account_circle</span>
-                <span *ngIf="usuario">{{usuario.nombre}}</span>
-                <i class="fas fa-chevron-down" [class.rotated]="menuOpen"></i>
+                <span *ngIf="usuario">{{ usuario.nombre }}</span>
+                <i class="material-icons" [class.rotated]="menuOpen">
+                    arrow_drop_down
+                </i>
             </button>
-            <div class="drop-menu" *ngIf="menuOpen">
-                <a routerLink="/perfil">
-                    <i class="material-icons">badge</i> <span>Mi perfil</span>
+
+            <div class="drop-menu" [class.open]="menuOpen">
+                <a routerLink="/perfil" class="perfil">
+                    <i class="material-icons medalla">badge</i>
+                    <span>Mi perfil</span>
                 </a>
-                <a routerLink="/mis-resultados">
-                    <i class="material-icons">bar_chart</i> Mis tests
-                </a>
+
+
+                <button class="theme-switch" (click)="cambiarTema()">
+                    <div class="switch-circle" [class.active]="temaServicio.getTheme()==='dark'">
+                        <span class="material-icons">
+                            {{temaServicio.getTheme()==='dark' ? 'bedtime' : 'sunny'}}
+                        </span>
+                    </div>
+                </button>
+
                 <div class="dropdown-divider"></div>
-                <button (click)="logout()" class="dropdown-logout"><i class="material-icons">logout</i>Cerrar sesión</button>
+
+                <button (click)="logout()" class="dropdown-logout">
+                    <i class="material-icons">logout</i>
+                    Cerrar sesión
+                </button>
             </div>
         </div>
     </div>
 
 
-    <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
-        <i class="fas" [class.fa-bars]="!mobileMenuOpen" [class.fa-times]="mobileMenuOpen"></i>
+    <button class="mobile-menu-btn" [class.active]="mobileMenuOpen" (click)="toggleMobileMenu()">
+        <i class="material-icons barra">format_align_justify</i>
     </button>
 </nav>
 
-<div class="mobile-menu" *ngIf="mobileMenuOpen">
+<div class="mobile-menu" [class.open]="mobileMenuOpen">
     <a (click)="scrollToSection('inicio'); closeMobileMenu()">Inicio</a>
     <a (click)="scrollToSection('beneficios'); closeMobileMenu()">Beneficios</a>
     <a (click)="scrollToSection('pasos'); closeMobileMenu()">Cómo funciona</a>
     <a (click)="scrollToSection('testimonios'); closeMobileMenu()">Testimonios</a>
 
     <ng-container *ngIf="!authServicio.logueado()">
-        <a routerLink="/login" class="mobile-btn-nav" (click)="closeMobileMenu()">✨ Comenzar test</a>
+        <a routerLink="/login" class="mobile-btn-nav" (click)="closeMobileMenu()">
+            ✨ Comenzar test
+        </a>
+
+        <button class="theme-switch" (click)="cambiarTema()">
+            <div class="switch-circle" [class.active]="temaServicio.getTheme()==='dark'">
+                <span class="material-icons">
+                    {{temaServicio.getTheme()==='dark' ? 'bedtime' : 'sunny'}}
+                </span>
+            </div>
+        </button>
     </ng-container>
+
+    <div class="dropdown-divider"></div>
 
     <ng-container *ngIf="authServicio.logueado()">
         <a routerLink="/perfil" (click)="closeMobileMenu()">Mi perfil</a>
-        <a routerLink="/mis-resultados" (click)="closeMobileMenu()">Mis tests</a>
-        <button (click)="logout()" class="mobile-btn-logout">Cerrar sesión</button>
+        <button (click)="logout()" class="mobile-btn-logout">
+            Cerrar sesión
+        </button>
     </ng-container>
 </div>

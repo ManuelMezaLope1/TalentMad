@@ -1,37 +1,76 @@
 <div class="container">
-    <button class="btn btn-primary" (click)="registrarBeca()">Agregar beca</button>&nbsp;
-    <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>
-    <br><br>
+    <h1 class="text-center">Becas</h1>
+
+    <div class="menu-radial d-flex justify-content-start ml-0">
+        <button class="btn-central" (click)="abierto = !abierto" #btnInfo data-bs-toggle="tooltip" title="Más acciones" (mouseenter)="mostrarTooltip()">
+            ➕
+        </button>
+
+        <button class="btn-opcion op1 btn btn-success" #btnInfoAgregar (click)="registrarBeca();" [class.activo]="abierto"
+            (mouseenter)="mostrarTooltipAgregar()" title="Agregar beca">
+            <i class="material-icons">add</i>
+        </button>
+
+        <button class="btn-opcion op2 btn btn-primary" #btnInfoDashboard (click)="volverDashboard()" [class.activo]="abierto"
+            (mouseenter)="mostrarTooltipDashboard()" title="Volver dashboard">
+            <i class="material-icons">dashboard</i>
+        </button>
+
+        <button class="btn-opcion op3 btn btn-warning" #btnInfoTipo (click)="tipoFiltro='tipo'" [class.activo]="abierto"
+            (mouseenter)="mostrarTooltipTipo()" title="Ordenar por tipo">
+            <i class="material-icons">apartment</i>
+        </button>
+
+        <button class="btn-opcion op4 btn btn-warning" #btnInfoNombre (click)="tipoFiltro='nombre'" [class.activo]="abierto"
+            (mouseenter)="mostrarTooltipNombre()" title="Ordenar por nombre">
+            <i class="material-icons">label</i>
+        </button>
+    </div>
 
     <div class="beca-grid">
         <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4" *ngFor="let be of becas$ | async">
-                <div class="beca-card h-100">
-                    <div class="beca-header">
-                        <h4>{{be.nombre}}</h4>
+            <div class="col-lg-4 col-md-6 mb-4" *ngFor="let be of obtenerBecasOrdenadas(becas$ | async)">
+                <div class="beca-card">
+                    <div class="beca-header" style="height: 160px;">
+                        <div style="height: 50px;">
+                            <h4>{{be.nombre}}</h4>
+                        </div>
                         <br>
                         <div class="beca-badge">🎓 {{be.tipoBeca}}</div>
                     </div>
 
                     <div class="beca-body">
-                        <div class="detalle">
+                        <div class="detalle beca-descripcion">
                             <span class="label">📖 Descripción</span>
                             <p>{{be.descripcion}}</p>
                         </div>
 
-                        <div class="detalle">
+                        <div class="detalle beca-beneficio">
                             <span class="label">💰 Beneficios</span>
-                            <p>{{be.beneficio}}</p>
+                            <ul class="lista">
+                                <li *ngFor="let beneficio of be.beneficio.split(',')"
+                                    [class.completo]="beneficio.trim().length > 30">
+                                    ✅ {{ beneficio.trim() }}
+                                </li>
+                            </ul>
                         </div>
 
-                        <div class="detalle">
-                            <span class="label">✅ Requisitos</span>
-                            <p>{{be.requisito}}</p>
+                        <div class="detalle beca-requisito">
+                            <span class="label">⚠️ Requisitos</span>
+                            <ul class="lista">
+                                <li *ngFor="let requisito of be.requisito.split(',')">
+                                    ✅ {{ requisito.trim() }}
+                                </li>
+                            </ul>
                         </div>
 
-                        <div class="detalle">
-                            <span class="label">⚠ Restricciones</span>
-                            <p>{{be.restriccion}}</p>
+                        <div class="detalle beca-restriccion">
+                            <span class="label">❌ Restricciones</span>
+                            <ul class="lista">
+                                <li *ngFor="let restriccion of be.restriccion.split(',')">
+                                    ✅ {{ restriccion.trim() }}
+                                </li>
+                            </ul>
                         </div>
 
                         <div class="duracion-box">

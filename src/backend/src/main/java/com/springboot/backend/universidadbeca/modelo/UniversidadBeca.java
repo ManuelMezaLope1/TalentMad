@@ -76,4 +76,7 @@ public class UniversidadBeca {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+}
+
 }

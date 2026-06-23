@@ -1,22 +1,20 @@
-.dark .menu-container{
-  background: #fff7f0;
+.dark :host ::ng-deep h1{
+  transition: 1s;
+  color: #fff !important;
 }
 
-.titulo {
-  text-align: center;
-  font-size: 40px;
-  color: #ff5a00;
-  margin-bottom: 20px;
+.light :host ::ng-deep h1{
+  transition: 1s;
 }
 
-.alpha-header{
+.alpha-header {
   position: sticky;
   top: 0;
   background: #2319ac;
   color: white;
   padding: 10px;
   z-index: 1000;
-  box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
 }
 
@@ -36,7 +34,7 @@
   background: white;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   transition: 0.3s;
 }
 
@@ -98,4 +96,120 @@
   font-weight: bold;
   color: #ff5a00;
   font-size: 18px;
+}
+
+.universidad-vacia {
+  height: 100%;
+  min-height: 300px;
+  border: 2px dashed #d1d5db;
+  border-radius: 20px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 30px;
+}
+
+.universidad-vacia .icono {
+  font-size: 4rem;
+  margin-bottom: 15px;
+}
+
+.universidad-vacia h4 {
+  color: #374151;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.universidad-vacia p {
+  color: #6b7280;
+  max-width: 300px;
+  margin: 0;
+}
+
+.menu-radial {
+  display: flex;
+  justify-content: end;
+  position: relative;
+  width: 250px;
+  height: 150px;
+  margin: auto;
+}
+
+.btn-central {
+  margin-top: 50px;
+  position: absolute;
+  top: 10px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.btn-opcion {
+  margin-top: 50px;
+  position: absolute;
+  top: 10px;
+
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+
+  opacity: 0;
+  transition: all .4s ease;
+}
+
+.btn-opcion.activo {
+  opacity: 1;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media(max-width:1500px) {
+  .universidad-nombre{
+    height: 100px;
+  }
+
+  .op1.activo {
+    transform: translateX(90px);
+  }
+
+  .op2.activo {
+    transform: translateX(180px);
+  }
+
+  .op3.activo {
+    transform: translateX(270px);
+  }
+
+  .op4.activo {
+    transform: translateX(360px);
+  }
+
+  .op5.activo {
+    transform: translateX(450px);
+  }
+}
+
+@media(max-width:995px){
+  .universidad-nombre{
+    height:170px;
+  }
+}
+
+@media(max-width:768px) {
+  .card{
+    height:690px;
+  }
+
+  .universidad-nombre{
+    height: 200px;
+  }
 }

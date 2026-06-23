@@ -18,12 +18,13 @@
             <br>
             <div *ngIf="universidadSeleccionada">
                 <div class="universidad-card">
-                    <div class="universidad-header">🎓 Universidad Recomendada</div>
+                    <div class="universidad-header">🎓 Universidad Seleccionada</div>
 
-                    <div class="universidad-body" style="height: 50vh;">
+                    <div class="universidad-body">
                         <h3 class="universidad-nombre">{{universidadSeleccionada.nombre}}</h3>
 
-                        <div class="ubicacion">📍 {{universidadSeleccionada.departamento.nombre}}</div>
+                        <div class="ubicacion" style="font-size: 18px;">📍
+                            {{universidadSeleccionada.departamento.nombre}}</div>
 
                         <div class="costo-box">
                             <span class="costo-label">Costo mensual</span>
@@ -131,7 +132,7 @@
             <div class="universidad-card">
                 <div class="universidad-header">🎓 Universidad Recomendada</div>
 
-                <div class="universidad-body" style="height: 33vh;">
+                <div class="universidad-agregada-body">
                     <h3 class="universidad-nombre">{{universidadAgregada.nombre}}</h3>
 
                     <div class="ubicacion">📍 {{universidadAgregada.departamento}}</div>
@@ -161,7 +162,7 @@
                             </span>
                         </div>
 
-                        <div class="info-item">
+                        <div class="info-beca-item">
                             <span class="info-label">💰 Beneficio</span>
                             <span class="info-value">
                                 <ul class="lista">
@@ -173,7 +174,7 @@
                             </span>
                         </div>
 
-                        <div class="info-item">
+                        <div class="info-requisito-item">
                             <span class="info-label">✅ Requisitos</span>
                             <span class="info-value">
                                 <ul class="lista">
@@ -184,7 +185,7 @@
                             </span>
                         </div>
 
-                        <div class="info-item">
+                        <div class="info-restriccion-item">
                             <span class="info-label">⚠ Restricciones</span>
                             <span class="info-value">
                                 <ul class="lista">
@@ -212,4 +213,5 @@
     <div class="d-flex justify-content-end">
         <button class="btn btn-success" (click)="guardarRelaciones()">Registrar</button>
     </div>
+    <br>
 </div>

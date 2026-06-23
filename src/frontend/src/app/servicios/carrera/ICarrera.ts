@@ -1,4 +1,5 @@
 import { IBeca } from "../beca/IBeca";
+import { IUniversidad } from "../universidad/IUniversidad";
 
 export class ICarrera{
     id:number;
@@ -6,7 +7,7 @@ export class ICarrera{
     descripcion:string;
     duracion:string;
     tipoCarrera:any;
-    universidad:ICarrera[];
+    universidad:IUniversidad[];
     combinacion:string;
     beca: IBeca[];
 }

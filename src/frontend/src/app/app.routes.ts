@@ -21,9 +21,6 @@ import { RegistroCarrera } from './components/carrera/registro-carrera/registro-
 import { ActualizacionCarrera } from './components/carrera/actualizacion-carrera/actualizacion-carrera';
 import { RegistroBeca } from './components/beca/registro-beca/registro-beca';
 import { ActualizacionBeca } from './components/beca/actualizacion-beca/actualizacion-beca';
-import { RegistroRespuesta } from './components/respuesta/registro-respuesta/registro-respuesta';
-import { ActualizacionRespuesta } from './components/respuesta/actualizacion-respuesta/actualizacion-respuesta';
-import { Respuesta } from './paginas/admin/respuesta/respuesta';
 import { UniversidadCarrera } from './paginas/admin/universidad-carrera/universidad-carrera';
 import { CarreraBeca } from './paginas/admin/carrera-beca/carrera-beca';
 import { UniversidadBeca } from './paginas/admin/universidad-beca/universidad-beca';
@@ -41,7 +38,6 @@ export const routes: Routes = [
   { path: 'universidad', component: Universidad, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'carrera', component: Carrera, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'beca', component: Beca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
-  { path: 'respuesta', component: Respuesta, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'universidad-carrera', component: UniversidadCarrera, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'carrera-beca', component: CarreraBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'universidad-beca', component: UniversidadBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
@@ -60,9 +56,6 @@ export const routes: Routes = [
 
   { path: 'creacion-beca', component: RegistroBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'actualizacion-beca/:id', component: ActualizacionBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
-
-  { path: 'creacion-respuesta', component: RegistroRespuesta, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
-  { path: 'actualizacion-respuesta/:id', component: ActualizacionRespuesta, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } }
 ];
 
 export const routing = RouterModule.forRoot(routes, {

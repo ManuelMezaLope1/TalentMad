@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthServicio } from '../../servicios/auth/auth-servicio';
 import { CommonModule } from '@angular/common';
+import { TemaServicio } from '../../servicios/global/tema-servicio';
 
 @Component({
   selector: 'app-home',
@@ -11,26 +12,23 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  constructor(public authServicio: AuthServicio){}
+  constructor(public authServicio: AuthServicio, public temaServicio: TemaServicio) { }
 
   // Método para manejar el acordeón FAQ
-toggleFaq(event: Event): void {
-  const questionElement = event.currentTarget as HTMLElement;
-  const answerElement = questionElement.nextElementSibling as HTMLElement;
-  const icon = questionElement.querySelector('i');
+  toggleFaq(event: Event): void {
+    const questionElement = event.currentTarget as HTMLElement;
+    const answerElement = questionElement.nextElementSibling as HTMLElement;
+    const icon = questionElement.querySelector('i');
 
-  if (answerElement) {
-    answerElement.classList.toggle('show');
+    if (answerElement) {
+      answerElement.classList.toggle('show');
+      answerElement.classList.toggle('mt-3');
+    }
 
     if (icon) {
-      if (answerElement.classList.contains('show')) {
-        icon.style.transform = 'rotate(180deg)';  // <-- CIERRA LA COMILLA
-      } else {
-        icon.style.transform = 'rotate(0deg)';     // <-- CIERRA LA COMILLA
-      }
+      icon.classList.toggle('rotate');
     }
   }
-}
 
   // Método para scroll suave a secciones
   scrollToSection(sectionId: string): void {

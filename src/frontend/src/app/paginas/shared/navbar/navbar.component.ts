@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AuthServicio } from '../../../servicios/auth/auth-servicio';
 import { UsuarioServicio } from '../../../servicios/usuario/usuario-servicio';
 import { tap, catchError, of, Subject, takeUntil } from 'rxjs';
+import { TemaServicio } from '../../../servicios/global/tema-servicio';
 
 @Component({
   selector: 'app-navbar',
@@ -23,8 +24,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private router: Router,
     public authServicio: AuthServicio,
     private usuarioServicio: UsuarioServicio,
-    private cd: ChangeDetectorRef
-  ) {}
+    private cd: ChangeDetectorRef,
+    public temaServicio: TemaServicio
+  ) { }
 
   ngOnInit(): void {
     // Solo carga el perfil si hay sesión activa
@@ -33,6 +35,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.cargarPerfil();
       this.cd.detectChanges();
     }
+  }
+
+  cambiarTema(){
+    this.temaServicio.toggleTheme();
   }
 
   ngOnDestroy(): void {

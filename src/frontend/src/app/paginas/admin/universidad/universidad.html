@@ -1,8 +1,39 @@
 <div class="container">
-    <h1 class="titulo">Universidades</h1>
-    <button (click)="registrarUniversidad()" class="btn btn-primary">Agregar universidad</button>&nbsp;
-    <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>
-    <br><br>
+    <br>
+    <h1 class="text-center">Universidades</h1>
+
+    <div class="menu-radial d-flex justify-content-start ml-0">
+        <button class="btn-central" (click)="abierto = !abierto" #btnInfo data-bs-toggle="tooltip" title="Más acciones"
+            (mouseenter)="mostrarTooltip()">
+            ➕
+        </button>
+
+        <button class="btn-opcion op1 btn btn-success" #btnInfoAgregar (click)="registrarUniversidad();"
+            [class.activo]="abierto" (mouseenter)="mostrarTooltipAgregar()" title="Agregar carrera">
+            <i class="material-icons">add</i>
+        </button>
+
+        <button class="btn-opcion op2 btn btn-primary" #btnInfoDashboard (click)="volverDashboard()"
+            [class.activo]="abierto" (mouseenter)="mostrarTooltipDashboard()" title="Volver dashboard">
+            <i class="material-icons">dashboard</i>
+        </button>
+
+        <button class="btn-opcion op3 btn btn-warning" #btnInfoUnico (click)="tipoFiltro='unico'"
+            [class.activo]="abierto" (mouseenter)="mostrarTooltipUnico()" title="Ordenar por universidad única">
+            <i class="material-icons">label</i>
+        </button>
+
+        <button class="btn-opcion op4 btn btn-warning" #btnInfoNombre (click)="tipoFiltro='nombre'"
+            [class.activo]="abierto" (mouseenter)="mostrarTooltipNombre()" title="Ordenar por nombre">
+            <i class="material-icons">label</i>
+        </button>
+
+        <button class="btn-opcion op5 btn btn-warning" #btnInfoSedes (click)="tipoFiltro='sedes'"
+            [class.activo]="abierto" (mouseenter)="mostrarTooltipSedes()" title="Ordenar por sedes">
+            <i class="material-icons">label</i>
+        </button>
+    </div>
+
     <div *ngFor="let depart of departamentos$ | async">
         <div>
             <div class="alpha-header">
@@ -11,7 +42,7 @@
             <br>
             <div class="universidad-grid">
                 <div class="row">
-                    <div class="col-md-4 mb-3" *ngFor="let uni of depart.universidad?.sort((a,b) => a.nombre.localeCompare(b.nombre))">
+                    <div class="col-md-4 mb-3" *ngFor="let uni of obtenerUniversidadesOrdenadas(depart?.universidad)">
                         <div class="card">
                             <div class="img-container">
                                 <div *ngIf="uni.nombre.startsWith('Pontificia Universidad Católica del Perú')">
@@ -81,16 +112,19 @@
                                 <div *ngIf="uni.nombre.startsWith('Universidad Tecnológica del Perú')">
                                     <img src="utp.jpeg" alt="Imagen de la UTP">
                                 </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad del Pacífico')">
+                                    <img src="upa.jpg" alt="Imagen de la UPA" />
+                                </div>
                             </div>
 
                             <div class="card-body">
-                                <h3>{{uni.nombre}}</h3>
+                                <h3 class="universidad-nombre">{{uni.nombre}}</h3>
                                 <p class="precio">Costo Mensual: S/.{{uni.costoMensualMinimo}} -
                                     S/.{{uni.costoMensualMaximo}}</p>
                                 <span>Tipo: {{uni.tipoUniversidad?.nombre}}</span>
                             </div>
 
-                            <div class="card-footer d-flex justify-content-center">
+                            <div class="action-buttons card-footer d-flex justify-content-center">
                                 <button class="btn btn-primary"
                                     (click)="actualizarUniversidad(uni.id)">Actualizar</button>&nbsp;
                                 <button class="btn btn-danger"
@@ -187,6 +221,11 @@
                                     <a type="button" class="btn btn-success" href="https://www.utp.edu.pe/"
                                         target="_blank">Ver más</a>
                                 </div>
+                                <div *ngIf="uni.nombre.startsWith('Universidad del Pacífico')">
+                                    <a type="button" class="btn btn-success p-2" href="https://www.up.edu.pe/"
+                                        target="_blank">Ver
+                                        más</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -194,7 +233,12 @@
             </div>
         </div>
         <div *ngIf="!depart.universidad || depart.universidad.length === 0">
-            <p class="text-center">No hay universidades en este departamento</p>
+            <div class="universidad-vacia">
+                <div class="icono">🎓</div>
+                <br>
+                <h4>Ninguna universidad encontrada</h4>
+                <p>No se encontraron universidades registradas en este departamento</p>
+            </div>
         </div>
         <br><br>
     </div>

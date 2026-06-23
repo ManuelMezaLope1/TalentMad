@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 import { BecaServicio } from '../../../servicios/beca/beca-servicio';
 import { IBeca } from '../../../servicios/beca/IBeca';
@@ -29,8 +29,17 @@ export class UniversidadBeca {
   constructor(private universidadServicio: UniversidadServicio, private becaServicio: BecaServicio, private universidadBecaServicio: UniversidadBecaServicio, private router: Router) { }
 
   ngOnInit(): void {
-    this.universidades$ = this.universidadServicio.obtenerListaDeUniversidad();
-    this.becas$ = this.becaServicio.obtenerListaDeBeca();
+    this.universidades$ = this.universidadServicio.obtenerListaDeUniversidad().pipe(
+      map(universidades =>
+        universidades.sort((a, b) => a.nombre.localeCompare(b.nombre))
+      )
+    );
+
+    this.becas$ = this.becaServicio.obtenerListaDeBeca().pipe(
+      map(becas =>
+        becas.sort((a, b) => a.nombre.localeCompare(b.nombre))
+      )
+    );
   }
 
   volverDashboard() {

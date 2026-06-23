@@ -1,493 +1,250 @@
-.dark :host ::ng-deep h1 {
-  transition: 1s;
-  color: white !important;
-}
-
-.light :host ::ng-deep h1 {
-  transition: 1s;
-}
-
-.dark :host ::ng-deep .form-label {
-  transition: 1s;
-  color: white !important;
-}
-
-.light :host ::ng-deep .form-label {
-  transition: 1s;
-}
-
 .universidad-card {
-  background: #fff;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  transition: 0.3s;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: .3s;
 }
 
 .universidad-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
 }
 
 .universidad-header {
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
-  color: white;
-  padding: 15px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 1rem;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
 }
 
 .universidad-body {
-  padding: 25px;
+    padding: 25px;
 }
 
 .universidad-nombre {
-  color: #1f2937;
-  font-weight: 700;
-  margin-bottom: 10px;
+    color: #1f2937;
+    font-weight: 700;
+    margin-bottom: 10px;
 }
 
 .ubicacion {
-  color: #6b7280;
-  font-size: 0.95rem;
-  margin-bottom: 15px;
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
 }
 
 .costo-box {
-  background: #eff6ff;
-  border-radius: 12px;
-  padding: 15px;
-  margin-top: 20px;
-  text-align: center;
+    background: #eff6ff;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .costo-label {
-  display: block;
-  color: #6b7280;
-  font-size: 0.9rem;
+    display: block;
+    color: #6b7280;
+    font-size: 0.9rem;
 }
 
 .costo {
-  color: #2563eb;
-  font-size: 1.4rem;
-  font-weight: 800;
+    color: #2563eb;
+    font-size: 1.4rem;
+    font-weight: 800;
 }
 
 .btn-ver {
-  width: 100%;
-  margin-top: 20px;
-  border: none;
-  padding: 12px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white;
-  font-weight: 600;
-  transition: 0.3s;
+    width: 100%;
+    margin-top: 20px;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    font-weight: 600;
+    transition: .3s;
 }
 
 .btn-ver:hover {
-  transform: scale(1.02);
+    transform: scale(1.02);
 }
 
 .universidad-vacia {
-  height: 100%;
-  min-height: 300px;
-  border: 2px dashed #d1d5db;
-  border-radius: 20px;
-  background: #fafafa;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 30px;
+    height: 100%;
+    min-height: 300px;
+    border: 2px dashed #d1d5db;
+    border-radius: 20px;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
 }
 
 .universidad-vacia .icono {
-  font-size: 4rem;
-  margin-bottom: 15px;
+    font-size: 4rem;
+    margin-bottom: 15px;
 }
 
 .universidad-vacia h4 {
-  color: #374151;
-  font-weight: 700;
-  margin-bottom: 10px;
+    color: #374151;
+    font-weight: 700;
+    margin-bottom: 10px;
 }
 
 .universidad-vacia p {
-  color: #6b7280;
-  max-width: 300px;
-  margin: 0;
+    color: #6b7280;
+    max-width: 300px;
+    margin: 0;
 }
 
 .beca-detalle-card {
-  background: #fff;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
 }
 
 .beca-detalle-header {
-  background: linear-gradient(135deg, #059669, #10b981);
-  color: white;
-  text-align: center;
-  padding: 16px;
-  font-weight: 700;
-  font-size: 1rem;
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: white;
+    text-align: center;
+    padding: 16px;
+    font-weight: 700;
+    font-size: 1rem;
 }
 
 .beca-detalle-body {
-  padding: 25px;
+    padding: 25px;
 }
 
 .beca-titulo {
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 15px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 15px;
 }
 
 .beca-descripcion {
-  color: #6b7280;
-  margin-bottom: 20px;
-  line-height: 1.6;
+    color: #6b7280;
+    margin-bottom: 20px;
+    line-height: 1.6;
 }
 
 .info-beca {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .info-item {
-  background: #f8fafc;
-  border-radius: 12px;
-  padding: 14px;
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 14px;
 }
 
 .info-label {
-  display: block;
-  font-weight: 700;
-  color: #059669;
-  margin-bottom: 5px;
+    display: block;
+    font-weight: 700;
+    color: #059669;
+    margin-bottom: 5px;
 }
 
 .info-value {
-  color: #374151;
+    color: #374151;
 }
 
 .lista {
-  text-align: left;
-  list-style: none;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px 20px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+    text-align: left;
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .lista li {
-  margin: 6px 0;
+    margin: 6px 0;
 }
 
 .lista li.completo {
-  grid-column: 1 / -1;
+    grid-column: 1 / -1;
 }
 
 .acciones {
-  display: flex;
-  gap: 10px;
-  margin-top: 25px;
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
 }
 
 .beca-vacia {
-  min-height: 300px;
-  border: 2px dashed #a7f3d0;
-  border-radius: 20px;
-  background: #f0fdf4;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 30px;
+    min-height: 350px;
+    border: 2px dashed #a7f3d0;
+    border-radius: 20px;
+    background: #f0fdf4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
 }
 
 .beca-vacia .icono {
-  font-size: 4rem;
-  margin-bottom: 15px;
+    font-size: 4rem;
+    margin-bottom: 15px;
 }
 
 .beca-vacia h4 {
-  color: #065f46;
-  font-weight: 700;
+    color: #065f46;
+    font-weight: 700;
 }
 
 .beca-vacia p {
-  color: #6b7280;
-  max-width: 320px;
-  margin: 0;
+    color: #6b7280;
+    max-width: 320px;
+    margin: 0;
 }
 
 .beca-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-
-.seleccion-vacia {
-  min-height: 250px;
-  border: 2px dashed #cbd5e1;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 30px;
-}
-
-.seleccion-vacia .icono {
-  font-size: 4rem;
-  margin-bottom: 15px;
-}
-
-.seleccion-vacia h4 {
-  color: #334155;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.seleccion-vacia p {
-  color: #64748b;
-  max-width: 400px;
-  margin: 0;
-}
-
-@media(max-width: 1500px) {
-  .beca-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-  }
-
-  .beca-agregada-descripcion {
-    color: #6b7280;
-    margin-bottom: 20px;
-    line-height: 1.6;
-    height: 110px;
-  }
-
-  .info-beca-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 260px;
-    text-align: center;
-  }
-
-  .info-requisito-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 360px;
-    text-align: center;
-  }
-
-  .info-restriccion-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 270px;
-    text-align: center;
-  }
-
-  .universidad-agregada-body{
-    padding: 25px;
-    height: 200px;
-  }
 }
 
-@media(max-width: 1115px){
-  .universidad-body{
-    height: 356px;
-  }
+.seleccion-vacia {
+    min-height: 250px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
 }
 
-@media(max-width: 995px) {
-  .beca-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 15px;
-  }
-
-  .beca-agregada-descripcion {
-    color: #6b7280;
-    margin-bottom: 20px;
-    line-height: 1.6;
-    height: 100px;
-  }
-
-  .info-beca-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 250px;
-    text-align: center;
-  }
-
-  .info-requisito-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 350px;
-    text-align: center;
-  }
-
-  .info-restriccion-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 240px;
-    text-align: center;
-  }
-
-  .universidad-agregada-body{
-    padding: 25px;
-    height: 230px;
-  }
-
-  .universidad-body{
-    height: 389px;
-  }
+.seleccion-vacia .icono {
+    font-size: 4rem;
+    margin-bottom: 15px;
 }
 
-@media(max-width: 768px) {
-  .beca-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 15px;
-  }
-
-  .beca-agregada-descripcion {
-    color: #6b7280;
-    margin-bottom: 20px;
-    line-height: 1.6;
-    height: 100px;
-  }
-
-  .info-beca-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 280px;
-    text-align: center;
-  }
-
-  .info-requisito-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 370px;
-    text-align: center;
-  }
-
-  .info-restriccion-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 280px;
-    text-align: center;
-  }
+.seleccion-vacia h4 {
+    color: #334155;
+    font-weight: 700;
+    margin-bottom: 10px;
 }
 
-@media(max-width: 415px) {
-  .beca-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 15px;
-  }
-
-  .beca-agregada-descripcion {
-    color: #6b7280;
-    margin-bottom: 20px;
-    line-height: 1.6;
-    height: 150px;
-  }
-
-  .info-beca-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 280px;
-    text-align: center;
-  }
-
-  .info-requisito-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 370px;
-    text-align: center;
-  }
-
-  .info-restriccion-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 360px;
-    text-align: center;
-  }
-
-  .universidad-agregada-body{
-    padding: 25px;
-    height: 260px;
-  }
-}
-
-@media(max-width: 375px) {
-  .beca-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 15px;
-  }
-
-  .beca-agregada-descripcion {
-    color: #6b7280;
-    margin-bottom: 20px;
-    line-height: 1.6;
-    height: 150px;
-  }
-
-  .info-beca-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 320px;
-    text-align: center;
-  }
-
-  .info-requisito-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 450px;
-    text-align: center;
-  }
-
-  .info-restriccion-item {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 15px;
-    height: 390px;
-    text-align: center;
-  }
-
-  .universidad-agregada-body{
-    padding: 25px;
-    height: 260px;
-  }
+.seleccion-vacia p {
+    color: #64748b;
+    max-width: 400px;
+    margin: 0;
 }

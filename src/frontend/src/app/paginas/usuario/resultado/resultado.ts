@@ -33,6 +33,9 @@ export class Resultado implements OnInit, OnDestroy {
 
   carreras$!: Observable<ICarrera[]>;
   carrerasFiltradas$!: Observable<ICarrera[]>;
+  historial: Historial = new Historial();
+  usuario: any = null;
+  histcar: any = null;
 
   codigoRIASEC = '';
   top3: PuntajeItem[] = [];
@@ -77,9 +80,9 @@ export class Resultado implements OnInit, OnDestroy {
   // ── Imagen por carrera ────────────────────────────────────────────────────
   // Busca primero en el mapa por id; si no hay URL registrada, usa picsum con
   // la id como seed para que cada carrera tenga siempre la misma imagen aleatoria.
- getImagenCarrera(carrera: ICarrera): string {
-  return obtenerImagenCarrera(carrera.id, 600, 340);
-}
+  getImagenCarrera(carrera: ICarrera): string {
+    return obtenerImagenCarrera(carrera.id, 600, 340);
+  }
   ngOnInit(): void {
     this.carreras$ = this.carreraServicio.obtenerListaDeCarrera();
     this.cargarResultados();
@@ -127,16 +130,6 @@ export class Resultado implements OnInit, OnDestroy {
         map(carreras => carreras.filter(car =>
           car.combinacion.split(',').map(c => c.trim()).includes(this.codigoRIASEC)
         ))
-      );
-
-        map(carreras =>
-          carreras.filter(car =>
-            car.combinacion
-              .split(",")
-              .map(c => c.trim())
-              .includes(this.codigoRIASEC)
-          )
-        )
       );
 
       const mapa = Object.fromEntries(
@@ -239,5 +232,27 @@ export class Resultado implements OnInit, OnDestroy {
     localStorage.removeItem('currentProgress_riasec');
     localStorage.removeItem('categorias_test_riasec');
     this.router.navigate(['/preguntas']).then(() => window.location.reload());
+  }
+
+  onSubmit() {
+    this.historialServicio.registrarHistorial(this.historial).pipe(
+      tap(dato => {
+        this.irAlFinal();
+      }),
+      catchError(err => {
+        console.log("ERROR COMPLETO:", err);
+        console.log("STATUS:", err.status);
+        console.log("BODY:", err.error);
+        return throwError(() => err);
+      })
+    ).subscribe()
+  }
+
+  irAlFinal() {
+    Swal.fire({
+      title: 'Resultado registrada',
+      text: `El resultado ha sido registrado con éxito`,
+      icon: `success`
+    })
   }
 }

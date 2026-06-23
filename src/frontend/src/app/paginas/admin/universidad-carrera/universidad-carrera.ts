@@ -118,8 +118,6 @@ export class UniversidadCarrera {
       carreraId: carrera.id
     }));
 
-    console.log(relaciones);
-
     this.universidadCarreraServicio
       .guardarLote(relaciones)
       .subscribe({
@@ -169,21 +167,15 @@ export class UniversidadCarrera {
               mensaje,
               'info'
             );
-
           }
-
         },
-
         error: () => {
-
           Swal.fire(
             'Error',
             'No se pudieron guardar las relaciones',
             'error'
           );
-
         }
-
       });
   }
 }

@@ -337,3 +337,22 @@
   .action-buttons { flex-direction: column; }
   .btn-primary, .btn-secondary { text-align: center; }
 }
+
+.boton-terciario {
+  padding: 0.75rem 1.75rem;
+  background: linear-gradient(135deg, #0ab752, #0ca535);
+  color: #fff;
+  border: none;
+  border-radius: 0.75rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
+}
+
+.boton-terciario:hover {
+  box-shadow: 0 8px 25px rgba(7, 239, 38, 0.08);
+  transform: translateY(-2px);
+}

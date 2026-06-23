@@ -11,7 +11,8 @@
       <!-- Header -->
       <div class="results-header">
         <h1 class="header-title">Tu Perfil RIASEC</h1>
-        <p class="header-subtitle">Basado en tus respuestas, este es tu perfil vocacional y las carreras que mejor se adaptan a ti.</p>
+        <p class="header-subtitle">Basado en tus respuestas, este es tu perfil vocacional y las carreras que mejor se
+          adaptan a ti.</p>
       </div>
 
       <!-- Código RIASEC badge -->
@@ -41,32 +42,35 @@
               <rect width="400" height="360" rx="16" fill="url(#bgGrad)" />
 
               <g [attr.transform]="'translate(200,185)'">
-                <polygon [attr.points]="getHexPoints(120)" fill="none" stroke="#94a3b8" stroke-opacity="0.3" stroke-width="1" />
-                <polygon [attr.points]="getHexPoints(90)"  fill="none" stroke="#94a3b8" stroke-opacity="0.25" stroke-width="1" />
-                <polygon [attr.points]="getHexPoints(60)"  fill="none" stroke="#94a3b8" stroke-opacity="0.2"  stroke-width="1" />
-                <polygon [attr.points]="getHexPoints(30)"  fill="none" stroke="#94a3b8" stroke-opacity="0.15" stroke-width="1" />
+                <polygon [attr.points]="getHexPoints(120)" fill="none" stroke="#94a3b8" stroke-opacity="0.3"
+                  stroke-width="1" />
+                <polygon [attr.points]="getHexPoints(90)" fill="none" stroke="#94a3b8" stroke-opacity="0.25"
+                  stroke-width="1" />
+                <polygon [attr.points]="getHexPoints(60)" fill="none" stroke="#94a3b8" stroke-opacity="0.2"
+                  stroke-width="1" />
+                <polygon [attr.points]="getHexPoints(30)" fill="none" stroke="#94a3b8" stroke-opacity="0.15"
+                  stroke-width="1" />
 
-                <line *ngFor="let axis of axisLines"
-                  [attr.x1]="axis.x1" [attr.y1]="axis.y1"
-                  [attr.x2]="axis.x2" [attr.y2]="axis.y2"
-                  stroke="#94a3b8" stroke-opacity="0.3" stroke-width="1" />
+                <line *ngFor="let axis of axisLines" [attr.x1]="axis.x1" [attr.y1]="axis.y1" [attr.x2]="axis.x2"
+                  [attr.y2]="axis.y2" stroke="#94a3b8" stroke-opacity="0.3" stroke-width="1" />
 
-                <text x="0" y="-125" fill="#64748b" fill-opacity="0.8" font-size="10" font-family="'DM Sans', sans-serif" text-anchor="middle">100</text>
-                <text x="0" y="-95"  fill="#64748b" fill-opacity="0.7" font-size="9"  font-family="'DM Sans', sans-serif" text-anchor="middle">75</text>
-                <text x="0" y="-65"  fill="#64748b" fill-opacity="0.6" font-size="9"  font-family="'DM Sans', sans-serif" text-anchor="middle">50</text>
-                <text x="0" y="-35"  fill="#64748b" fill-opacity="0.5" font-size="9"  font-family="'DM Sans', sans-serif" text-anchor="middle">25</text>
+                <text x="0" y="-125" fill="#64748b" fill-opacity="0.8" font-size="10"
+                  font-family="'DM Sans', sans-serif" text-anchor="middle">100</text>
+                <text x="0" y="-95" fill="#64748b" fill-opacity="0.7" font-size="9" font-family="'DM Sans', sans-serif"
+                  text-anchor="middle">75</text>
+                <text x="0" y="-65" fill="#64748b" fill-opacity="0.6" font-size="9" font-family="'DM Sans', sans-serif"
+                  text-anchor="middle">50</text>
+                <text x="0" y="-35" fill="#64748b" fill-opacity="0.5" font-size="9" font-family="'DM Sans', sans-serif"
+                  text-anchor="middle">25</text>
 
-                <polygon [attr.points]="getRadarPoints()" fill="url(#radarFill)" stroke="#3b82f6" stroke-width="2.5" stroke-opacity="0.9" />
+                <polygon [attr.points]="getRadarPoints()" fill="url(#radarFill)" stroke="#3b82f6" stroke-width="2.5"
+                  stroke-opacity="0.9" />
 
-                <circle *ngFor="let pt of radarVertices"
-                  [attr.cx]="pt.x" [attr.cy]="pt.y"
-                  r="4.5" fill="#3b82f6" stroke="#ffffff" stroke-width="2" />
+                <circle *ngFor="let pt of radarVertices" [attr.cx]="pt.x" [attr.cy]="pt.y" r="4.5" fill="#3b82f6"
+                  stroke="#ffffff" stroke-width="2" />
 
-                <text *ngFor="let lbl of radarLabels"
-                  [attr.x]="lbl.x" [attr.y]="lbl.y"
-                  fill="#1e293b" font-size="11" font-weight="600"
-                  font-family="'DM Sans', sans-serif"
-                  text-anchor="middle" dominant-baseline="middle">
+                <text *ngFor="let lbl of radarLabels" [attr.x]="lbl.x" [attr.y]="lbl.y" fill="#1e293b" font-size="11"
+                  font-weight="600" font-family="'DM Sans', sans-serif" text-anchor="middle" dominant-baseline="middle">
                   {{ lbl.text }}
                 </text>
               </g>
@@ -82,9 +86,7 @@
                   <span class="bar-pct">{{ getPorcentaje(item) }}%</span>
                 </div>
                 <div class="bar-track">
-                  <div class="bar-fill"
-                    [style.width.%]="getPorcentaje(item)"
-                    [style.background]="getBarColor(i)">
+                  <div class="bar-fill" [style.width.%]="getPorcentaje(item)" [style.background]="getBarColor(i)">
                   </div>
                 </div>
                 <p class="bar-descripcion">{{ getDescripcion(item.categoria) }}</p>
@@ -111,19 +113,11 @@
 
           <!-- Grid de carreras -->
           <div *ngIf="carreras.length > 0" class="carreras-grid">
-            <button
-              *ngFor="let car of carreras"
-              class="carrera-card"
-              (click)="verDetalleCarrera(car)"
-              type="button">
+            <button *ngFor="let car of carreras" class="carrera-card" (click)="verDetalleCarrera(car)" type="button">
 
               <!-- Imagen -->
               <div class="carrera-img-wrapper">
-                <img
-                  [src]="getImagenCarrera(car)"
-                  [alt]="car.nombre"
-                  class="carrera-img"
-                  loading="lazy" />
+                <img [src]="getImagenCarrera(car)" [alt]="car.nombre" class="carrera-img" loading="lazy" />
                 <div class="carrera-img-overlay">
                   <span class="ver-mas-label">Ver detalle →</span>
                 </div>
@@ -156,335 +150,6 @@
       <div class="action-buttons">
         <button (click)="volverATest()" class="btn-primary">← Volver al test</button>
         <button (click)="reiniciarTest()" class="btn-secondary">↻ Reiniciar test</button>
-      </div>
-
-    </div><!-- /results-wrapper -->
-      <br />
-      <div class="card">
-        <div style="margin-right: 30px;" *ngFor="let car of carrerasFiltradas$ | async">
-          <br />
-          <div
-            class="rounded-3xl shadow-lg overflow-hidden border border-purple-100 hover:shadow-xl transition-all duration-300 bg-white ml-4">
-            <div class="bg-gradient-to-r from-[#9333ea] to-[#7c3aed] text-white p-4">
-              <h5 class="text-lg font-bold">{{ car.nombre }}</h5>
-              <small class="text-purple-100">{{ car.tipoCarrera }}</small>
-            </div>
-
-            <div class="p-4">
-              <p class="carrera-descripcion text-gray-600 text-sm leading-relaxed mb-4">
-                {{ car.descripcion }}
-              </p>
-              <br /><br /><br />
-              <div class="flex items-center text-gray-700 text-sm">
-                <span class="mr-2">⏱️</span>
-                <strong>Duración:</strong>
-                <span class="ml-1">{{ car.duracion }} semestres</span>
-              </div>
-              <br />
-              <h3>Universidades:</h3>
-              <br />
-              <div class="menu-radial d-flex justify-content-start ml-0">
-                <button class="btn-central" (click)="abierto = !abierto" #btnInfo data-bs-toggle="tooltip"
-                  title="Filtros" (mouseenter)="mostrarTooltip()">
-                  ➕
-                </button>
-
-
-
-                <button class="btn-opcion op1 btn btn-success" #btnInfoNombre (click)="abierto1=!abierto1"
-                  [class.activo]="abierto" (mouseenter)="mostrarTooltipNombre()" title="Ordenar por nombre">
-                  <i class="material-icons">add</i>
-                </button>
-
-                <button class="btn-opcion op5 btn btn-primary" #btnInfoNombreUnico (click)="tipoFiltro='nombreUnico'"
-                  [class.activo]="abierto && abierto1" (mouseenter)="mostrarTooltipNombreUnico()"
-                  title="Universidades única">
-                  <i class="material-icons">apartment</i></button>
-
-                <button class="btn-opcion op6 btn btn-primary" #btnInfoNombreSedes (click)="tipoFiltro='nombreSedes'"
-                  [class.activo]="abierto && abierto1" (mouseenter)="mostrarTooltipNombreSedes()" title="Por sedes">
-                  <i class="material-icons">domain</i>
-                </button>
-
-
-
-                <button class="btn-opcion btn-secundario op2 btn btn-primary" #btnInfoCaras (click)="abierto2=!abierto2"
-                  [class.activo]="abierto" (mouseenter)="mostrarTooltipCaras()" title="Ordenar por más caras">
-                  <i class="material-icons">dashboard</i>
-                </button>
-
-                <button class="btn-opcion op7 btn btn-primary" #btnInfoCaraUnico (click)="tipoFiltro='caraUnico'"
-                  [class.activo]="abierto && abierto2" (mouseenter)="mostrarTooltipCaraUnico()"
-                  title="Universidades únicas">
-                  <i class="material-icons">apartment</i>
-                </button>
-
-                <button class="btn-opcion op8 btn btn-primary" #btnInfoCaraSedes (click)="tipoFiltro='caraSedes'"
-                  [class.activo]="abierto && abierto2" (mouseenter)="mostrarTooltipCaraSedes()" title="Por sedes">
-                  <i class="material-icons">domain</i>
-                </button>
-
-
-
-                <button class="btn-opcion btn-secundario op3 btn btn-primary" #btnInfoBaratas
-                  (click)="abierto3=!abierto3" [class.activo]="abierto" (mouseenter)="mostrarTooltipBaratas()"
-                  title="Ordenar por más baratas">
-                  <i class="material-icons">dashboard</i>
-                </button>
-
-                <button class="btn-opcion op9 btn btn-primary" #btnInfoBarataUnico (click)="tipoFiltro='barataUnico'"
-                  [class.activo]="abierto && abierto3" (mouseenter)="mostrarTooltipBarataUnico()"
-                  title="Por universidad única">
-                  <i class="material-icons">apartment</i>
-                </button>
-
-                <button class="btn-opcion op10 btn btn-primary" #btnInfoBarataSedes (click)="tipoFiltro='barataSedes'"
-                  [class.activo]="abierto && abierto3" (mouseenter)="mostrarTooltipBarataSedes()">
-                  <i class="material-icons">domain</i>
-                </button>
-
-
-                <button class="btn-opcion btn-secundario op4 btn btn-warning" #btnInfoSedes (click)="tipoFiltro='sedes'"
-                  [class.activo]="abierto" (mouseenter)="mostrarTooltipSedes()" title="Ordenar por sedes">
-                  <i class="material-icons">label</i>
-                </button>
-              </div>
-              <br><br>
-              <div class="row">
-                <div *ngFor="let uni of obtenerTop5Universidades(car.universidad)" class="mb-4 col-md-4">
-                  <div
-                    class="bg-white rounded-3xl shadow-lg border border-purple-200 hover:shadow-xl transition-all duration-300 overflow-hidden ml-2 mr-2">
-                    <div class="img-container">
-                      <div *ngIf="uni.nombre.startsWith('Pontificia Universidad Católica del Perú')">
-                        <img src="pucp.jpg" alt="Imagen de la PUCP" />
-                      </div>
-
-                      <div *ngIf="uni.nombre.startsWith('Universidad Andina del Cusco')">
-                        <img src="uac.jpg" alt="Imagen de la UAC" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Antonio Ruiz de Montoya')">
-                        <img src="uarm.jpg" alt="Imagen de la UARM" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Católica de Trujillo')">
-                        <img src="uct.jpg" alt="Imagen de la UCT" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Católica de San Pablo')">
-                        <img src="ucsp.jpeg" alt="Imagen de la UCSP" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Peruana de Ciencias Aplicadas')">
-                        <img src="upc.jpeg" alt="Imagen de la UPC" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad César Vallejo')">
-                        <img src="ucv.jpg" alt="Imagen de la UCV" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Científica del Sur')">
-                        <img src="ucs.jpeg" alt="" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Continental')">
-                        <img src="uc.jpg" alt="Imagen de la UC" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad de Ingeniería y Tecnología')">
-                        <img src="utec.jpg" alt="Imagen de la UTEC" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad de Lima')">
-                        <img src="ul.jpg" alt="Imagen de la UL" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad de Piura')">
-                        <img src="up.jpg" alt="Imagen de la UP" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad de San Martín de Porres')">
-                        <img src="usmp.jpg" alt="Imagen de la USMP" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Esan')">
-                        <img src="esan.jpg" alt="Imagen de la ESAN" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Peruana Cayetano Heredia')">
-                        <img src="upch.jpeg" alt="Imagen de la UPCH" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Católica Sedes Sapientiae')">
-                        <img src="ucss.jpg" alt="Imagen de la UCSS" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Peruana Los Andes')">
-                        <img src="upla.jpeg" alt="Imagen de la UPLA" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Privada Antenor Orrego')">
-                        <img src="upao.jpeg" alt="Imagen de la UPAO" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Privada de Tacna')">
-                        <img src="upt.jpg" alt="Imagen de la UPT" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Privada del Norte')">
-                        <img src="upn.jpeg" alt="Imagen de la UPN" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Privada San Ignacio de Loyola')">
-                        <img src="usil.jpg" alt="Imagen de la USIL" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Tecnológica del Perú')">
-                        <img src="utp.jpeg" alt="Imagen de la UTP" />
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad del Pacífico')">
-                        <img src="upa.jpg" alt="Imagen de la UPA" />
-                      </div>
-                    </div>
-
-                    <div class="bg-gradient-to-r from-[#9333ea] to-[#7c3aed] text-white p-4">
-                      <h5 class="universidad-nombre text-lg font-bold mb-1">{{ uni.nombre }}</h5>
-                      <p class="text-purple-100"><strong>{{ uni.tipoUniversidad.nombre }}</strong></p>
-                    </div>
-
-                    <div class="p-4 space-y-2 text-gray-700 text-sm">
-                      <p><strong>Departamento:</strong> {{ uni.departamento.nombre }}</p>
-                      <p>
-                        <strong>Costo Promedio:</strong> S/. {{ obtenerPromedioUniversidad(uni) }}
-                      </p>
-                    </div>
-
-                    <div class="d-flex justify-content-center">
-                      <div *ngIf="uni.nombre.startsWith('Pontificia Universidad Católica del Perú')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.pucp.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Andina del Cusco')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.uandina.edu.pe/"
-                          target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Antonio Ruiz de Montoya')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.uarm.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Católica de Trujillo')">
-                        <a type="button" class="btn btn-success p-2" href="https://uct.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Católica de San Pablo')">
-                        <a type="button" class="btn btn-success p-2" href="https://ucsp.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Peruana de Ciencias Aplicadas')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.upc.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-
-                      <div *ngIf="uni.nombre.startsWith('Universidad César Vallejo')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.ucv.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Científica del Sur')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.cientifica.edu.pe/"
-                          target="_blank">Ver más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Continental')">
-                        <a type="button" class="btn btn-success p-2" href="https://ucontinental.edu.pe/"
-                          target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad de Ingeniería y Tecnología')">
-                        <a type="button" class="btn btn-success p-2" href="https://utec.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad de Lima')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.ulima.edu.pe/"
-                          target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad de Piura')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.udep.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad de San Martín de Porres')">
-                        <a type="button" class="btn btn-success p-2" href="https://usmp.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Esan')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.ue.edu.pe/pregrado/"
-                          target="_blank">Ver más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Peruana Cayetano Heredia')">
-                        <a type="button" class="btn btn-success p-2" href="https://cayetano.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-
-                      <div *ngIf="uni.nombre.startsWith('Universidad Católica Sedes Sapientiae')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.ucss.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Peruana Los Andes')">
-                        <a type="button" class="btn btn-success p-2" href="https://upla.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Privada Antenor Orrego')">
-                        <a type="button" class="btn btn-success p-2" href="https://upao.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Privada de Tacna')">
-                        <a type="button" class="btn btn-success p-2"
-                          href="https://portal.upt.edu.pe/site/web/contenido/inicio" target="_blank">Ver más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Privada del Norte')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.upn.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Privada San Ignacio de Loyola')">
-                        <a type="button" class="btn btn-success p-2" href="https://usil.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad Tecnológica del Perú')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.utp.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                      <div *ngIf="uni.nombre.startsWith('Universidad del Pacífico')">
-                        <a type="button" class="btn btn-success p-2" href="https://www.up.edu.pe/" target="_blank">Ver
-                          más</a>
-                      </div>
-                    </div>
-                    <br />
-                    <div class="h-1 bg-gradient-to-r from-[#9333ea] to-[#7c3aed]"></div>
-                  </div>
-                </div>
-
-                <div class="col-12" *ngIf="obtenerTop5Universidades(car.universidad).length === 0">
-                  <div class="universidad-vacia">
-                    <div class="icono">🎯</div>
-                    <h4>Sin universidades encontrados</h4>
-                    <p>No se encontraron universidades de esta carrera.</p>
-                  </div>
-                </div>
-              </div>
-              <br />
-              <h3>Becas:</h3>
-              <br />
-              <!-- BOTÓN -->
-              <div class="d-flex justify-content-around">
-                <button class="btn btn-success p-2" data-bs-toggle="modal" data-bs-target="#carreraBecaModal">
-                  Por Carrera
-                </button>
-
-                <button class="btn btn-success p-2" data-bs-toggle="modal" data-bs-target="#universidadBecaModal">Por
-                  Universidad</button>
-              </div>
-              <br />
-            </div>
-
-            <div class="h-1 bg-gradient-to-r from-[#9333ea] to-[#7c3aed]"></div>
-          </div>
-          <br />
-        </div>
-
-        <div class="col-12 card-resultado" *ngIf="(carrerasFiltradas$ | async)?.length === 0">
-          <div class="seleccion-vacia">
-            <div class="icono">🎯</div>
-            <br>
-            <h4>Sin resultados encontrados</h4>
-            <p>Esta combinación de letras no tiene carreras encontradas.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Action buttons -->
-      <div class="action-buttons">
-        <button (click)="volverATest()" class="boton-final">← Volver al Test</button>
-        <button (click)="reiniciarTest()" class="btn-secondary">↻ Reiniciar Test</button>
 
         <form (ngSubmit)="onSubmit()">
           <div *ngIf="usuario">
@@ -507,98 +172,16 @@
               id="puntaje_convencional" [(ngModel)]="historial.puntaje_convencional">
           </div>
 
-          <button class="boton-terciario" [disabled]="!usuario || (carrerasFiltradas$ | async)?.length === 0">Guardar resultado</button>
+          <button class="boton-terciario" [disabled]="!usuario || (carrerasFiltradas$ | async)?.length === 0">Guardar
+            resultado</button>
         </form>
       </div>
     </div>
-
-    <!-- Sin datos -->
-    <div *ngIf="!isLoading && todosPuntajes.length === 0" class="loading-card">
-      <p class="loading-text">No se encontraron resultados. Por favor, completa el test primero.</p>
-      <button (click)="volverATest()" class="btn-primary" style="margin-top:1.5rem">Ir al test</button>
-    </div>
   </div>
-</div>
 
-<!-- MODAL -->
-<div class="modal fade" id="carreraBecaModal" tabindex="-1">
-  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <!-- HEADER -->
-      <div class="modal-header">
-        <h5 class="modal-title p-3" id="carreraBecaModalLabel">
-          Becas por Carreras:
-        </h5>
-
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <br>
-      <!-- BODY -->
-      <div class="modal-body">
-        <div style="margin-left: 10px; margin-right: 10px;" *ngFor="let car of carrerasFiltradas$ | async">
-          <div class="row">
-            <div *ngFor="let be of car.beca" class="mb-4 col-12">
-              <div
-                class="bg-white rounded-3xl shadow-lg border border-purple-200 hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col ml-4">
-                <div class="bg-gradient-to-r from-[#9333ea] to-[#7c3aed] text-white p-4">
-                  <h5 class="text-lg font-bold mb-1">{{ be.nombre }}</h5>
-                  <small class="text-purple-100">{{ be.tipoBeca }}</small>
-                </div>
-
-                <div class="p-4 space-y-2 text-sm text-gray-700 flex-1">
-                  <p class="text-gray-600">{{ be.descripcion }}</p>
-                  <br />
-                  <p><strong>Duración:</strong> {{ be.duracion }}</p>
-                  <br />
-                  <p><strong>Beneficio:</strong></p>
-                  <ul class="lista">
-                    <li *ngFor="let beneficio of be.beneficio.split(',')"
-                      [class.completo]="beneficio.trim().length > 30">
-                      ✅ {{ beneficio.trim() }}
-                    </li>
-                  </ul>
-                  <br />
-                  <p><strong>Requisito:</strong></p>
-                  <ul class="lista">
-                    <li *ngFor="let requisito of be.requisito.split(',')">
-                      ✅ {{ requisito.trim() }}
-                    </li>
-                  </ul>
-                  <br />
-                  <p><strong>Restricción:</strong></p>
-                  <ul class="lista">
-                    <li *ngFor="let restriccion of be.restriccion.split(',')">
-                      ✅ {{ restriccion.trim() }}
-                    </li>
-                  </ul>
-                </div>
-
-                <a type="button" [href]="be.url" class="btn btn-success" target="_blank">Ver más</a>
-                <br />
-
-                <div class="h-1 bg-gradient-to-r from-[#9333ea] to-[#7c3aed]"></div>
-              </div>
-            </div>
-
-            <div class="col-12" *ngIf="(car.beca?.length ?? 0) === 0">
-              <div class="beca-vacia">
-                <div class="icono">🎯</div>
-                <h4>Sin becas encontradas</h4>
-                <p>No se encontraron becas registradas en ninguna carrera.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <br>
-      </div>
-
-      <!-- FOOTER MODAL -->
-      <div class="modal-footer">
-        <button type="button" style="margin-top: 10px; margin-bottom: 10px;" class="btn btn-secondary"
-          data-bs-dismiss="modal">
-          Cerrar
-        </button>
-      </div>
-    </div>
+  <!-- Sin datos -->
+  <div *ngIf="!isLoading && todosPuntajes.length === 0" class="loading-card">
+    <p class="loading-text">No se encontraron resultados. Por favor, completa el test primero.</p>
+    <button (click)="volverATest()" class="btn-primary" style="margin-top:1.5rem">Ir al test</button>
   </div>
 </div>

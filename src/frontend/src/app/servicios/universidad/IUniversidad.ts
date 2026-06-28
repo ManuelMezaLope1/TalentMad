@@ -1,4 +1,5 @@
 import { ICarrera } from "../carrera/ICarrera";
+import { IBeca } from "../beca/IBeca";
 
 export class IUniversidad{
     id:number;
@@ -8,4 +9,5 @@ export class IUniversidad{
     costoMensualMaximo:string;
     tipoUniversidad:any;
     carrera: ICarrera[];
+    beca: IBeca[];
 }

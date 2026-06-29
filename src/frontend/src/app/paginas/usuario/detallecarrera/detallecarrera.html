@@ -18,7 +18,7 @@
         <h1 class="hero-title">{{ carrera.nombre }}</h1>
         <p class="hero-desc">{{ carrera.descripcion }}</p>
         <div class="hero-meta">
-          <span class="meta-chip">🏛 {{ carrera.universidad?.length ?? 0 }} universidades</span>
+          <span class="meta-chip">🏛 {{ universidadesUnicas.length }} universidades</span>
         </div>
       </div>
     </div>
@@ -26,318 +26,39 @@
     <!-- ── Contenido principal ───────────────────────────────────────────── -->
     <div class="detalle-container">
 
-      <!-- ── FILTROS ──────────────────────────────────────────────────── -->
-      <div class="filtros-horizontal">
-        <div class="filtros-header">
-          <h2 class="filtros-title">Filtrar universidades</h2>
-          <button (click)="limpiarFiltros()" class="btn-limpiar-horizontal">✕ Limpiar</button>
-        </div>
-
-        <div class="filtros-grid">
-
-          <!-- Filtro Costo Mensual -->
-          <div class="filtro-item">
-            <label class="filtro-label-horizontal">Costo mensual</label>
-
-            <div class="filtro-select-wrapper" [class.open]="costoDropdownOpen">
-              <button
-                type="button"
-                class="filtro-trigger-btn"
-                (click)="toggleCostoDropdown()">
-                <span
-                  class="filtro-trigger-text"
-                  [class.active]="costoDesde != null || costoHasta != null">
-                  {{ costoFiltroLabel }}
-                </span>
-                <span class="filtro-chevron" [class.open]="costoDropdownOpen">
-                  <svg width="12" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                </span>
-              </button>
-
-              <div class="costo-panel" *ngIf="costoDropdownOpen">
-                <p class="costo-panel-titulo">Rango de pensión mensual</p>
-
-                <div class="costo-selects-row">
-                  <!-- Dropdown DESDE -->
-                  <div class="costo-select-group">
-                    <label class="costo-select-label">Desde</label>
-                    <div class="costo-select-wrapper">
-                      <select
-                        class="costo-select"
-                        [ngModel]="costoDesdeTemp"
-                        (ngModelChange)="costoDesdeTemp = $event; onDesdeChange()">
-                        <option [ngValue]="null">Sin mínimo</option>
-                        <option *ngFor="let v of opcionesDesde" [ngValue]="v">
-                          {{ formatCosto(v) }}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="costo-range-separator">
-                    <span>—</span>
-                  </div>
-
-                  <!-- Dropdown HASTA -->
-                  <div class="costo-select-group">
-                    <label class="costo-select-label">Hasta</label>
-                    <div class="costo-select-wrapper">
-                      <select
-                        class="costo-select"
-                        [ngModel]="costoHastaTemp"
-                        (ngModelChange)="costoHastaTemp = $event; onHastaChange()">
-                        <option [ngValue]="null">Sin máximo</option>
-                        <option *ngFor="let v of opcionesHasta" [ngValue]="v">
-                          {{ formatCosto(v) }}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Preview dinámico del rango seleccionado -->
-                <p class="costo-range-preview" *ngIf="costoDesdeTemp != null || costoHastaTemp != null">
-                  <span class="costo-range-preview-icon">📊</span>
-                  Buscando pensiones
-                  <ng-container *ngIf="costoDesdeTemp != null">desde <strong>{{ formatCosto(costoDesdeTemp) }}</strong></ng-container>
-                  <ng-container *ngIf="costoDesdeTemp != null && costoHastaTemp != null"> hasta </ng-container>
-                  <ng-container *ngIf="costoDesdeTemp == null && costoHastaTemp != null">hasta </ng-container>
-                  <ng-container *ngIf="costoHastaTemp != null"><strong>{{ formatCosto(costoHastaTemp) }}</strong></ng-container>
-                  al mes.
-                </p>
-
-                <div class="costo-panel-footer">
-                  <button type="button" class="costo-btn-limpiar" (click)="limpiarCosto()">Limpiar</button>
-                  <button type="button" class="costo-btn-aplicar" (click)="aplicarCosto()">Ver resultados</button>
-                </div>
-              </div>
-            </div>
-
-            <p class="filtro-hint-horizontal" *ngIf="costoDesde != null || costoHasta != null">
-              Mostrando universidades con costo
-              <strong *ngIf="costoDesde != null">desde {{ formatCosto(costoDesde) }}</strong>
-              <span *ngIf="costoDesde != null && costoHasta != null"> y </span>
-              <strong *ngIf="costoHasta != null">hasta {{ formatCosto(costoHasta) }}</strong>
-            </p>
-          </div>
-
-          <!-- Filtro Origen de Beca -->
-          <div class="filtro-item">
-            <label class="filtro-label-horizontal">Becas</label>
-
-            <div class="filtro-select-wrapper">
-              <select class="filtro-select-horizontal" [(ngModel)]="origenFiltro">
-                <option value="">Todos los orígenes</option>
-                <option
-                  *ngFor="let o of origenesLista"
-                  [value]="o.key"
-                  [disabled]="!origenesDisponibles.includes(o.key)">
-                  {{ o.label }}{{ !origenesDisponibles.includes(o.key) ? ' (sin becas)' : '' }}
-                </option>
-              </select>
-            </div>
-
-            <p class="filtro-hint-horizontal" *ngIf="origenFiltro">
-              Mostrando becas de
-              <strong>{{ getLabelOrigen(origenFiltro) }}</strong>
-              · {{ becasFiltradas.length }}
-              {{ becasFiltradas.length === 1 ? 'beca' : 'becas' }}
-            </p>
-          </div>
-
-        </div><!-- /filtros-grid -->
-
-        <div class="filtro-count-horizontal">
-          <strong>{{ universidadesFiltradas.length }}</strong>
-          {{ universidadesFiltradas.length === 1 ? 'universidad encontrada' : 'universidades encontradas' }}
-        </div>
-      </div><!-- /filtros-horizontal -->
-
-      <!-- ── Lista de universidades ──────────────────────────────────────── -->
-      <main class="unis-main">
-
-        <div *ngIf="universidadesFiltradas.length === 0" class="unis-empty">
-          <span class="empty-icon">🔍</span>
-          <p>No hay universidades que cumplan los filtros seleccionados.</p>
-          <button (click)="limpiarFiltros()" class="btn-limpiar-horizontal" style="margin-top:1rem">
-            Limpiar filtros
-          </button>
-        </div>
-
-        <div class="unis-grid">
-          <article *ngFor="let uni of universidadesFiltradas" class="uni-card">
-
-            <div class="uni-img-wrapper">
-              <img
-                [src]="getImagenUniversidad(uni.nombre)"
-                [alt]="uni.nombre"
-                class="uni-img"
-                loading="lazy" />
-            </div>
-
-            <div class="uni-body">
-              <h3 class="uni-nombre">{{ uni.nombre }}</h3>
-              <p class="uni-tipo">{{ uni.tipoUniversidad?.nombre }}</p>
-
-              <div class="uni-datos">
-                <div class="dato">
-                  <span class="dato-icon">📍</span>
-                  <span class="dato-text">{{ uni.departamento?.nombre }}</span>
-                </div>
-                <div class="dato">
-                  <span class="dato-icon">💸</span>
-                  <span class="dato-text">
-                    {{ formatCosto(+uni.costoMensualMinimo) }} – {{ formatCosto(+uni.costoMensualMaximo) }} / mes
-                  </span>
-                </div>
-                <div class="dato">
-                  <span class="dato-icon">📊</span>
-                  <span class="dato-text">
-                    Promedio: <strong>{{ formatCosto(obtenerPromedio(uni)) }}</strong>
-                  </span>
-                </div>
-              </div>
-
-              <button
-                *ngIf="(uni.beca?.length ?? 0) > 0"
-                type="button"
-                class="btn-ver-becas"
-                (click)="abrirModalBecas(uni)">
-                <span class="ver-becas-info">
-                  <span class="ver-becas-icon">🎓</span>
-                  <span class="ver-becas-text">
-                    {{ uni.beca?.length }}
-                    {{ (carrera?.beca?.length ?? 0) === 1 ? 'beca disponible' : 'becas disponibles' }}
-                    para esta carrera
-                  </span>
-                </span>
-                <span class="ver-becas-cta">Ver becas →</span>
-              </button>
-
-              <p *ngIf="(uni.beca?.length ?? 0) === 0" class="sin-convenio">
-                No hay becas registradas para esta carrera aún.
-              </p>
-
-              <a [href]="getUrlUniversidad(uni.nombre)" target="_blank" rel="noopener" class="btn-uni-web">
-                Visitar sitio oficial →
-              </a>
-            </div>
-          </article>
-        </div>
-
-      </main>
-    </div><!-- /detalle-container -->
-
-    <!-- ── Modal de becas ─────────────────────────────────────────────────── -->
-    <div class="modal-overlay" *ngIf="modalBecasAbierto" (click)="cerrarModalBecas()">
-      <div class="modal-becas" (click)="$event.stopPropagation()">
-
-        <!-- Header -->
-        <div class="modal-becas-header">
-          <div>
-            <p class="modal-becas-universidad">{{ universidadModal?.nombre }}</p>
-            <h3 class="modal-becas-title">🎓 Becas disponibles para esta carrera</h3>
-          </div>
-          <button type="button" class="modal-close-btn" (click)="cerrarModalBecas()">✕</button>
-        </div>
-
-        <!-- Chips de origen dentro del modal -->
-        <div class="modal-origen-filtro" *ngIf="(carrera?.beca?.length ?? 0) > 0">
-          <button
-            class="origen-chip"
-            [class.active]="origenFiltro === ''"
-            (click)="seleccionarOrigen('')">
-            Todas
-          </button>
-          <button
-            *ngFor="let o of origenesLista"
-            class="origen-chip"
-            [class.active]="origenFiltro === o.key"
-            [class.disabled]="!origenesDisponibles.includes(o.key)"
-            (click)="origenesDisponibles.includes(o.key) && seleccionarOrigen(o.key)">
-            {{ o.label }}
-          </button>
-        </div>
-
-        <!-- Cuerpo -->
-        <div class="modal-becas-body">
-
-          <ng-container *ngIf="becasFiltradas.length > 0; else sinDataBecas">
-            <div class="beca-mini-card" *ngFor="let beca of becasFiltradas">
-
-              <div class="beca-mini-header">
-                <span class="beca-mini-nombre">{{ beca.nombre }}</span>
-                <div class="beca-mini-tags">
-                  <span
-                    class="beca-mini-origen"
-                    [ngClass]="getClaseOrigen(getOrigenBeca(beca))">
-                    {{ getLabelOrigen(getOrigenBeca(beca)) }}
-                  </span>
-                  <span class="beca-mini-tipo">{{ beca.tipoBeca }}</span>
-                </div>
-              </div>
-
-              <p class="beca-mini-desc">{{ beca.descripcion }}</p>
-
-              <div class="beca-mini-grid">
-                <div class="beca-mini-col">
-                  <p class="beca-mini-label">✅ Beneficios</p>
-                  <ul class="beca-lista">
-                    <li *ngFor="let item of splitLista(beca.beneficio)">{{ item }}</li>
-                  </ul>
-                </div>
-                <div class="beca-mini-col">
-                  <p class="beca-mini-label">📋 Requisitos</p>
-                  <ul class="beca-lista">
-                    <li *ngFor="let item of splitLista(beca.requisito)">{{ item }}</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div *ngIf="beca.restriccion" class="beca-restriccion">
-                <p class="beca-mini-label">⚠ Restricciones</p>
-                <ul class="beca-lista">
-                  <li *ngFor="let item of splitLista(beca.restriccion)">{{ item }}</li>
-                </ul>
-              </div>
-
-              <div class="beca-footer">
-                <p class="beca-duracion">⏳ Duración: {{ beca.duracion }}</p>
-                <a
-                  *ngIf="tieneUrl(beca)"
-                  [href]="beca.url"
-                  target="_blank"
-                  rel="noopener"
-                  class="beca-url-btn">
-                  Más información →
-                </a>
-              </div>
-
-            </div>
-          </ng-container>
-
-          <ng-template #sinDataBecas>
-            <div class="beca-no-data">
-              <span class="beca-no-data-icon">🎓</span>
-              <p>
-                No hay becas registradas
-                <ng-container *ngIf="origenFiltro">
-                  de origen <strong>{{ getLabelOrigen(origenFiltro) }}</strong>
-                </ng-container>
-                para esta carrera.
-              </p>
-              <p class="beca-no-data-sub">
-                Consulta directamente con la universidad para obtener información actualizada.
-              </p>
-            </div>
-          </ng-template>
-
-        </div><!-- /modal-becas-body -->
+      <div class="unis-header">
+        <h2 class="unis-title">Universidades que ofrecen esta carrera</h2>
+        <p class="unis-subtitle">Selecciona una universidad para ver sus sedes, costos y becas disponibles.</p>
       </div>
-    </div><!-- /modal-overlay -->
 
+      <!-- ── Grid de universidades ──────────────────────────────────────── -->
+      <div class="unis-grid">
+        <button
+          *ngFor="let uni of universidadesUnicas"
+          type="button"
+          class="uni-card"
+          (click)="irASedes(uni.nombre)">
+
+          <div class="uni-img-wrapper">
+            <img
+              [src]="uni.imagen"
+              [alt]="uni.nombre"
+              class="uni-img"
+              loading="lazy" />
+            <div class="uni-img-overlay"></div>
+          </div>
+
+          <div class="uni-card-footer">
+            <p class="uni-nombre">{{ uni.nombre }}</p>
+            <span class="uni-sedes-badge">
+              {{ uni.cantidadSedes }} {{ uni.cantidadSedes === 1 ? 'sede' : 'sedes' }} →
+            </span>
+          </div>
+
+        </button>
+      </div>
+
+    </div>
   </ng-container>
 
   <!-- Error -->

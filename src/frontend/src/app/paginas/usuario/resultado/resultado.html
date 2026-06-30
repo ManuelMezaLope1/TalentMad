@@ -117,7 +117,9 @@
 
               <!-- Imagen -->
               <div class="carrera-img-wrapper">
-                <img [src]="getImagenCarrera(car)" [alt]="car.nombre" class="carrera-img" loading="lazy" />
+                <div class="d-flex justify-content-center">
+                  <img [src]="car.imagen" [alt]="car.nombre" class="carrera-img" loading="lazy" />
+                </div>
                 <div class="carrera-img-overlay">
                   <span class="ver-mas-label">Ver detalle →</span>
                 </div>

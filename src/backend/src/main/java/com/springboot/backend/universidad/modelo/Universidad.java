@@ -32,6 +32,12 @@ public class Universidad {
     @Column(name = "costo_mensual_maximo", nullable = false)
     private double costoMensualMaximo;
 
+    @Column(name = "imagen")
+    private String imagen;
+
+    @Column(name = "url")
+    private String url;
+
     @ManyToOne
     @JoinColumn(name = "tipo_universidad_id")
     @JsonIgnoreProperties({ "universidad" })
@@ -42,27 +48,26 @@ public class Universidad {
     private List<Carrera> carrera;
 
     @ManyToMany
-    @JoinTable(
-        name="universidad_beca",
-        joinColumns = @JoinColumn(name="universidad_id"),
-        inverseJoinColumns = @JoinColumn(name="beca_id")
-    )
-    @JsonIgnoreProperties({"universidad"})
+    @JoinTable(name = "universidad_beca", joinColumns = @JoinColumn(name = "universidad_id"), inverseJoinColumns = @JoinColumn(name = "beca_id"))
+    @JsonIgnoreProperties({ "universidad" })
     private List<Beca> beca;
 
     public Universidad() {
     }
 
     public Universidad(Long id, String nombre, Departamento departamento, double costoMensualMinimo,
-            double costoMensualMaximo, TipoUniversidad tipoUniversidad, List<Carrera> carrera, List<Beca> beca) {
+            double costoMensualMaximo, String imagen, String url, TipoUniversidad tipoUniversidad,
+            List<Carrera> carrera, List<Beca> beca) {
         this.id = id;
         this.nombre = nombre;
         this.departamento = departamento;
         this.costoMensualMinimo = costoMensualMinimo;
         this.costoMensualMaximo = costoMensualMaximo;
+        this.imagen = imagen;
+        this.url = url;
         this.tipoUniversidad = tipoUniversidad;
         this.carrera = carrera;
-        this.beca=beca;
+        this.beca = beca;
     }
 
     public Universidad(String nombre, Departamento departamento, double costoMensualMinimo, double costoMensualMaximo,
@@ -73,7 +78,7 @@ public class Universidad {
         this.costoMensualMaximo = costoMensualMaximo;
         this.tipoUniversidad = tipoUniversidad;
         this.carrera = carrera;
-        this.beca=beca;
+        this.beca = beca;
     }
 
     public Long getId() {
@@ -116,6 +121,22 @@ public class Universidad {
         this.costoMensualMaximo = costoMensualMaximo;
     }
 
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public TipoUniversidad getTipoUniversidad() {
         return tipoUniversidad;
     }
@@ -132,12 +153,12 @@ public class Universidad {
         this.carrera = carrera;
     }
 
-    public List<Beca> getBeca(){
+    public List<Beca> getBeca() {
         return beca;
     }
 
-    public void setBeca(List<Beca> beca){
-        this.beca=beca;
+    public void setBeca(List<Beca> beca) {
+        this.beca = beca;
     }
 
     @Override

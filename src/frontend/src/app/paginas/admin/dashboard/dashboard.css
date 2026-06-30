@@ -118,3 +118,9 @@ a {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     border-color: #121212;
 }
+
+.accion-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}

@@ -263,7 +263,11 @@
   z-index: 30;
 }
 
-.costo-panel-inputs { display: flex; gap: 0.75rem; margin-bottom: 0.9rem; }
+.costo-panel-inputs { 
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
 
 .costo-input-box {
   flex: 1;
@@ -321,7 +325,7 @@
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .costo-btn-aplicar {
@@ -337,6 +341,50 @@
   box-shadow: 0 3px 10px rgba(37,99,235,0.25);
 }
 .costo-btn-aplicar:hover { background: #1d4ed8; }
+
+.ranking-presets{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.flex-ranking{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.departamento-presets{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.botones-departamentos{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
+}
+
+.departamento-preset-chip{
+  padding: 0.35rem 0.8rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #374151;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.departamento-preset-chip:hover { border-color: #3b82f6; background: #f0f7ff; }
+.departamento-preset-chip.active {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
 
 /* ── Botón resumen de becas ─────────────────────────────── */
 .btn-ver-becas {
@@ -466,6 +514,12 @@
   padding-right: 2.2rem;
 }
 
+.filtro-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
 .filtro-select-horizontal:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
@@ -512,6 +566,13 @@
 }
 
 /* ── Universidad card ────────────────────── */
+.unis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.75rem;
+}
+
+/* ── Universidad card ────────────────────── */
 .uni-card {
   background: #fff;
   border: 1px solid rgba(59,130,246,0.1);
@@ -520,14 +581,20 @@
   box-shadow: 0 4px 16px rgba(0,0,0,0.07);
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.22s;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  transition: box-shadow 0.22s, transform 0.22s;
+  font-family: 'DM Sans', sans-serif;
 }
-.uni-card:hover { box-shadow: 0 12px 32px rgba(37,99,235,0.14); }
+.uni-card:hover {
+  box-shadow: 0 14px 36px rgba(37,99,235,0.18);
+  transform: translateY(-4px);
+}
 
-/* Imagen universidad */
 .uni-img-wrapper {
   position: relative;
-  height: 170px;
+  height: 230px;
   overflow: hidden;
 }
 .uni-img {
@@ -535,59 +602,49 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.35s ease;
+  transition: transform 0.4s ease;
 }
-.uni-card:hover .uni-img { transform: scale(1.05); }
-
-.uni-badges {
+.uni-card:hover .uni-img { transform: scale(1.06); }
+.uni-img-overlay {
   position: absolute;
-  top: 0.65rem;
-  left: 0.65rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
+  inset: 0;
+  background: linear-gradient(to bottom,
+    transparent 40%,
+    rgba(15,23,42,0.45) 100%);
+  transition: opacity 0.3s;
 }
-.convenio-badge {
-  background: rgba(37,99,235,0.85);
-  color: #fff;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0.22rem 0.6rem;
-  border-radius: 9999px;
-  backdrop-filter: blur(4px);
-  letter-spacing: 0.04em;
-}
+.uni-card:hover .uni-img-overlay { opacity: 0.7; }
 
-/* Body */
-.uni-body {
-  flex: 1;
+/* Footer de la card */
+.uni-card-footer {
+  padding: 1.2rem 1.35rem 1.35rem;
   display: flex;
   flex-direction: column;
-  padding: 1.1rem 1.2rem 1.3rem;
   gap: 0.6rem;
+  flex: 1;
 }
 .uni-nombre {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #1e3a8a;
-  line-height: 1.3;
+  line-height: 1.35;
 }
-.uni-tipo {
+.uni-sedes-badge {
+  display: inline-block;
   font-size: 0.75rem;
-  color: #6b7280;
-  font-weight: 500;
+  font-weight: 700;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid rgba(59,130,246,0.25);
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.65rem;
+  align-self: flex-start;
+  transition: background 0.2s, border-color 0.2s;
 }
-.uni-datos { display: flex; flex-direction: column; gap: 0.35rem; }
-.dato {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.45rem;
-  font-size: 0.8rem;
-  color: #374151;
+.uni-card:hover .uni-sedes-badge {
+  background: #dbeafe;
+  border-color: #3b82f6;
 }
-.dato-icon { font-size: 0.85rem; flex-shrink: 0; margin-top: 0.05rem; }
-.dato-text { line-height: 1.4; }
-.dato-text strong { color: #1e3a8a; }
 
 /* Beca mini card */
 .beca-mini-card {
@@ -676,8 +733,13 @@
   font-style: italic;
 }
 
+.btn-sedes{
+  background: transparent;
+  border: none;
+}
+
 .sin-convenio {
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: #9ca3af;
   font-style: italic;
 }

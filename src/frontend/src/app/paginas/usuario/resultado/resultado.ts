@@ -83,6 +83,8 @@ export class Resultado implements OnInit, OnDestroy {
   getImagenCarrera(carrera: ICarrera): string {
     return obtenerImagenCarrera(carrera.id, 600, 340);
   }
+
+  combinacion: any;
   ngOnInit(): void {
     this.carreras$ = this.carreraServicio.obtenerListaDeCarrera();
     this.cargarResultados();
@@ -127,10 +129,15 @@ export class Resultado implements OnInit, OnDestroy {
       this.codigoRIASEC = this.generarCodigoRIASEC(this.top3);
 
       this.carrerasFiltradas$ = this.carreras$.pipe(
-        map(carreras => carreras.filter(car =>
-          car.combinacion.split(',').map(c => c.trim()).includes(this.codigoRIASEC)
-        ))
+        map(carreras => carreras.filter(car => {
+          const combinaciones = car.combinacion.split(',').map(c => c.trim());
+
+          const posicion = combinaciones.indexOf(this.codigoRIASEC);
+
+          return posicion === 0 || posicion===1 || posicion===2;
+        }).slice(0,6))
       );
+    
 
       const mapa = Object.fromEntries(
         this.todosPuntajes.map(item => [item.categoria, item])

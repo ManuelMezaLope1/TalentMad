@@ -15,12 +15,12 @@ export class UniversidadServicio {
     return this.HttpClient.get<IUniversidad[]>(`${this.baseURL}`);
   }
 
-  registrarUniversidad(universidad: IUniversidad): Observable<Object>{
-    return this.HttpClient.post(`${this.baseURL}`,universidad);
+  registrarUniversidad(formData: FormData): Observable<Object>{
+    return this.HttpClient.post(`${this.baseURL}`, formData);
   }
 
-  actualizarUniversidad(id: number, universidad: IUniversidad): Observable<Object>{
-    return this.HttpClient.put(`${this.baseURL}/${id}`,universidad);
+  actualizarUniversidad(id: number, formData: FormData): Observable<Object>{
+    return this.HttpClient.put(`${this.baseURL}/${id}`, formData);
   }
 
   obtenerUniversidadPorId(id: number): Observable<IUniversidad>{

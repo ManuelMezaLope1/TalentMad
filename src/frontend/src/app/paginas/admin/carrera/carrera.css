@@ -1,7 +1,26 @@
+.dark :host ::ng-deep h1 {
+  transition: 1s;
+  color: white !important;
+}
+
+.light :host ::ng-deep h1 {
+  transition: 1s;
+}
+
 .carrera-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 25px;
+}
+
+.categoria-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: .85rem;
+  margin-bottom: 15px;
 }
 
 .alpha-header {
@@ -25,11 +44,122 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-.card-header {
+.img-container {
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
+  position: relative;
 }
 
 .badge {
   font-size: 0.85rem;
+}
+
+.imagen-carrera {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  min-height: 270px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.menu-radial {
+  display: flex;
+  justify-content: end;
+  position: relative;
+  width: 250px;
+  height: 150px;
+  margin: auto;
+}
+
+.btn-central {
+  margin-top: 50px;
+  position: absolute;
+  top: 10px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.btn-opcion {
+  margin-top: 50px;
+  position: absolute;
+  top: 10px;
+
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+
+  opacity: 0;
+  transition: all .4s ease;
+}
+
+.btn-opcion.activo {
+  opacity: 1;
+}
+
+@media(max-width:7000px) {
+  .carrera-nombre {
+    height: 50px;
+  }
+
+  .carrera-descripcion {
+    height: 170px;
+  }
+
+  .op1.activo {
+    transform: translateX(90px);
+  }
+
+  .op2.activo {
+    transform: translateX(180px);
+  }
+
+  .op3.activo {
+    transform: translateX(270px);
+  }
+
+  .op4.activo {
+    transform: translateX(360px);
+  }
+}
+
+@media(max-width:1500px) {
+  .carrera-nombre {
+    height: 50px;
+  }
+
+  .carrera-descripcion {
+    height: 170px;
+  }
+
+  .op1.activo {
+    transform: translateX(90px);
+  }
+
+  .op2.activo {
+    transform: translateX(180px);
+  }
+
+  .op3.activo {
+    transform: translateX(270px);
+  }
+
+  .op4.activo {
+    transform: translateX(360px);
+  }
+}
+
+@media(max-width: 993px) {
+  .card-header {
+    height: 130px;
+  }
+
+  .carrera-nombre {
+    height: 70px;
+  }
+
+  .carrera-descripcion {
+    height: 290px;
+  }
 }

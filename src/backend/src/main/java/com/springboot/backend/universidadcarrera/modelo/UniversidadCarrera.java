@@ -25,17 +25,27 @@ public class UniversidadCarrera {
     @JsonIgnoreProperties({"universidad_carrera"})
     private Carrera carrera;
 
+    @Column(name="ranking")
+    private Integer ranking;
+
+    @Column(name="total")
+    private Double total;
+
     public UniversidadCarrera(){}
 
-    public UniversidadCarrera(Long id, Universidad universidad, Carrera carrera) {
+    public UniversidadCarrera(Long id, Universidad universidad, Carrera carrera, Integer ranking, Double total) {
         this.id = id;
         this.universidad = universidad;
         this.carrera = carrera;
+        this.ranking=ranking;
+        this.total=total;
     }
 
-    public UniversidadCarrera(Universidad universidad, Carrera carrera) {
+    public UniversidadCarrera(Universidad universidad, Carrera carrera, Integer ranking, Double total) {
         this.universidad = universidad;
         this.carrera = carrera;
+        this.ranking=ranking;
+        this.total=total;
     }
 
     public Long getId() {
@@ -60,6 +70,22 @@ public class UniversidadCarrera {
 
     public void setCarrera(Carrera carrera) {
         this.carrera = carrera;
+    }
+
+    public Integer getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(Integer ranking) {
+        this.ranking = ranking;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
     @Override

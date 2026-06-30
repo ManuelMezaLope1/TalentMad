@@ -1,5 +1,6 @@
 package com.springboot.backend.universidad.controlador;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.springboot.backend.excepcion.ResourceNotFoundException;
 import com.springboot.backend.universidad.modelo.Universidad;
@@ -43,14 +46,21 @@ public class UniversidadControlador {
     }
     
     @PutMapping("/universidad/{id}")
-    public ResponseEntity<Universidad> actualizarUniversidad(@PathVariable Long id, @RequestBody Universidad detallesUniversidad) {
+    public ResponseEntity<Universidad> actualizarUniversidad(@PathVariable Long id, @RequestPart("universidad") Universidad detallesUniversidad, @RequestPart(value = "imagen", required = false) MultipartFile imagen) throws IOException {
         Universidad universidadExistente=universidadRepositorio.findById(id).orElseThrow(()->new ResourceNotFoundException("No existe la universidad con el id: "+id));
 
         universidadExistente.setNombre(detallesUniversidad.getNombre());
         universidadExistente.setDepartamento(detallesUniversidad.getDepartamento());
         universidadExistente.setCostoMensualMinimo(detallesUniversidad.getCostoMensualMinimo());
         universidadExistente.setCostoMensualMaximo((detallesUniversidad.getCostoMensualMaximo()));
+        universidadExistente.setUrl(detallesUniversidad.getUrl());
         universidadExistente.setTipoUniversidad(detallesUniversidad.getTipoUniversidad());
+
+        if (imagen != null && !imagen.isEmpty()) {
+            String nombreImagen = imagen.getOriginalFilename();
+
+            universidadExistente.setImagen(nombreImagen);
+        }
 
         Universidad universidadActualizada=universidadRepositorio.save(universidadExistente);
         

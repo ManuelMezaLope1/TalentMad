@@ -1,0 +1,64 @@
+
+<div class="chatbot-fab" (click)="toggleChat()" [class.active]="isOpen()">
+
+  @if (isOpen()) {
+    <i class="material-icons">close</i>
+  } @else {
+    <img src="/talensito.png" alt="Talensito" class="chatbot-fab-img">
+  }
+</div>
+
+
+<div class="chatbot-window" [class.open]="isOpen()">
+
+
+  <div class="chatbot-header">
+    <div class="chatbot-header-info">
+      <i class="material-icons chatbot-avatar">smart_toy</i>
+      <div>
+        <h3>CHATBOT TALENSITO</h3>
+        <div class="chatbot-status">
+          <span class="status-dot"></span>
+          {{ isTyping() ? 'Escribiendo...' : 'Conectado' }}
+        </div>
+      </div>
+    </div>
+    <button class="chatbot-minimize" (click)="toggleChat()">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+
+  <!-- Mensajes -->
+  <div class="chatbot-messages" #chatContainer>
+    @for (message of messages(); track $index) {
+      <div class="message-wrapper" [class.user]="message.role === 'user'">
+        <div class="message-bubble">
+          @if (message.loading) {
+            <div class="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          } @else {
+
+            <div class="message-content" [innerHTML]="formatMessage(message.content)"></div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="chatbot-input">
+    <input
+      type="text"
+      [value]="prompt()"
+      (input)="prompt.set($any($event.target).value)"
+      (keydown.enter)="sendMessage()"
+      placeholder="Escribe tu pregunta..."
+      [disabled]="isTyping()"
+    />
+    <button (click)="sendMessage()" [disabled]="isTyping() || !prompt().trim()">
+      <i class="material-icons">send</i>
+    </button>
+  </div>
+</div>

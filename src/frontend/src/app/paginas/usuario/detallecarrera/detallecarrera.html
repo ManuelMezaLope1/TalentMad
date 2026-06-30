@@ -1,0 +1,263 @@
+<div class="detalle-page">
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-card">
+    <div class="spinner"></div>
+    <p class="loading-text">Cargando información de la carrera...</p>
+  </div>
+
+  <ng-container *ngIf="!isLoading && carrera">
+
+    <!-- ── Hero de la carrera ─────────────────────────────────────────── -->
+    <div class="hero">
+      <img [src]="carrera.imagen" [alt]="carrera.nombre" class="hero-img" />
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <button (click)="volver()" class="btn-back">← Volver a resultados</button>
+        <span class="hero-tipo">{{ carrera.tipoCarrera }}</span>
+        <h1 class="hero-title">{{ carrera.nombre }}</h1>
+        <p class="hero-desc">{{ carrera.descripcion }}</p>
+        <div class="hero-meta">
+          <span class="meta-chip">⏱ {{ carrera.duracion }} semestres</span>
+          <span class="meta-chip">🏛 {{ universidadesUnicas.length }} universidades</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Contenido principal ───────────────────────────────────────── -->
+    <div class="detalle-container">
+
+      <!-- ── FILTROS HORIZONTALES ──────────────────────────────────── -->
+      <div class="filtros-horizontal">
+        <div class="filtros-header">
+          <h2 class="filtros-title">🎯 Filtrar universidades</h2>
+          <button (click)="limpiarFiltros()" class="btn-limpiar-horizontal">✕ Limpiar</button>
+        </div>
+
+        <div class="filtros-grid">
+          <div class="filtro-item costo-filtro">
+            <div class="filtro-grid">
+              <div>
+                <label class="filtro-label-horizontal">Ranking</label>
+                <div class="costo-dropdown">
+                  <button type="button" class="costo-trigger" (click)="toggleRankingDropdown()" disabled>
+                    <span>{{ rankingFiltroLabel }}</span>
+                    <span class="costo-chevron" [class.open]="rankingDropdownOpen">⌄</span>
+                  </button>
+
+                  <div class="costo-panel" *ngIf="rankingDropdownOpen">
+                    <div class="costo-panel-inputs">
+                      <div class="costo-input-box">
+                        <span class="costo-input-label">Desde</span>
+                        <input type="number" min="1" placeholder="1" [(ngModel)]="rankingDesdeTemp" readonly />
+                      </div>
+                      <div class="costo-input-box">
+                        <span class="costo-input-label">Hasta</span>
+                        <input type="number" min="2" max="5" placeholder="5" [(ngModel)]="rankingHastaTemp" readonly />
+                      </div>
+                    </div>
+
+                    <div class="ranking-presets">
+                      <div class="flex-ranking">
+                        <button type="button" *ngFor="let presetDesde of opcionesRankingDesde" class="costo-preset-chip"
+                          [class.active]="rankingDesdeTemp === presetDesde"
+                          (click)="seleccionarPresetRankingDesde(presetDesde)">
+                          Desde {{ presetDesde }}
+                        </button>
+                      </div>
+
+                      <div class="flex-ranking">
+                        <button type="button" *ngFor="let presetHasta of opcionesRankingHasta" class="costo-preset-chip"
+                          [class.active]="costoHastaTemp === presetHasta"
+                          (click)="seleccionarPresetRankingHasta(presetHasta)">
+                          Hasta {{ presetHasta }}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="costo-panel-footer">
+                      <button type="button" class="costo-btn-limpiar" (click)="limpiarRanking()">Limpiar</button>
+                      <button type="button" class="costo-btn-aplicar" (click)="aplicarRanking()">Ver resultados</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!--<div>
+                <label class="filtro-label-horizontal">Departamento</label>
+                <div class="costo-dropdown">
+                  <button type="button" class="costo-trigger" (click)="toggleDepartamentoDropdown()">
+                    <span>{{ departamentoFiltroLabel }}</span>
+                    <span class="costo-chevron" [class.open]="departamentoDropdownOpen">⌄</span>
+                  </button>
+
+                  <div class="costo-panel" *ngIf="departamentoDropdownOpen">
+                    <div class="botones-departamentos">
+                      <button type="button" class="departamento-preset-chip" [class.active]="regionActual==='costa'"
+                        style="font-size: 1rem;" (click)="regionSeleccionada('costa')">Costa</button>
+                      <button type="button" class="departamento-preset-chip" [class.active]="regionActual==='sierra'"
+                        style="font-size: 1rem;" (click)="regionSeleccionada('sierra')">Sierra</button>
+                      <button type="button" class="departamento-preset-chip" [class.active]="regionActual==='selva'"
+                        style="font-size: 1rem;" (click)="regionSeleccionada('selva')">Selva</button>
+                    </div>
+                    <br>
+                    <div class="departamento-presets">
+                      <button type="button" *ngFor="let preset of opcionesDepartamento" class="costo-preset-chip"
+                        [class.active]="departamentoTemp === preset" (click)="seleccionarPresetDepartamento(preset)">
+                        {{ preset }}
+                      </button>
+                    </div>
+
+                    <div class="costo-panel-footer">
+                      <button type="button" class="costo-btn-limpiar" (click)="limpiarDepartamento()">Limpiar</button>
+                      <button type="button" class="costo-btn-aplicar" (click)="aplicarDepartamento()">Ver
+                        resultados</button>
+                    </div>
+                  </div>
+                </div>
+              </div>-->
+            </div>
+          </div>
+
+          <!-- Filtro Beca -->
+          <div class="filtro-item beca-filtro">
+            <label class="filtro-label-horizontal" for="becaSelect">🎓 Convenio de beca</label>
+            <select id="becaSelect" class="filtro-select-horizontal" [(ngModel)]="becaFiltro">
+              <option value="">Todas las universidades</option>
+              <option *ngFor="let entidad of entidadesBeca" [value]="entidad">
+                {{ entidad }}
+              </option>
+            </select>
+            <p class="filtro-hint-horizontal" *ngIf="becaFiltro">
+              Mostrando universidades con convenio <strong>{{ becaFiltro }}</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="filtro-count-horizontal">
+          <strong>{{ universidadesFiltradas.length }}</strong>
+          {{ universidadesFiltradas.length === 1 ? 'universidad encontrada' : 'universidades encontradas' }}
+        </div>
+      </div>
+
+      <!-- ── Lista de universidades ──────────────────────────────────── -->
+      <main class="unis-main">
+
+        <div *ngIf="universidadesFiltradas.length === 0" class="unis-empty">
+          <span class="empty-icon">🔍</span>
+          <p>No hay universidades que cumplan los filtros seleccionados.</p>
+          <button (click)="limpiarFiltros()" class="btn-limpiar-horizontal" style="margin-top:1rem">Limpiar
+            filtros</button>
+        </div>
+
+        <div class="unis-grid">
+          <div *ngFor="let uni of universidadesFiltradas" class="uni-card">
+            <div class="uni-img-wrapper">
+              <img [src]="uni.imagen" [alt]="uni.nombre" class="uni-img" loading="lazy" />
+              <div class="uni-img-overlay"></div>
+            </div>
+
+            <div class="uni-card-footer">
+              <p class="uni-nombre">{{ uni.nombre }}</p>
+
+              <button type="button" class="btn-sedes" (click)="irASedes(uni.nombre)">
+                <span class="uni-sedes-badge">
+                  {{ uni.cantidadSedes }} {{ uni.cantidadSedes === 1 ? 'sede' : 'sedes' }} →
+                </span>
+              </button>
+
+              <button *ngIf="getConveniosUniversidad(uni.nombre).length > 0" type="button" class="btn-ver-becas"
+                (click)="abrirModalBecas(uni)">
+                <span class="ver-becas-info">
+                  <span class="ver-becas-icon">🎓</span>
+                  <span class="ver-becas-text">Convenio con {{ getConveniosUniversidad(uni.nombre).join(', ') }}</span>
+                </span>
+                <span class="ver-becas-cta">Ver becas →</span>
+              </button>
+
+              <p *ngIf="getConveniosUniversidad(uni.nombre).length === 0" class="sin-convenio">
+                Esta universidad no tiene convenios de beca registrados.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div><!-- /detalle-container -->
+
+    <!-- ── Modal de becas ─────────────────────────────────────────────── -->
+    <div class="modal-overlay" *ngIf="modalBecasAbierto" (click)="cerrarModalBecas()">
+      <div class="modal-becas" (click)="$event.stopPropagation()">
+        <div class="modal-becas-header">
+          <div>
+            <p class="modal-becas-universidad">{{ universidadModal?.nombre }}</p>
+            <h3 class="modal-becas-title">🎓 Becas y convenios disponibles</h3>
+          </div>
+          <button type="button" class="modal-close-btn" (click)="cerrarModalBecas()">✕</button>
+        </div>
+
+        <div class="modal-becas-body">
+
+          <!-- Convenios de esta universidad (informativo) -->
+          <div class="modal-becas-convenios" *ngIf="universidadModal">
+            <span class="convenio-chip" *ngFor="let c of getConveniosUniversidad(universidadModal.nombre)">
+              🎓 {{ c }}
+            </span>
+          </div>
+
+          <!-- Becas REALES registradas en la base de datos para esta carrera -->
+          <ng-container *ngIf="carrera?.beca && (carrera?.beca?.length ?? 0) > 0; else sinDataBecas">
+            <div class="beca-mini-card" *ngFor="let beca of carrera?.beca">
+              <div class="beca-mini-header">
+                <span class="beca-mini-nombre">{{ beca.nombre }}</span>
+                <span class="beca-mini-tipo">{{ beca.tipoBeca }}</span>
+              </div>
+              <p class="beca-mini-desc">{{ beca.descripcion }}</p>
+
+              <div class="beca-mini-grid">
+                <div class="beca-mini-col">
+                  <p class="beca-mini-label">✅ Beneficios</p>
+                  <ul class="beca-lista">
+                    <li *ngFor="let item of splitLista(beca.beneficio)">{{ item }}</li>
+                  </ul>
+                </div>
+                <div class="beca-mini-col">
+                  <p class="beca-mini-label">📋 Requisitos</p>
+                  <ul class="beca-lista">
+                    <li *ngFor="let item of splitLista(beca.requisito)">{{ item }}</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div *ngIf="beca.restriccion" class="beca-restriccion">
+                <p class="beca-mini-label">⚠ Restricciones</p>
+                <ul class="beca-lista">
+                  <li *ngFor="let item of splitLista(beca.restriccion)">{{ item }}</li>
+                </ul>
+              </div>
+
+              <p class="beca-duracion">⏳ Duración: {{ beca.duracion }}</p>
+            </div>
+          </ng-container>
+
+          <ng-template #sinDataBecas>
+            <p class="beca-no-data">
+              Esta universidad tiene convenio con
+              <strong>{{ getConveniosUniversidad(universidadModal?.nombre || '').join(', ') }}</strong>,
+              pero todavía no hay becas registradas para esta carrera en el sistema.
+              Consulta directamente con la universidad para obtener información actualizada.
+            </p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+  </ng-container><!-- /ng-container carrera -->
+
+  <!-- Error -->
+  <div *ngIf="!isLoading && !carrera" class="loading-card">
+    <p class="loading-text">No se pudo cargar la carrera. Vuelve a los resultados.</p>
+    <button (click)="volver()" class="btn-back-center">← Volver</button>
+  </div>
+
+</div>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { CategoriaPreguntasServicio } from '../../../servicios/categoria-preguntas/categoria-preguntas-servicio';
 import { CategoriaPreguntas } from '../../../servicios/categoria-preguntas/categoria-preguntas';
 import { Observable } from 'rxjs';
@@ -8,21 +8,137 @@ import Swal from 'sweetalert2';
 import { IPreguntas } from '../../../servicios/preguntas/IPreguntas';
 import { PreguntasServicio } from '../../../servicios/preguntas/preguntas-servicio';
 import { FormsModule } from '@angular/forms';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-preguntas-admin',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatPaginatorModule, MatTableModule],
   templateUrl: './preguntas-admin.html',
   styleUrl: './preguntas-admin.css',
 })
 export class PreguntasAdmin {
   data: string[] = [];
+  abierto = false;
 
-  constructor(private categoriaPreguntasServicio: CategoriaPreguntasServicio, private preguntaServicio: PreguntasServicio, private router: Router) { }
+  constructor(private categoriaPreguntasServicio: CategoriaPreguntasServicio, private preguntaServicio: PreguntasServicio, private router: Router, private cd: ChangeDetectorRef) { }
+
+  @ViewChild('btnInfo')
+  btnInfo!: ElementRef;
+
+  @ViewChild('btnInfoAgregarCategoria')
+  btnInfoAgregarCategoria!: ElementRef;
+
+  @ViewChild('btnInfoDashboard')
+  btnInfoDashboard!: ElementRef;
+
+  @ViewChild('btnInfoAgregarPregunta')
+  btnInfoAgregarPregunta!: ElementRef;
+
+  mostrarTooltip() {
+    if (!this.btnInfo?.nativeElement) {
+      return;
+    }
+
+    const tooltip = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfo.nativeElement
+    );
+
+    tooltip.show();
+
+    setTimeout(() => {
+      try {
+        tooltip.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000);
+  }
+
+  mostrarTooltipAgregarCategoria() {
+    if (!this.btnInfoAgregarCategoria?.nativeElement) {
+      return;
+    }
+
+    const tooltipAgregarCategoria = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoAgregarCategoria.nativeElement
+    );
+
+    tooltipAgregarCategoria.show();
+
+    setTimeout(() => {
+      try {
+        tooltipAgregarCategoria.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000);
+  }
+
+  mostrarTooltipDashboard() {
+    if (!this.btnInfoDashboard?.nativeElement) {
+      return;
+    }
+
+    const tooltipDashboard = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoDashboard.nativeElement
+    );
+
+    tooltipDashboard.show();
+
+    setTimeout(() => {
+      try {
+        tooltipDashboard.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000);
+  }
+
+  mostrarTooltipAgregarPregunta() {
+    if (!this.btnInfoAgregarPregunta?.nativeElement) {
+      return;
+    }
+    
+    const tooltipAgregarPregunta = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoAgregarPregunta.nativeElement
+    );
+
+    tooltipAgregarPregunta.show();
+
+    setTimeout(() => {
+      try {
+        tooltipAgregarPregunta.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000);
+  }
 
   ngOnInit(): void {
-    this.categoriaPreguntas$ = this.categoriaPreguntasServicio.obtenerListaDeCategorias();
+    this.categoriaPreguntasServicio.obtenerListaDeCategorias().subscribe(dato => {
+      this.dataSourceCategoria.data = dato;
+
+      this.dataSourceCategoria.data.forEach(cate => {
+        cate.preguntas = cate.preguntas?.sort((a, b) =>
+          a.preguntas.localeCompare(b.preguntas)
+        );
+      });
+
+      this.cd.detectChanges();
+    });
+
     this.preguntas$ = this.preguntaServicio.obtenerListaDePreguntas();
+    this.preguntaServicio.obtenerListaDePreguntas().subscribe(dato => {
+      this.dataSourcePregunta.data = dato;
+      this.cd.detectChanges();
+    })
+  }
+
+  ngAfterViewInit() {
+    this.dataSourceCategoria.paginator = this.paginadorCategoria;
+    this.dataSourcePregunta.paginator = this.paginadorPregunta;
   }
 
   volverDashboard() {
@@ -34,6 +150,19 @@ export class PreguntasAdmin {
   /*=====================================================================================*/
   categoriaPreguntas: CategoriaPreguntas[] = [];
   categoriaPreguntas$!: Observable<CategoriaPreguntas[]>;
+
+  displayedColumnsCategoria: string[] = ['nombre', 'platos', 'acciones'];
+
+  dataSourceCategoria = new MatTableDataSource<CategoriaPreguntas>();
+
+  @ViewChild('paginadorCategoria')
+  paginadorCategoria!: MatPaginator;
+
+  columnasCategoria: string[] = [
+    'nombre',
+    'preguntas',
+    'acciones'
+  ];
 
   registrarCategoriaPregunta() {
     this.router.navigate(['creacion-categoria-preguntas']);
@@ -81,12 +210,25 @@ export class PreguntasAdmin {
   preguntas: IPreguntas[] = [];
   preguntas$!: Observable<IPreguntas[]>;
 
+  displayedColumnsPregunta: string[] = ['pregunta', 'categoria', 'acciones'];
+
+  dataSourcePregunta = new MatTableDataSource<IPreguntas>();
+
+  @ViewChild('paginadorPregunta')
+  paginadorPregunta!: MatPaginator;
+
+  columnasPregunta: string[] = [
+    'pregunta',
+    'categoria',
+    'acciones'
+  ];
+
   registrarPregunta() {
     this.router.navigate(['creacion-preguntas']);
   }
 
   actualizarPregunta(id: number) {
-    this.router.navigate(['actualizacion-preguntas',id]);
+    this.router.navigate(['actualizacion-preguntas', id]);
   }
 
   private obtenerPregunta() {

@@ -1,47 +1,46 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, Observable, Subject } from 'rxjs';
+import { catchError, map, Observable, of, Subject, takeUntil, tap, throwError } from 'rxjs';
 import { ICarrera } from '../../../servicios/carrera/ICarrera';
 import { CarreraServicio } from '../../../servicios/carrera/carrera-servicio';
+import { obtenerImagenCarrera } from '../../../servicios/carrera/imagenes-carrera';
+import * as bootstrap from 'bootstrap';
+import { FormsModule } from '@angular/forms';
+import { Historial } from '../../../servicios/historial/Historial';
+import { UsuarioServicio } from '../../../servicios/usuario/usuario-servicio';
+import { HistorialServicio } from '../../../servicios/historial/historial-servicio';
+import Swal from 'sweetalert2';
 
-interface RespuestaGuardada {
-  [preguntaTexto: string]: number;
-}
-
+interface RespuestaGuardada { [preguntaTexto: string]: number; }
 interface CategoriaPregunta {
-  id: number;
-  nombre: string;
-  preguntas: { preguntas: string }[];
+  id: number; nombre: string; preguntas: { preguntas: string }[];
+}
+interface PuntajeItem {
+  categoria: string; puntaje: number; puntajeMaximo: number; id: number;
 }
 
-interface PuntajeItem {
-  categoria: string;
-  puntaje: number;
-  puntajeMaximo: number;
-  id: number;
-}
+// ─────────────────────────────────────────────────────────────────────────────
 
 @Component({
   selector: 'app-resultado',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './resultado.html',
   styleUrls: ['./resultado.css']
 })
 export class Resultado implements OnInit, OnDestroy {
 
-  carreras: ICarrera[] = [];
   carreras$!: Observable<ICarrera[]>;
-  carrerasFiltradas$: Observable<any[]>;
+  carrerasFiltradas$!: Observable<ICarrera[]>;
+  historial: Historial = new Historial();
+  usuario: any = null;
+  histcar: any = null;
 
-  universidadBecas: any[] = [];
-  becas: any[] = [];
-
-  codigoRIASEC: string = '';
+  codigoRIASEC = '';
   top3: PuntajeItem[] = [];
   todosPuntajes: PuntajeItem[] = [];
-  isLoading: boolean = true;
+  isLoading = true;
   private destroy$ = new Subject<void>();
 
   axisLines: { x1: number; y1: number; x2: number; y2: number }[] = [];
@@ -61,30 +60,51 @@ export class Resultado implements OnInit, OnDestroy {
   ];
 
   private descripciones: { [key: string]: string } = {
-    'Realista': 'Personas prácticas, físicas y mecánicas. Prefieren actividades concretas con resultados tangibles. Son honestos, estables y persistentes.',
-    'Investigador': 'Analíticos, curiosos e intelectualmente orientados. Disfrutan resolver problemas complejos y comprender el mundo a través de la ciencia y la investigación.',
-    'Artístico': 'Creativos, expresivos e imaginativos. Valoran la originalidad y prefieren entornos sin estructura rígida donde puedan crear y explorar libremente.',
-    'Social': 'Empáticos, cooperativos y orientados a las personas. Disfrutan ayudar, enseñar y trabajar en equipo para mejorar el bienestar de los demás.',
-    'Emprendedor': 'Ambiciosos, persuasivos y orientados al liderazgo. Les gusta influenciar, liderar proyectos y asumir riesgos calculados para alcanzar metas.',
-    'Convencional': 'Ordenados, precisos y orientados a los detalles. Prefieren entornos estructurados con procedimientos claros y resultados medibles y verificables.',
+    'Realista': 'Personas prácticas, físicas y mecánicas. Prefieren actividades concretas con resultados tangibles.',
+    'Investigador': 'Analíticos, curiosos e intelectualmente orientados. Disfrutan resolver problemas complejos.',
+    'Artístico': 'Creativos, expresivos e imaginativos. Valoran la originalidad y prefieren entornos sin estructura rígida.',
+    'Social': 'Empáticos, cooperativos y orientados a las personas. Disfrutan ayudar y trabajar en equipo.',
+    'Emprendedor': 'Ambiciosos, persuasivos y orientados al liderazgo. Les gusta influenciar y liderar proyectos.',
+    'Convencional': 'Ordenados, precisos y orientados a los detalles. Prefieren entornos estructurados.',
   };
 
   mapaLetras: { [key: string]: string } = {
-    'Realista': 'R',
-    'Investigador': 'I',
-    'Artístico': 'A',
-    'Social': 'S',
-    'Emprendedor': 'E',
-    'Convencional': 'C',
+    'Realista': 'R', 'Investigador': 'I', 'Artístico': 'A',
+    'Social': 'S', 'Emprendedor': 'E', 'Convencional': 'C',
   };
 
   private ordenRIASEC = ['Realista', 'Investigador', 'Artístico', 'Social', 'Emprendedor', 'Convencional'];
 
-  constructor(private carreraServicio: CarreraServicio, private router: Router) { }
+  constructor(private carreraServicio: CarreraServicio, private router: Router, private usuarioServicio: UsuarioServicio, private historialServicio: HistorialServicio, private cd: ChangeDetectorRef) { }
 
+  // ── Imagen por carrera ────────────────────────────────────────────────────
+  // Busca primero en el mapa por id; si no hay URL registrada, usa picsum con
+  // la id como seed para que cada carrera tenga siempre la misma imagen aleatoria.
+  getImagenCarrera(carrera: ICarrera): string {
+    return obtenerImagenCarrera(carrera.id, 600, 340);
+  }
+
+  combinacion: any;
   ngOnInit(): void {
     this.carreras$ = this.carreraServicio.obtenerListaDeCarrera();
     this.cargarResultados();
+
+    this.usuarioServicio.obtenerPerfil().pipe(
+      tap(data => {
+        this.usuario = data;
+        this.historial.usuario = {
+          id: this.usuario.id
+        };
+        this.historial.username = this.usuario.username
+        this.cd.detectChanges();
+      }),
+      catchError(error => {
+        console.error(error);
+        this.usuario = null;
+        return of(null);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -96,33 +116,48 @@ export class Resultado implements OnInit, OnDestroy {
     try {
       const respuestasGuardadas = localStorage.getItem('respuestas_test_riasec');
       const categoriasGuardadas = localStorage.getItem('categorias_test_riasec');
-
       if (!respuestasGuardadas || !categoriasGuardadas) {
-        this.router.navigate(['/preguntas']);
-        return;
+        this.router.navigate(['/preguntas']); return;
       }
-
       const respuestas: RespuestaGuardada = JSON.parse(respuestasGuardadas);
       const categorias: CategoriaPregunta[] = JSON.parse(categoriasGuardadas);
 
       this.todosPuntajes = this.calcularPuntajesPorCategoria(respuestas, categorias);
-
       const primeros3 = this.todosPuntajes.slice(0, 3);
       const puntajeLimite = primeros3[2]?.puntaje ?? 0;
-      this.top3 = this.todosPuntajes.filter((item) => item.puntaje >= puntajeLimite);
-
+      this.top3 = this.todosPuntajes.filter(item => item.puntaje >= puntajeLimite);
       this.codigoRIASEC = this.generarCodigoRIASEC(this.top3);
-      console.log(this.codigoRIASEC);
+
       this.carrerasFiltradas$ = this.carreras$.pipe(
-        map(carreras =>
-          carreras.filter(car =>
-            car.combinacion
-              .split(",")
-              .map(c => c.trim())
-              .includes(this.codigoRIASEC)
-          )
-        )
+        map(carreras => carreras.filter(car => {
+          const combinaciones = car.combinacion.split(',').map(c => c.trim());
+
+          const posicion = combinaciones.indexOf(this.codigoRIASEC);
+
+          return posicion === 0 || posicion===1 || posicion===2;
+        }).slice(0,6))
       );
+    
+
+      const mapa = Object.fromEntries(
+        this.todosPuntajes.map(item => [item.categoria, item])
+      );
+
+      this.historial.puntaje_realista = mapa['Realista'].puntaje;
+      this.historial.puntaje_investigador = mapa['Investigador'].puntaje;
+      this.historial.puntaje_artistico = mapa['Artístico'].puntaje;
+      this.historial.puntaje_social = mapa['Social'].puntaje;
+      this.historial.puntaje_emprendedor = mapa['Emprendedor'].puntaje;
+      this.historial.puntaje_convencional = mapa['Convencional'].puntaje;
+
+      this.historial.codigo = this.codigoRIASEC;
+      this.historial.fecha = new Date().toLocaleString();
+
+      this.carrerasFiltradas$.subscribe(carreras => {
+        this.historial.carreras = carreras
+          .map(car => car.nombre)
+          .join(', ');
+      });
 
       this.buildRadarGeometry();
       this.isLoading = false;
@@ -137,66 +172,41 @@ export class Resultado implements OnInit, OnDestroy {
     categorias: CategoriaPregunta[]
   ): PuntajeItem[] {
     const puntajes: { [id: number]: { nombre: string; puntaje: number; puntajeMaximo: number } } = {};
-
-    // Máximo teórico = número de preguntas de la categoría × 5
-    categorias.forEach((cat) => {
-      const cantidadPreguntas = cat.preguntas?.length ?? 0;
-      puntajes[cat.id] = {
-        nombre: cat.nombre,
-        puntaje: 0,
-        puntajeMaximo: cantidadPreguntas * 5,
-      };
+    categorias.forEach(cat => {
+      puntajes[cat.id] = { nombre: cat.nombre, puntaje: 0, puntajeMaximo: (cat.preguntas?.length ?? 0) * 5 };
     });
-
-    // Acumular respuestas en su categoría
     for (const [preguntaTexto, respuesta] of Object.entries(respuestas)) {
       for (const categoria of categorias) {
-        const encontrada = categoria.preguntas?.find((p) => p.preguntas === preguntaTexto);
-        if (encontrada) {
-          puntajes[categoria.id].puntaje += Number(respuesta);
-          break;
+        if (categoria.preguntas?.find(p => p.preguntas === preguntaTexto)) {
+          puntajes[categoria.id].puntaje += Number(respuesta); break;
         }
       }
     }
-
     return Object.entries(puntajes)
-      .map(([id, data]) => ({
-        categoria: data.nombre,
-        puntaje: data.puntaje,
-        puntajeMaximo: data.puntajeMaximo,
-        id: parseInt(id),
-      }))
+      .map(([id, data]) => ({ categoria: data.nombre, puntaje: data.puntaje, puntajeMaximo: data.puntajeMaximo, id: parseInt(id) }))
       .sort((a, b) => b.puntaje - a.puntaje);
   }
 
   generarCodigoRIASEC(top3: PuntajeItem[]): string {
-    return top3.map((item) => this.mapaLetras[item.categoria] || item.categoria.charAt(0)).join('');
+    return top3.map(item => this.mapaLetras[item.categoria] || item.categoria.charAt(0)).join('');
   }
 
   buildRadarGeometry(): void {
     const n = 6;
-    this.axisLines = [];
-    this.radarVertices = [];
-    this.radarLabels = [];
-
+    this.axisLines = []; this.radarVertices = []; this.radarLabels = [];
     for (let i = 0; i < n; i++) {
       const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
-      const x2 = Math.cos(angle) * this.RADAR_RADIUS;
-      const y2 = Math.sin(angle) * this.RADAR_RADIUS;
-      this.axisLines.push({ x1: 0, y1: 0, x2, y2 });
-
-      const lx = Math.cos(angle) * (this.RADAR_RADIUS + this.LABEL_OFFSET);
-      const ly = Math.sin(angle) * (this.RADAR_RADIUS + this.LABEL_OFFSET);
-      this.radarLabels.push({ x: lx, y: ly, text: this.ordenRIASEC[i] });
+      this.axisLines.push({ x1: 0, y1: 0, x2: Math.cos(angle) * this.RADAR_RADIUS, y2: Math.sin(angle) * this.RADAR_RADIUS });
+      this.radarLabels.push({
+        x: Math.cos(angle) * (this.RADAR_RADIUS + this.LABEL_OFFSET),
+        y: Math.sin(angle) * (this.RADAR_RADIUS + this.LABEL_OFFSET),
+        text: this.ordenRIASEC[i]
+      });
     }
-
-    // Radar usa porcentaje teórico por categoría
-    const puntajeMap = Object.fromEntries(this.todosPuntajes.map((p) => [p.categoria, p]));
-
+    const puntajeMap = Object.fromEntries(this.todosPuntajes.map(p => [p.categoria, p]));
     for (let i = 0; i < n; i++) {
       const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
-      const cat = this.ordenRIASEC[i];
-      const item = puntajeMap[cat];
+      const item = puntajeMap[this.ordenRIASEC[i]];
       const ratio = item && item.puntajeMaximo > 0 ? item.puntaje / item.puntajeMaximo : 0;
       const r = ratio * this.RADAR_RADIUS;
       this.radarVertices.push({ x: Math.cos(angle) * r, y: Math.sin(angle) * r });
@@ -210,27 +220,19 @@ export class Resultado implements OnInit, OnDestroy {
     }).join(' ');
   }
 
-  getRadarPoints(): string {
-    return this.radarVertices.map((v) => `${v.x},${v.y}`).join(' ');
-  }
-
-  // Porcentaje real: puntaje obtenido / máximo teórico de ESA categoría
+  getRadarPoints(): string { return this.radarVertices.map(v => `${v.x},${v.y}`).join(' '); }
   getPorcentaje(item: PuntajeItem): number {
-    if (!item || item.puntajeMaximo === 0) return 0;
-    return Math.round((item.puntaje / item.puntajeMaximo) * 100);
+    return !item || item.puntajeMaximo === 0 ? 0 : Math.round((item.puntaje / item.puntajeMaximo) * 100);
+  }
+  getBarColor(index: number): string { return this.barColors[index % this.barColors.length]; }
+  getDescripcion(categoria: string): string { return this.descripciones[categoria] ?? ''; }
+
+  verDetalleCarrera(carrera: ICarrera): void {
+    localStorage.setItem('carrera_seleccionada', JSON.stringify(carrera));
+    this.router.navigate(['/detallecarrera', carrera.id]);
   }
 
-  getBarColor(index: number): string {
-    return this.barColors[index % this.barColors.length];
-  }
-
-  getDescripcion(categoria: string): string {
-    return this.descripciones[categoria] ?? '';
-  }
-
-  volverATest(): void {
-    this.router.navigate(['/preguntas']);
-  }
+  volverATest(): void { this.router.navigate(['/preguntas']); }
 
   reiniciarTest(): void {
     localStorage.removeItem('respuestas_test_riasec');
@@ -239,79 +241,25 @@ export class Resultado implements OnInit, OnDestroy {
     this.router.navigate(['/preguntas']).then(() => window.location.reload());
   }
 
-  obtenerUniversidadesUnicas(universidades: any[]): any[] {
-
-    const mapa = new Map<string, any>();
-
-    universidades.forEach(uni => {
-
-      const nombrePrincipal = uni.nombre
-        .split(' - ')[0]
-        .trim();
-
-      if (!mapa.has(nombrePrincipal)) {
-
-        mapa.set(nombrePrincipal, {
-          ...uni,
-          nombre: nombrePrincipal,
-          beca: [...(uni.beca || [])]
-        });
-
-      } else {
-
-        const existente = mapa.get(nombrePrincipal);
-
-        existente.beca = [
-          ...new Map(
-            [
-              ...existente.beca,
-              ...(uni.beca || [])
-            ].map((beca: any) => [beca.id, beca])
-          ).values()
-        ];
-
-        existente.costoMensualMinimo = Math.min(
-          existente.costoMensualMinimo,
-          uni.costoMensualMinimo
-        );
-
-        existente.costoMensualMaximo = Math.max(
-          existente.costoMensualMaximo,
-          uni.costoMensualMaximo
-        );
-
-      }
-
-    });
-
-    return Array.from(mapa.values());
-
+  onSubmit() {
+    this.historialServicio.registrarHistorial(this.historial).pipe(
+      tap(dato => {
+        this.irAlFinal();
+      }),
+      catchError(err => {
+        console.log("ERROR COMPLETO:", err);
+        console.log("STATUS:", err.status);
+        console.log("BODY:", err.error);
+        return throwError(() => err);
+      })
+    ).subscribe()
   }
 
-  obtenerPromedioUniversidad(universidad: any): number {
-    return (
-      universidad.costoMensualMinimo +
-      universidad.costoMensualMaximo
-    ) / 2;
-  }
-
-  obtenerTop5Universidades(universidades: any[]): any[] {
-    return [...this.obtenerUniversidadesUnicas(universidades)]
-      .sort((a, b) =>
-        this.obtenerPromedioUniversidad(b) -
-        this.obtenerPromedioUniversidad(a)
-      )
-      .slice(0, 5);
-  }
-
-  obtenerBecasPorUniversidad(idUniversidad: number): any[] {
-    const idsBecas = this.universidadBecas
-      .filter(ub => ub.universidad.id === idUniversidad)
-      .map(ub => ub.beca.id);
-
-    return this.becas.filter(
-      beca => idsBecas.includes(beca.id)
-    );
-
+  irAlFinal() {
+    Swal.fire({
+      title: 'Resultado registrada',
+      text: `El resultado ha sido registrado con éxito`,
+      icon: `success`
+    })
   }
 }

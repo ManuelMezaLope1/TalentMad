@@ -22,6 +22,8 @@ export class ActualizacionUniversidad {
   universidad: IUniversidad=new IUniversidad();
   tipoUniversidades: TipoUniversidad[]=[];
   departamentos: Departamento[]=[];
+  imagenSeleccionada!: File;
+  imagenPreview: any;
 
   constructor(private cd: ChangeDetectorRef, private universidadServicio: UniversidadServicio, private tipoUniversidadServicio: TipoUniversidadServicio, private departamentoServicio: DepartamentoServicio, private router: Router, private route: ActivatedRoute){}
 
@@ -31,6 +33,7 @@ export class ActualizacionUniversidad {
     this.universidadServicio.obtenerUniversidadPorId(this.id).pipe(
       tap(dato=>{
         Object.assign(this.universidad, dato);
+        this.imagenPreview = this.universidad.imagen;
         this.cd.detectChanges();
       }),
       catchError(err=>{
@@ -58,14 +61,43 @@ export class ActualizacionUniversidad {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 
+  seleccionarImagen(event: any): void {
+    this.imagenSeleccionada = event.target.files[0];
+    if (this.imagenSeleccionada) {
+      const reader = new FileReader();
+      reader.readAsDataURL(this.imagenSeleccionada);
+      reader.onload = () => {
+        this.imagenPreview = reader.result;
+        this.cd.detectChanges();
+      };
+    }
+  }
+
   irALaListaDeUniversidad(){
     this.router.navigate(['/universidad']);
     Swal.fire('Universidad actualizada','La universidad ha sido actualizada con éxito','success');
   }
 
   onSubmit(): void{
+    const formData = new FormData();
+
+    formData.append(
+      'universidad',
+      new Blob(
+        [JSON.stringify(this.universidad)],
+        { type: 'application/json' }
+      )
+    );
+
+    if (this.imagenSeleccionada) {
+      formData.append(
+        'imagen',
+        this.imagenSeleccionada
+      )
+    }
+
     if(this.universidad){
-      this.universidadServicio.actualizarUniversidad(this.id, this.universidad).pipe(
+      this.universidadServicio.actualizarUniversidad(this.id, formData).pipe(
         tap(dato=>{
           this.irALaListaDeUniversidad();
         }),

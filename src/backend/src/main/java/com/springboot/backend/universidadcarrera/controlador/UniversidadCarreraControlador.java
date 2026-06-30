@@ -19,6 +19,9 @@ import com.springboot.backend.universidadcarrera.modelo.UniversidadCarreraDto;
 import com.springboot.backend.universidadcarrera.repositorio.UniversidadCarreraRepositorio;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/v1/public")
@@ -32,9 +35,19 @@ public class UniversidadCarreraControlador {
     @Autowired
     private CarreraRepositorio carreraRepositorio;
 
+    @GetMapping("/universidad-carrera/lote")
+    public List<UniversidadCarrera> listarTodasUniversidadesCarreras() {
+        return universidadCarreraRepositorio.findAll();
+    }
+    
+
     @PostMapping("/universidad-carrera/lote")
     public ResponseEntity<?> guardarLote(
             @RequestBody List<UniversidadCarreraDto> relaciones) {
+
+        Long universidadId=relaciones.get(0).getUniversidadId();
+
+        universidadCarreraRepositorio.deleteByUniversidadId((universidadId));
 
         List<UniversidadCarrera> lista = new ArrayList<>();
 

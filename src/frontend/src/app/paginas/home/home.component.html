@@ -2,8 +2,8 @@
   <!-- Hero Banner -->
   <section id="inicio" class="hero">
     <div class="hero-content">
-      <div class="hero-badge">
-        <i class="fas fa-brain"></i> Orientación simple · Resultados claros
+      <div class="hero-badge" style="display:inline-flex">
+        <i class="material-icons">psychology</i>Orientación simple · Resultados claros
       </div>
       <h1>Descubre tu verdadera vocación sin presiones</h1>
       <p>
@@ -14,31 +14,32 @@
       <div class="hero-buttons">
         <div *ngIf="authServicio.logueado()">
           <a routerLink="/preguntas" class="btn-primary">
-            <i class="fas fa-arrow-right"></i> Iniciar test ahora
+            <span style="display:inline-flex; align-items:center; padding: 1px;"><i
+                class="material-icons">arrow_circle_right</i>&nbsp;Iniciar test ahora</span>
           </a>
         </div>
 
         <div *ngIf="!authServicio.logueado()">
           <a routerLink="/login" class="btn-primary">
-            <i class="fas fa-arrow-right"></i> Iniciar test ahora
+            <span style="display:inline-flex; align-items:center; padding: 1px;"><i
+                class="material-icons">arrow_circle_right</i>&nbsp;Iniciar test ahora</span>
           </a>
         </div>
 
         <a (click)="scrollToSection('pasos')" class="btn-secondary">
-          <i class="fas fa-play"></i> Cómo funciona
+          <span style="display:inline-flex; align-items:center; padding: 1px; margin-top:4px;"><i
+              class="material-icons">play_arrow</i>
+            Cómo funciona</span>
         </a>
       </div>
     </div>
-    <div
-      class="hero-image"
-      style="
+    <div class="hero-image" style="
         background-image: url('https://raw.githubusercontent.com/ManuelMezaLope1/TalentMap/refs/heads/main/assets/images/logo.jpeg');
-      "
-    ></div>
+      "></div>
   </section>
 
   <!-- Beneficios -->
-  <section id="beneficios" class="section">
+  <section id="beneficios" class="section" style="padding: 40px 0px">
     <div class="section-header">
       <h2>¿Por qué hacer nuestro test?</h2>
       <p>
@@ -48,23 +49,23 @@
     </div>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-chalkboard-user"></i></div>
+        <i class="feature-icon material-icons">co_present</i>
         <h3>Diseño claro</h3>
         <p>Preguntas directas, con imágenes y opciones que reflejan situaciones reales.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+        <i class="feature-icon material-icons">stacked_line_chart</i>
         <h3>Resultados multidimensionales</h3>
         <p>No solo una carrera: te mostramos tus áreas de mayor afinidad.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+        <i class="feature-icon material-icons">tablet</i>
         <h3>Completa en cualquier lugar</h3>
         <p>Desde tu celular, tablet o computadora. Sin instalaciones.</p>
       </div>
     </div>
   </section>
-
+  <br><br>
   <!-- Pasos / Cómo funciona -->
   <section id="pasos" class="section steps-section">
     <div class="section-header">
@@ -103,10 +104,8 @@
           ahora estudio Publicidad. Súper útil."
         </p>
         <div class="testimonial-author">
-          <div
-            class="author-avatar"
-            style="background-image: url('https://randomuser.me/api/portraits/women/68.jpg')"
-          ></div>
+          <div class="author-avatar" style="background-image: url('https://randomuser.me/api/portraits/women/68.jpg')">
+          </div>
           <div><strong>Valeria M.</strong><br />Estudiante</div>
         </div>
       </div>
@@ -114,27 +113,25 @@
         <p class="testimonial-text">
           "Es una herramienta sencilla y confiable. Me ayudó a entender mejor lo que me gusta."
         </p>
+        <br>
         <div class="testimonial-author">
-          <div
-            class="author-avatar"
-            style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg')"
-          ></div>
+          <div class="author-avatar" style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg')">
+          </div>
           <div><strong>Diego R.</strong><br />Bachiller</div>
         </div>
       </div>
       <div class="testimonial-card">
         <p class="testimonial-text">"Lo recomendé a mis amigos. Las preguntas son entretenidas."</p>
+        <br>
         <div class="testimonial-author">
-          <div
-            class="author-avatar"
-            style="background-image: url('https://randomuser.me/api/portraits/women/45.jpg')"
-          ></div>
+          <div class="author-avatar" style="background-image: url('https://randomuser.me/api/portraits/women/45.jpg')">
+          </div>
           <div><strong>Camila L.</strong><br />Último año escolar</div>
         </div>
       </div>
     </div>
   </section>
-
+  <br><br>
   <!-- FAQ -->
   <section id="faq" class="section">
     <div class="section-header">
@@ -143,54 +140,58 @@
     </div>
     <div class="faq-grid">
       <div class="faq-item">
-        <div class="faq-question" (click)="toggleFaq($event)">
-          ¿Cuánto tiempo toma completar el test?<i class="fas fa-chevron-down"></i>
+        <div class="faq-question" (click)="toggleFaq($event)" style="transition: 2s;">
+          ¿Cuánto tiempo toma completar el test?<i class="material-icons">arrow_drop_down</i>
         </div>
-        <div class="faq-answer">
+        <div class="faq-answer d-flex justify-content-center">
           El test es rápido y puedes completarlo en aproximadamente 5 a 7 minutos.
         </div>
       </div>
       <div class="faq-item">
         <div class="faq-question" (click)="toggleFaq($event)">
-          ¿Qué tan precisos son los resultados? <i class="fas fa-chevron-down"></i>
+          ¿Qué tan precisos son los resultados? <i class="material-icons">arrow_drop_down</i>
         </div>
-        <div class="faq-answer">
+        <div class="faq-answer d-flex justify-content-center">
           Los resultados se basan en tus respuestas, por lo que mientras más sincero seas, más
           acertada será la orientación.
         </div>
       </div>
       <div class="faq-item">
         <div class="faq-question" (click)="toggleFaq($event)">
-          ¿Guardo mis resultados? <i class="fas fa-chevron-down"></i>
+          ¿Guardo mis resultados? <i class="material-icons">arrow_drop_down</i>
         </div>
-        <div class="faq-answer">Si completas el test, puedes ver tu resultado al instante</div>
+        <div class="faq-answer d-flex justify-content-center">Si completas el test, puedes ver tu resultado al instante
+        </div>
       </div>
       <div class="faq-item">
         <div class="faq-question" (click)="toggleFaq($event)">
-          ¿Puedo repetir el test? <i class="fas fa-chevron-down"></i>
+          ¿Puedo repetir el test? <i class="material-icons">arrow_drop_down</i>
         </div>
-        <div class="faq-answer">
+        <div class="faq-answer d-flex justify-content-center">
           Sí, puedes realizar el test nuevamente en cualquier momento si deseas comparar resultados.
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA final -->
+
   <div class="cta-section">
     <h2>¿Listo para descubrir tu vocación?</h2>
     <p>Sin costo, sin spam, solo responde lo que realmente te gusta.</p>
 
     <div *ngIf="authServicio.logueado()">
       <a routerLink="/preguntas" class="btn-primary">
-        <i class="fas fa-rocket"></i> Comenzar test gratuito
+        <i class="material-icons">rocket_launch</i> Comenzar test gratuito
       </a>
     </div>
 
     <div *ngIf="!authServicio.logueado()">
       <a routerLink="/login" class="btn-primary">
-        <i class="fas fa-rocket"></i> Comenzar test gratuito
+        <i class="material-icons">rocket_launch</i> Comenzar test gratuito
       </a>
     </div>
+
   </div>
+  <br>
 </div>
+<app-chatbot></app-chatbot>

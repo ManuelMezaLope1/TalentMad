@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
+import { UniversidadServicio } from '../../../servicios/universidad/universidad-servicio';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import Swal from 'sweetalert2';
-import { BecaServicio } from '../../../servicios/beca/beca-servicio';
-import { IBeca } from '../../../servicios/beca/IBeca';
-import { UniversidadBecaServicio } from '../../../servicios/universidad-beca/universidad-beca-servicio';
 import { IUniversidad } from '../../../servicios/universidad/IUniversidad';
-import { UniversidadServicio } from '../../../servicios/universidad/universidad-servicio';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CarreraBecaServicio } from '../../../servicios/carrera-beca/carrera-beca-servicio';
+import { BecaServicio } from '../../../servicios/beca/beca-servicio';
+import { IBeca } from '../../../servicios/beca/IBeca';
+import Swal from 'sweetalert2';
+import { UniversidadBecaServicio } from '../../../servicios/universidad-beca/universidad-beca-servicio';
 
 @Component({
   selector: 'app-universidad-beca',
@@ -29,6 +30,7 @@ export class UniversidadBeca {
   constructor(private universidadServicio: UniversidadServicio, private becaServicio: BecaServicio, private universidadBecaServicio: UniversidadBecaServicio, private router: Router) { }
 
   ngOnInit(): void {
+    
     this.universidades$ = this.universidadServicio.obtenerListaDeUniversidad();
     this.becas$ = this.becaServicio.obtenerListaDeBeca();
   }

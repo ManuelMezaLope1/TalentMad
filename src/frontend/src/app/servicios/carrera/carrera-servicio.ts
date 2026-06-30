@@ -15,12 +15,12 @@ export class CarreraServicio {
     return this.HttpClient.get<ICarrera[]>(`${this.baseURL}`);
   }
 
-  registrarCarrera(carrera: ICarrera): Observable<Object>{
-    return this.HttpClient.post(`${this.baseURL}`,carrera);
+  registrarCarrera(formData: FormData): Observable<Object>{
+    return this.HttpClient.post(`${this.baseURL}`,formData);
   }
 
-  actualizarCarrera(id: number, carrera: ICarrera): Observable<Object>{
-    return this.HttpClient.put(`${this.baseURL}/${id}`,carrera);
+  actualizarCarrera(id: number, formData: FormData): Observable<Object>{
+    return this.HttpClient.put(`${this.baseURL}/${id}`, formData);
   }
 
   obtenerCarreraPorId(id: number): Observable<ICarrera>{

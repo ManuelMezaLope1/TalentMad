@@ -1,4 +1,48 @@
-/* Reset y estilos base */
+.dark :host ::ng-deep .contenedor{
+  transition: 1s;
+  background: #222;
+}
+
+.dark :host ::ng-deep .riasec{
+  transition: 1s;
+  color: #fff !important;
+}
+
+.dark :host ::ng-deep .text-gray-600{
+  transition: 1s;
+  color: #fff;
+}
+
+.dark :host ::ng-deep .categoria{
+  transition: 1s;
+  color: #fff !important;
+}
+
+.dark :host ::ng-deep .progreso{
+  transition: 1s;
+  color: #222 !important;
+}
+
+.light :host ::ng-deep .contenedor{
+  transition: 1s  !important;
+}
+
+.light :host ::ng-deep .riasec{
+  transition: 1s  !important;
+}
+
+.light :host ::ng-deep .text-gray-600{
+  transition: 1s  !important;
+}
+
+.light :host ::ng-deep .categoria{
+  transition: 1s  !important;
+}
+
+.light :host ::ng-deep .progreso{
+  transition: 1s  !important;
+}
+
 * {
   margin: 0;
   padding: 0;

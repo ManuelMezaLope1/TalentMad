@@ -3,7 +3,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { UniversidadServicio } from '../../../servicios/universidad/universidad-servicio';
 import { CarreraServicio } from '../../../servicios/carrera/carrera-servicio';
 import { IUniversidad } from '../../../servicios/universidad/IUniversidad';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ICarrera } from '../../../servicios/carrera/ICarrera';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -31,12 +31,25 @@ export class UniversidadCarrera {
   constructor(private universidadServicio: UniversidadServicio, private carreraServicio: CarreraServicio, private universidadCarreraServicio: UniversidadCarreraServicio, private cd: ChangeDetectorRef, private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
-    this.carreras$ = this.carreraServicio.obtenerListaDeCarrera();
-    this.universidades$ = this.universidadServicio.obtenerListaDeUniversidad();
+    this.carreras$ = this.carreraServicio.obtenerListaDeCarrera().pipe(
+      map(carreras =>
+        carreras.sort((a, b) => a.nombre.localeCompare(b.nombre))
+      )
+    );
+
+    this.universidades$ = this.universidadServicio.obtenerListaDeUniversidad().pipe(
+      map(universidades =>
+        universidades.sort((a, b) => a.nombre.localeCompare(b.nombre))
+      )
+    );
   }
 
   volverDashboard() {
-    this.router.navigate(['/dashboard'])
+    this.router.navigate(['/dashboard']);
+  }
+
+  elegirUniversidad(){
+    this.router.navigate(['elegir-universidad']);
   }
 
   universidadAgregada: any = null;
@@ -109,8 +122,6 @@ export class UniversidadCarrera {
       carreraId: carrera.id
     }));
 
-    console.log(relaciones);
-
     this.universidadCarreraServicio
       .guardarLote(relaciones)
       .subscribe({
@@ -160,21 +171,15 @@ export class UniversidadCarrera {
               mensaje,
               'info'
             );
-
           }
-
         },
-
         error: () => {
-
           Swal.fire(
             'Error',
             'No se pudieron guardar las relaciones',
             'error'
           );
-
         }
-
       });
   }
 }

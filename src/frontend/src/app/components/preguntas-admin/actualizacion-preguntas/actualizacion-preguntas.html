@@ -4,7 +4,7 @@
         <div class="form-group">
             <label>Nombre : </label>
             <input type="text" class="form-control" id="preguntas" [(ngModel)]="pregunta.preguntas" name="preguntas" required
-                pattern="^[¿]?[A-ZÁÉÍÓÚÑ][a-zA-ZáéíóúÁÉÍÓÚÑñ\s¿?]+[?]?$" minlength="4" maxlength="60" placeholder="Digite su nombre " #preguntas="ngModel" />
+                pattern="^[¿]?[A-ZÁÉÍÓÚÑ][a-zA-ZáéíóúÁÉÍÓÚÑñ\s.¿?]+[?]?$" minlength="4" maxlength="60" placeholder="Digite su nombre " #preguntas="ngModel" />
             <div class="alert alert-danger" *ngIf="preguntas.invalid && (preguntas.dirty || preguntas.touched)">
                 <div *ngIf="preguntas.errors?.['required']">
                     Digite su nombre por favor

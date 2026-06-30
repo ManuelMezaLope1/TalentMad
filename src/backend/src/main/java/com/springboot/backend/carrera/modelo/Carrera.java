@@ -28,6 +28,9 @@ public class Carrera {
     @Column(name="tipo_carrera", nullable = false)
     private String tipoCarrera;
 
+    @Column(name="imagen")
+    private String imagen;
+
     @ManyToMany
     @JoinTable(
         name="universidad_carrera",
@@ -47,7 +50,7 @@ public class Carrera {
     public Carrera(){}
 
     public Carrera(Long id, String nombre, String descripcion, Integer duracion, String tipoCarrera,
-            List<Universidad> universidad, List<Beca> beca, String combinacion) {
+            List<Universidad> universidad, List<Beca> beca, String combinacion, String imagen) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -56,10 +59,11 @@ public class Carrera {
         this.universidad = universidad;
         this.beca = beca;
         this.combinacion=combinacion;
+        this.imagen=imagen;
     }
 
     public Carrera(String nombre, String descripcion, Integer duracion, String tipoCarrera,
-            List<Universidad> universidad, List<Beca> beca, String combinacion) {
+            List<Universidad> universidad, List<Beca> beca, String combinacion, String imagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
@@ -67,6 +71,7 @@ public class Carrera {
         this.universidad = universidad;
         this.beca = beca;
         this.combinacion=combinacion;
+        this.imagen=imagen;
     }
     
     public Long getId() {
@@ -131,6 +136,14 @@ public class Carrera {
 
     public void setCombinacion(String combinacion) {
         this.combinacion = combinacion;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     @Override

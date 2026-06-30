@@ -45,7 +45,11 @@ export class UniversidadCarrera {
   }
 
   volverDashboard() {
-    this.router.navigate(['/dashboard'])
+    this.router.navigate(['/dashboard']);
+  }
+
+  elegirUniversidad(){
+    this.router.navigate(['elegir-universidad']);
   }
 
   universidadAgregada: any = null;

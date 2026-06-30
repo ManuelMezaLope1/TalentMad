@@ -10,7 +10,7 @@
 
     <!-- ── Hero de la carrera ─────────────────────────────────────────── -->
     <div class="hero">
-      <img [src]="getImagenCarrera()" [alt]="carrera.nombre" class="hero-img" />
+      <img [src]="carrera.imagen" [alt]="carrera.nombre" class="hero-img" />
       <div class="hero-overlay"></div>
       <div class="hero-content">
         <button (click)="volver()" class="btn-back">← Volver a resultados</button>
@@ -19,7 +19,7 @@
         <p class="hero-desc">{{ carrera.descripcion }}</p>
         <div class="hero-meta">
           <span class="meta-chip">⏱ {{ carrera.duracion }} semestres</span>
-          <span class="meta-chip">🏛 {{ carrera.universidad?.length ?? 0 }} universidades</span>
+          <span class="meta-chip">🏛 {{ universidadesUnicas.length }} universidades</span>
         </div>
       </div>
     </div>
@@ -35,45 +35,87 @@
         </div>
 
         <div class="filtros-grid">
-
-          <!-- Filtro Costo Mensual: Desde / Hasta -->
           <div class="filtro-item costo-filtro">
-            <label class="filtro-label-horizontal">💰 Costo mensual</label>
-
-            <div class="costo-dropdown">
-              <button type="button" class="costo-trigger" (click)="toggleCostoDropdown()">
-                <span>{{ costoFiltroLabel }}</span>
-                <span class="costo-chevron" [class.open]="costoDropdownOpen">⌄</span>
-              </button>
-
-              <div class="costo-panel" *ngIf="costoDropdownOpen">
-                <div class="costo-panel-inputs">
-                  <div class="costo-input-box">
-                    <span class="costo-input-label">Desde</span>
-                    <input type="number" min="0" placeholder="S/. 0" [(ngModel)]="costoDesdeTemp" />
-                  </div>
-                  <div class="costo-input-box">
-                    <span class="costo-input-label">Hasta</span>
-                    <input type="number" min="0" placeholder="Sin límite" [(ngModel)]="costoHastaTemp" />
-                  </div>
-                </div>
-
-                <div class="costo-presets">
-                  <button
-                    type="button"
-                    *ngFor="let preset of opcionesCosto"
-                    class="costo-preset-chip"
-                    [class.active]="costoHastaTemp === preset"
-                    (click)="seleccionarPresetCosto(preset)">
-                    Hasta {{ formatCosto(preset) }}
+            <div class="filtro-grid">
+              <div>
+                <label class="filtro-label-horizontal">Ranking</label>
+                <div class="costo-dropdown">
+                  <button type="button" class="costo-trigger" (click)="toggleRankingDropdown()" disabled>
+                    <span>{{ rankingFiltroLabel }}</span>
+                    <span class="costo-chevron" [class.open]="rankingDropdownOpen">⌄</span>
                   </button>
-                </div>
 
-                <div class="costo-panel-footer">
-                  <button type="button" class="costo-btn-limpiar" (click)="limpiarCosto()">Limpiar</button>
-                  <button type="button" class="costo-btn-aplicar" (click)="aplicarCosto()">Ver resultados</button>
+                  <div class="costo-panel" *ngIf="rankingDropdownOpen">
+                    <div class="costo-panel-inputs">
+                      <div class="costo-input-box">
+                        <span class="costo-input-label">Desde</span>
+                        <input type="number" min="1" placeholder="1" [(ngModel)]="rankingDesdeTemp" readonly />
+                      </div>
+                      <div class="costo-input-box">
+                        <span class="costo-input-label">Hasta</span>
+                        <input type="number" min="2" max="5" placeholder="5" [(ngModel)]="rankingHastaTemp" readonly />
+                      </div>
+                    </div>
+
+                    <div class="ranking-presets">
+                      <div class="flex-ranking">
+                        <button type="button" *ngFor="let presetDesde of opcionesRankingDesde" class="costo-preset-chip"
+                          [class.active]="rankingDesdeTemp === presetDesde"
+                          (click)="seleccionarPresetRankingDesde(presetDesde)">
+                          Desde {{ presetDesde }}
+                        </button>
+                      </div>
+
+                      <div class="flex-ranking">
+                        <button type="button" *ngFor="let presetHasta of opcionesRankingHasta" class="costo-preset-chip"
+                          [class.active]="costoHastaTemp === presetHasta"
+                          (click)="seleccionarPresetRankingHasta(presetHasta)">
+                          Hasta {{ presetHasta }}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="costo-panel-footer">
+                      <button type="button" class="costo-btn-limpiar" (click)="limpiarRanking()">Limpiar</button>
+                      <button type="button" class="costo-btn-aplicar" (click)="aplicarRanking()">Ver resultados</button>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <!--<div>
+                <label class="filtro-label-horizontal">Departamento</label>
+                <div class="costo-dropdown">
+                  <button type="button" class="costo-trigger" (click)="toggleDepartamentoDropdown()">
+                    <span>{{ departamentoFiltroLabel }}</span>
+                    <span class="costo-chevron" [class.open]="departamentoDropdownOpen">⌄</span>
+                  </button>
+
+                  <div class="costo-panel" *ngIf="departamentoDropdownOpen">
+                    <div class="botones-departamentos">
+                      <button type="button" class="departamento-preset-chip" [class.active]="regionActual==='costa'"
+                        style="font-size: 1rem;" (click)="regionSeleccionada('costa')">Costa</button>
+                      <button type="button" class="departamento-preset-chip" [class.active]="regionActual==='sierra'"
+                        style="font-size: 1rem;" (click)="regionSeleccionada('sierra')">Sierra</button>
+                      <button type="button" class="departamento-preset-chip" [class.active]="regionActual==='selva'"
+                        style="font-size: 1rem;" (click)="regionSeleccionada('selva')">Selva</button>
+                    </div>
+                    <br>
+                    <div class="departamento-presets">
+                      <button type="button" *ngFor="let preset of opcionesDepartamento" class="costo-preset-chip"
+                        [class.active]="departamentoTemp === preset" (click)="seleccionarPresetDepartamento(preset)">
+                        {{ preset }}
+                      </button>
+                    </div>
+
+                    <div class="costo-panel-footer">
+                      <button type="button" class="costo-btn-limpiar" (click)="limpiarDepartamento()">Limpiar</button>
+                      <button type="button" class="costo-btn-aplicar" (click)="aplicarDepartamento()">Ver
+                        resultados</button>
+                    </div>
+                  </div>
+                </div>
+              </div>-->
             </div>
           </div>
 
@@ -104,47 +146,27 @@
         <div *ngIf="universidadesFiltradas.length === 0" class="unis-empty">
           <span class="empty-icon">🔍</span>
           <p>No hay universidades que cumplan los filtros seleccionados.</p>
-          <button (click)="limpiarFiltros()" class="btn-limpiar-horizontal" style="margin-top:1rem">Limpiar filtros</button>
+          <button (click)="limpiarFiltros()" class="btn-limpiar-horizontal" style="margin-top:1rem">Limpiar
+            filtros</button>
         </div>
 
         <div class="unis-grid">
-          <article *ngFor="let uni of universidadesFiltradas" class="uni-card">
-
+          <div *ngFor="let uni of universidadesFiltradas" class="uni-card">
             <div class="uni-img-wrapper">
-              <img [src]="getImagenUniversidad(uni.nombre)" [alt]="uni.nombre" class="uni-img" loading="lazy" />
-              <div class="uni-badges">
-                <span *ngFor="let c of getConveniosUniversidad(uni.nombre)" class="convenio-badge">
-                  🎓 {{ c }}
-                </span>
-              </div>
+              <img [src]="uni.imagen" [alt]="uni.nombre" class="uni-img" loading="lazy" />
+              <div class="uni-img-overlay"></div>
             </div>
 
-            <div class="uni-body">
-              <h3 class="uni-nombre">{{ uni.nombre }}</h3>
-              <p class="uni-tipo">{{ uni.tipoUniversidad?.nombre }}</p>
+            <div class="uni-card-footer">
+              <p class="uni-nombre">{{ uni.nombre }}</p>
 
-              <div class="uni-datos">
-                <div class="dato">
-                  <span class="dato-icon">📍</span>
-                  <span class="dato-text">{{ uni.departamento?.nombre }}</span>
-                </div>
-                <div class="dato">
-                  <span class="dato-icon">💸</span>
-                  <span class="dato-text">
-                    {{ formatCosto(+uni.costoMensualMinimo) }} – {{ formatCosto(+uni.costoMensualMaximo) }} / mes
-                  </span>
-                </div>
-                <div class="dato">
-                  <span class="dato-icon">📊</span>
-                  <span class="dato-text">Promedio: <strong>{{ formatCosto(obtenerPromedio(uni)) }}</strong></span>
-                </div>
-              </div>
+              <button type="button" class="btn-sedes" (click)="irASedes(uni.nombre)">
+                <span class="uni-sedes-badge">
+                  {{ uni.cantidadSedes }} {{ uni.cantidadSedes === 1 ? 'sede' : 'sedes' }} →
+                </span>
+              </button>
 
-              <!-- Resumen de becas: solo abre el modal, no estira el card -->
-              <button
-                *ngIf="getConveniosUniversidad(uni.nombre).length > 0"
-                type="button"
-                class="btn-ver-becas"
+              <button *ngIf="getConveniosUniversidad(uni.nombre).length > 0" type="button" class="btn-ver-becas"
                 (click)="abrirModalBecas(uni)">
                 <span class="ver-becas-info">
                   <span class="ver-becas-icon">🎓</span>
@@ -156,12 +178,8 @@
               <p *ngIf="getConveniosUniversidad(uni.nombre).length === 0" class="sin-convenio">
                 Esta universidad no tiene convenios de beca registrados.
               </p>
-
-              <a [href]="getUrlUniversidad(uni.nombre)" target="_blank" rel="noopener" class="btn-uni-web">
-                Visitar sitio oficial →
-              </a>
             </div>
-          </article>
+          </div>
         </div>
 
       </main>

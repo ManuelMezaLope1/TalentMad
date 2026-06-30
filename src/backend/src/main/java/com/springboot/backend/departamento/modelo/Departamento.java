@@ -19,6 +19,9 @@ public class Departamento {
     @Column(name="nombre", nullable = false, length = 60)
     private String nombre;
 
+    @Column(name="region", nullable=false, length=100)
+    private String region;
+
     @OneToMany(mappedBy = "departamento", fetch=FetchType.EAGER)
     private List<Universidad> universidad;
 
@@ -28,15 +31,17 @@ public class Departamento {
 
     public Departamento(){}
 
-    public Departamento(Long id, String nombre, List<Universidad> universidad, List<Usuario> usuario) {
+    public Departamento(Long id, String nombre, String region, List<Universidad> universidad, List<Usuario> usuario) {
         this.id = id;
         this.nombre = nombre;
+        this.region=region;
         this.universidad = universidad;
         this.usuario=usuario;
     }
 
-    public Departamento(String nombre, List<Universidad> universidad, List<Usuario> usuario) {
+    public Departamento(String nombre, String region, List<Universidad> universidad, List<Usuario> usuario) {
         this.nombre = nombre;
+        this.region=region;
         this.universidad = universidad;
         this.usuario=usuario;
     }
@@ -55,6 +60,14 @@ public class Departamento {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public List<Universidad> getUniversidad() {

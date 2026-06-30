@@ -1,13 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { of, Subject } from 'rxjs';
+import { catchError, takeUntil, tap } from 'rxjs/operators';
 import { CarreraServicio } from '../../../servicios/carrera/carrera-servicio';
 import { ICarrera } from '../../../servicios/carrera/ICarrera';
 import { IUniversidad } from '../../../servicios/universidad/IUniversidad';
 import { obtenerImagenCarrera } from '../../../servicios/carrera/imagenes-carrera';
+import Swal from 'sweetalert2';
+import { Departamento } from '../../../servicios/departamento/Departamento';
+import { UsuarioServicio } from '../../../servicios/usuario/usuario-servicio';
+import { DepartamentoServicio } from '../../../servicios/departamento/departamento-servicio';
 
 // ──────────────────────────────────────────────────────────────────────────────
 // Interfaces
@@ -74,10 +78,33 @@ export class DetalleCarrera implements OnInit, OnDestroy {
   costoDesdeTemp: number | null = null;
   costoHastaTemp: number | null = null;
 
-  costoDropdownOpen = false;
+  rankingDesde: number | null = null;
+  rankingHasta: number | null = null;
 
-  /** Atajos rápidos de "hasta" — ajusta estos valores si tu data usa otra escala. */
-  opcionesCosto: number[] = [500, 1000, 1500, 2000, 3000, 5000];
+  rankingDesdeTemp: number | null = null;
+  rankingHastaTemp: number | null = null;
+
+  departamento: any | null = null;
+  departamentoTemp: any;
+  departamentoUsuario: any;
+  usuario: any;
+  regionActual: any = 'costa';
+
+  costoDropdownOpen = false;
+  rankingDropdownOpen = false;
+  departamentoDropdownOpen = false;
+
+  opcionesCostoDesde: number[] = [500, 1000, 1500, 2000, 3000, 5000];
+  opcionesCostoHasta: number[] = [500, 1000, 1500, 2000, 3000, 5000];
+
+  opcionesRankingDesde: number[] = [1, 2, 3, 4, 5];
+  opcionesRankingHasta: number[] = [1, 2, 3, 4, 5];
+
+  departamentos: Departamento[] = [];
+  opcionesDepartamento: string[] = [];
+  departamentosCosta: any[] = []
+  departamentosSierra: any[] = []
+  departamentosSelva: any[] = []
 
   // ── Filtro de beca ───────────────────────────────────────────────────────────
   becaFiltro: string = '';
@@ -90,10 +117,67 @@ export class DetalleCarrera implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private carreraServicio: CarreraServicio
-  ) {}
+    private carreraServicio: CarreraServicio,
+    private usuarioServicio: UsuarioServicio,
+    private departamentoServicio: DepartamentoServicio,
+    private cd: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
+    this.usuarioServicio.obtenerPerfil().pipe(
+      tap(data => {
+        this.usuario = data;
+        this.departamentoUsuario = this.usuario.departamento.nombre;
+        this.cd.detectChanges();
+      }),
+      catchError(error => {
+        console.error(error);
+        return of(null);
+      })
+    ).subscribe();
+
+    this.departamentoServicio.obtenerDepartamentoCosta().pipe(
+      tap(dato => {
+        this.departamentosCosta = dato;
+        this.departamentosCosta=this.departamentosCosta.map(
+          departamento=>departamento.nombre
+        )
+        this.cd.detectChanges();
+      }),
+      catchError(err => {
+        console.error(err);
+        return of(null)
+      })
+    ).subscribe();
+
+    this.departamentoServicio.obtenerDepartamentoSierra().pipe(
+      tap(dato => {
+        this.departamentosSierra = dato;
+        this.departamentosSierra=this.departamentosSierra.map(
+          departamento=>departamento.nombre
+        )
+        this.cd.detectChanges();
+      }),
+      catchError(err => {
+        console.error(err);
+        return of(null)
+      })
+    ).subscribe();
+
+    this.departamentoServicio.obtenerDepartamentoSelva().pipe(
+      tap(dato => {
+        this.departamentosSelva = dato;
+        this.departamentosSelva=this.departamentosSelva.map(
+          departamento=>departamento.nombre
+        )
+        this.cd.detectChanges();
+      }),
+      catchError(err => {
+        console.error(err);
+        return of(null)
+      })
+    ).subscribe();
+
     const cached = localStorage.getItem('carrera_seleccionada');
     if (cached) {
       this.carrera = JSON.parse(cached);
@@ -134,66 +218,6 @@ export class DetalleCarrera implements OnInit, OnDestroy {
     this.isLoading = false;
   }
 
-  // ── Helpers de imagen ─────────────────────────────────────────────────────
-
-  getImagenCarrera(): string {
-    const id = this.carrera?.id ?? 1;
-    return obtenerImagenCarrera(id, 1200, 400);
-  }
-
-  getImagenUniversidad(nombre: string): string {
-    const mapa: { [k: string]: string } = {
-      'Pontificia Universidad Católica del Perú': 'pucp.jpg',
-      'Universidad Andina del Cusco': 'uac.jpg',
-      'Universidad Peruana de Ciencias Aplicadas': 'upc.jpeg',
-      'Universidad César Vallejo': 'ucv.jpg',
-      'Universidad de Lima': 'ul.jpg',
-      'Universidad de Ingeniería y Tecnología': 'utec.jpg',
-      'Universidad Continental': 'uc.jpg',
-      'Universidad Tecnológica del Perú': 'utp.jpeg',
-      'Universidad Privada del Norte': 'upn.jpeg',
-      'Universidad de San Martín de Porres': 'usmp.jpg',
-      'Universidad Esan': 'esan.jpg',
-      'Universidad Peruana Cayetano Heredia': 'upch.jpeg',
-    };
-    for (const prefix of Object.keys(mapa)) {
-      if (nombre.startsWith(prefix)) return mapa[prefix];
-    }
-    const seed = nombre.length * 7;
-    return `https://picsum.photos/seed/uni-${seed}/400/220`;
-  }
-
-  getUrlUniversidad(nombre: string): string {
-    const mapa: { [k: string]: string } = {
-      'Pontificia Universidad Católica del Perú': 'https://www.pucp.edu.pe/',
-      'Universidad Andina del Cusco': 'https://www.uandina.edu.pe/',
-      'Universidad Antonio Ruiz de Montoya': 'https://www.uarm.edu.pe/',
-      'Universidad Católica de Trujillo': 'https://uct.edu.pe/',
-      'Universidad Católica de San Pablo': 'https://ucsp.edu.pe/',
-      'Universidad Peruana de Ciencias Aplicadas': 'https://www.upc.edu.pe/',
-      'Universidad César Vallejo': 'https://www.ucv.edu.pe/',
-      'Universidad Científica del Sur': 'https://www.cientifica.edu.pe/',
-      'Universidad Continental': 'https://ucontinental.edu.pe/',
-      'Universidad de Ingeniería y Tecnología': 'https://utec.edu.pe/',
-      'Universidad de Lima': 'https://www.ulima.edu.pe/',
-      'Universidad de Piura': 'https://www.udep.edu.pe/',
-      'Universidad de San Martín de Porres': 'https://usmp.edu.pe/',
-      'Universidad Esan': 'https://www.ue.edu.pe/pregrado/',
-      'Universidad Peruana Cayetano Heredia': 'https://cayetano.edu.pe/',
-      'Universidad Católica Sedes Sapientiae': 'https://www.ucss.edu.pe/',
-      'Universidad Peruana Los Andes': 'https://upla.edu.pe/',
-      'Universidad Privada Antenor Orrego': 'https://upao.edu.pe/',
-      'Universidad Privada de Tacna': 'https://portal.upt.edu.pe/site/web/contenido/inicio',
-      'Universidad Privada del Norte': 'https://www.upn.edu.pe/',
-      'Universidad Privada San Ignacio de Loyola': 'https://usil.edu.pe/',
-      'Universidad Tecnológica del Perú': 'https://www.utp.edu.pe/',
-    };
-    for (const prefix of Object.keys(mapa)) {
-      if (nombre.startsWith(prefix)) return mapa[prefix];
-    }
-    return '#';
-  }
-
   // ── Datos filtrados ───────────────────────────────────────────────────────
 
   get universidadesFiltradas(): IUniversidad[] {
@@ -202,13 +226,18 @@ export class DetalleCarrera implements OnInit, OnDestroy {
     return this.obtenerUniversidadesUnicas(this.carrera.universidad).filter(u => {
       const costoMin = parseFloat(u.costoMensualMinimo);
       const costoMax = parseFloat(u.costoMensualMaximo);
+      const departamento=u.departamento.nombre;
 
-      const cumpleDesde = this.costoDesde == null || costoMax >= this.costoDesde;
-      const cumpleHasta = this.costoHasta == null || costoMin <= this.costoHasta;
+      const promedio = Math.round((costoMin + costoMax) / 2)
+
+      const cumpleDesde = this.costoDesde == null || promedio >= this.costoDesde;
+      const cumpleHasta = this.costoHasta == null || promedio <= this.costoHasta;
       const tieneBeca = this.becaFiltro === '' ||
-          getConvenios(u.nombre).includes(this.becaFiltro);
+        getConvenios(u.nombre).includes(this.becaFiltro);
 
-      return cumpleDesde && cumpleHasta && tieneBeca;
+      const cumpleDepartamento=this.departamento==null || departamento===this.departamento;
+
+      return cumpleDesde && cumpleHasta && tieneBeca && cumpleDepartamento;
     });
   }
 
@@ -222,11 +251,30 @@ export class DetalleCarrera implements OnInit, OnDestroy {
     this.costoDropdownOpen = !this.costoDropdownOpen;
   }
 
-  seleccionarPresetCosto(valor: number): void {
+  seleccionarPresetCostoDesde(valor: number): void {
+    this.costoDesdeTemp = valor;
+  }
+
+  seleccionarPresetCostoHasta(valor: number): void {
     this.costoHastaTemp = valor;
   }
 
   aplicarCosto(): void {
+    if (this.costoDesdeTemp === null) {
+      Swal.fire('Oops..', 'Añada un costo mínimo', 'warning');
+      return;
+    }
+
+    if (this.costoHastaTemp === null) {
+      Swal.fire('Oops..', 'Añada un costo máximo', 'warning');
+      return;
+    }
+
+    if (this.costoDesdeTemp > this.costoHastaTemp) {
+      Swal.fire('Oops..', 'El costo mínimo no puede ser mayor al costo máximo', 'warning');
+      return;
+    }
+
     this.costoDesde = this.costoDesdeTemp;
     this.costoHasta = this.costoHastaTemp;
     this.costoDropdownOpen = false;
@@ -249,6 +297,126 @@ export class DetalleCarrera implements OnInit, OnDestroy {
     return `Desde ${this.formatCosto(this.costoDesde as number)}`;
   }
 
+  toggleRankingDropdown() {
+    if (!this.rankingDropdownOpen) {
+      this.costoDesdeTemp = this.costoDesde;
+      this.costoHastaTemp = this.costoHasta;
+    }
+    this.rankingDropdownOpen = !this.rankingDropdownOpen;
+  }
+
+  seleccionarPresetRankingDesde(valor: number): void {
+    this.rankingDesdeTemp = valor;
+  }
+
+  seleccionarPresetRankingHasta(valor: number): void {
+    this.rankingHastaTemp = valor;
+  }
+
+  aplicarRanking(): void {
+    if (this.rankingDesdeTemp === null) {
+      Swal.fire('Oops..', 'Añada un desde', 'warning');
+      return;
+    }
+
+    if (this.rankingHastaTemp === null) {
+      Swal.fire('Oops..', 'Añada un hasta', 'warning');
+      return;
+    }
+
+    if (this.rankingDesdeTemp > this.rankingHastaTemp) {
+      Swal.fire('Oops..', 'El desde no puede ser mayor al hasta', 'warning');
+      return;
+    }
+
+    this.rankingDesde = this.rankingDesdeTemp;
+    this.rankingHasta = this.rankingHastaTemp;
+    this.rankingDropdownOpen = false;
+  }
+
+  limpiarRanking(): void {
+    this.rankingDesdeTemp = null;
+    this.rankingHastaTemp = null;
+    this.rankingDesde = null;
+    this.rankingHasta = null;
+    this.rankingDropdownOpen = false;
+  }
+
+  get rankingFiltroLabel(): string {
+    if (this.rankingDesde == null && this.rankingHasta == null) return 'De mayor a menor';
+    if (this.rankingDesde != null && this.rankingHasta != null) {
+      return `${this.rankingDesde} - ${this.rankingHasta}`;
+    }
+    if (this.rankingHasta != null) return `Hasta ${this.rankingHasta}`;
+    return `Desde ${this.rankingDesde}`
+  }
+
+  seleccionarPresetDepartamento(valor: string): void {
+    this.departamentoTemp = valor;
+  }
+
+  toggleDepartamentoDropdown() {
+    if (!this.departamentoDropdownOpen) {
+      this.departamentoTemp = this.departamento;
+    }
+    this.departamentoDropdownOpen = !this.departamentoDropdownOpen;
+  }
+
+  get departamentoFiltroLabel(): string {
+    if (this.departamento == null) return `${this.departamentoUsuario}`
+    if (this.departamento != null) {
+      return `${this.departamento}`;
+    }
+    return `${this.departamento}`
+  }
+
+  regionSeleccionada(region: string) {
+    this.regionActual = region;
+    this.departamentosFiltrados();
+  }
+
+  departamentosFiltrados(): string[] {
+    if (this.regionActual === null) {
+      this.opcionesDepartamento = this.departamentosCosta;
+      this.cd.detectChanges();
+    };
+
+    switch (this.regionActual) {
+      case "costa":
+        this.opcionesDepartamento = this.departamentosCosta;
+        break;
+
+      case "sierra":
+        this.opcionesDepartamento = this.departamentosSierra;
+        break;
+
+      case "selva":
+        this.opcionesDepartamento = this.departamentosSelva;
+        break;
+
+      default:
+        this.opcionesDepartamento = this.departamentosCosta;
+    }
+
+    return this.opcionesDepartamento;
+  }
+
+  aplicarDepartamento(): void {
+    if (this.departamentoTemp === null) {
+      Swal.fire('Oops..', 'Añada un departamento', 'warning');
+      return;
+    }
+
+    this.departamento = this.departamentoTemp;
+    this.departamentoDropdownOpen = false;
+  }
+
+  limpiarDepartamento(): void {
+    this.departamentoTemp = null;
+    this.departamento = null;
+    this.departamentoDropdownOpen = false;
+  }
+
   // ── Métodos del filtro de beca ────────────────────────────────────────────
 
   getConveniosUniversidad(nombre: string): string[] {
@@ -269,7 +437,29 @@ export class DetalleCarrera implements OnInit, OnDestroy {
     this.universidadModal = null;
   }
 
+  irASedes(nombreUniversidad: string): void {
+    this.router.navigate(['/sedes-universidad'], {
+      queryParams: {
+        nombre: encodeURIComponent(nombreUniversidad),
+        carreraId: this.carrera?.id,
+      }
+    });
+  }
+
   // ── Utilidades ────────────────────────────────────────────────────────────
+
+  get universidadesUnicas(): { nombre: string; cantidadSedes: number }[] {
+    if (!this.carrera?.universidad) return [];
+    const mapa = new Map<string, number>();
+    (this.carrera.universidad as IUniversidad[]).forEach(u => {
+      const nombreBase = u.nombre.split(' - ')[0].trim();
+      mapa.set(nombreBase, (mapa.get(nombreBase) ?? 0) + 1);
+    });
+    return Array.from(mapa.entries()).map(([nombre, cantidadSedes]) => ({
+      nombre,
+      cantidadSedes,
+    }));
+  }
 
   obtenerUniversidadesUnicas(universidades: any[]): any[] {
     const mapa = new Map();
@@ -292,6 +482,8 @@ export class DetalleCarrera implements OnInit, OnDestroy {
 
   limpiarFiltros(): void {
     this.limpiarCosto();
+    this.limpiarRanking();
+    this.limpiarDepartamento();
     this.becaFiltro = '';
   }
 

@@ -30,6 +30,7 @@ export class UniversidadBeca {
   constructor(private universidadServicio: UniversidadServicio, private becaServicio: BecaServicio, private universidadBecaServicio: UniversidadBecaServicio, private router: Router) { }
 
   ngOnInit(): void {
+    
     this.universidades$ = this.universidadServicio.obtenerListaDeUniversidad();
     this.becas$ = this.becaServicio.obtenerListaDeBeca();
   }

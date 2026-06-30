@@ -18,33 +18,65 @@ import { Departamento } from '../../../servicios/departamento/Departamento';
   styleUrl: './registro-universidad.css',
 })
 export class RegistroUniversidad {
-  universidad: IUniversidad=new IUniversidad();
-  tipoUniversidades: TipoUniversidad[]=[];
-  departamentos: Departamento[]=[];
+  universidad: IUniversidad = new IUniversidad();
+  tipoUniversidades: TipoUniversidad[] = [];
+  departamentos: Departamento[] = [];
 
-  constructor(private tipoUniversidadServicio: TipoUniversidadServicio, private departamentoServicio: DepartamentoServicio, private universidadServicio: UniversidadServicio, private router: Router, private cd: ChangeDetectorRef){
-    this.universidad.tipoUniversidad=null;
-    this.universidad.departamento=null;
+  constructor(private tipoUniversidadServicio: TipoUniversidadServicio, private departamentoServicio: DepartamentoServicio, private universidadServicio: UniversidadServicio, private router: Router, private cd: ChangeDetectorRef) {
+    this.universidad.tipoUniversidad = null;
+    this.universidad.departamento = null;
   }
 
-  ngOnInit(): void{
-    this.tipoUniversidadServicio.obtenerListaDeTipoDeUniversidad().subscribe(dato=>{
-      this.tipoUniversidades=dato;
+  ngOnInit(): void {
+    this.tipoUniversidadServicio.obtenerListaDeTipoDeUniversidad().subscribe(dato => {
+      this.tipoUniversidades = dato;
       this.cd.detectChanges();
     });
 
-    this.departamentoServicio.obtenerListaDeTipoDeDepartamento().subscribe(dato=>{
-      this.departamentos=dato;
+    this.departamentoServicio.obtenerListaDeTipoDeDepartamento().subscribe(dato => {
+      this.departamentos = dato;
       this.cd.detectChanges();
     })
   }
 
-  guardarUniversidad(){
-    this.universidadServicio.registrarUniversidad(this.universidad).pipe(
-      tap(dato=>{
+  imagenSeleccionada!: File;
+  imagenPreview: any;
+
+  seleccionarImagen(event: any): void {
+    this.imagenSeleccionada = event.target.files[0];
+    if (this.imagenSeleccionada) {
+      const reader = new FileReader();
+      reader.readAsDataURL(this.imagenSeleccionada);
+      reader.onload = () => {
+        this.imagenPreview = reader.result;
+        this.cd.detectChanges();
+      };
+    }
+  }
+
+  guardarUniversidad() {
+    const formData = new FormData();
+
+    formData.append(
+      'universidad',
+      new Blob(
+        [JSON.stringify(this.universidad)],
+        { type: 'application/json' }
+      )
+    );
+
+    if (this.imagenSeleccionada) {
+      formData.append(
+        'imagen',
+        this.imagenSeleccionada
+      )
+    }
+
+    this.universidadServicio.registrarUniversidad(formData).pipe(
+      tap(dato => {
         this.irALaListaDeUniversidad();
       }),
-      catchError(err=>{
+      catchError(err => {
         console.log("ERROR COMPLETO:", err);
         console.log("STATUS:", err.status);
         console.log("BODY:", err.error);
@@ -53,7 +85,7 @@ export class RegistroUniversidad {
     ).subscribe()
   }
 
-  irALaListaDeUniversidad(){
+  irALaListaDeUniversidad() {
     Swal.fire({
       title: 'Universidad registrada',
       text: `La universidad ha sido registrada con éxito`,
@@ -66,7 +98,7 @@ export class RegistroUniversidad {
     })
   }
 
-  onSubmit(){
+  onSubmit() {
     this.guardarUniversidad();
   }
 }

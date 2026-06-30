@@ -7,7 +7,10 @@ export class ICarrera {
     descripcion: string;
     duracion: string;
     tipoCarrera: any;
-    universidad: IUniversidad[]; // ← era ICarrera[], debe ser IUniversidad[]
+    imagen: string;
+    universidad: IUniversidad[];
     combinacion: string;
     beca: IBeca[];
+    ranking: number;
+    total: number;
 }

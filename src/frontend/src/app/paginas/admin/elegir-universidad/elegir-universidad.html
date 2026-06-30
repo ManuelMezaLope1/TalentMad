@@ -1,0 +1,29 @@
+<div class="container">
+    <h1 class="text-center">Elija la universidad</h1>
+
+    <div class="universidad-grid">
+        <div *ngFor="let uni of universidades$ | async">
+            <div class="universidad-card">
+                <div class="img-container">
+                    <img [src]="uni.imagen" alt="Imagen de la universidad">
+                </div>
+
+                <div class="universidad-body">
+                    <h3 class="universidad-nombre">{{uni.nombre}}</h3>
+
+                    <div class="ubicacion" style="font-size: 18px;">📍 {{uni.departamento.nombre}}</div>
+
+                    <div class="costo-box">
+                        <span class="costo-label">Costo mensual</span>
+                        <span class="costo">S/. {{uni.costoMensualMinimo}} - S/.
+                            {{uni.costoMensualMaximo}}</span>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button class="btn btn-success w-100" (click)="actualizarCarreras(uni.id)">Elegir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

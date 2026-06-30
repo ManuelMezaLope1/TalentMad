@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.45, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
 --
--- Host: localhost    Database: talentmap
+-- Host: 127.0.0.1    Database: talentmap
 -- ------------------------------------------------------
--- Server version	8.0.45
+-- Server version	8.0.39
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -176,6 +176,42 @@ INSERT INTO `facultad` VALUES (2,'Ingeniería'),(3,'Arte y Diseño'),(4,'Artes E
 UNLOCK TABLES;
 
 --
+-- Table structure for table `historial`
+--
+
+DROP TABLE IF EXISTS `historial`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `historial` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `carreras` varchar(1000) NOT NULL,
+  `codigo` varchar(10) NOT NULL,
+  `fecha` varchar(255) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `usuario_id` bigint DEFAULT NULL,
+  `puntaje_artistico` varchar(255) NOT NULL,
+  `puntaje_convencional` varchar(255) NOT NULL,
+  `puntaje_emprendedor` varchar(255) NOT NULL,
+  `puntaje_investigador` varchar(255) NOT NULL,
+  `puntaje_realista` varchar(255) NOT NULL,
+  `puntaje_social` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKbvhkf7khj43q0xgb81phbbyfi` (`usuario_id`),
+  CONSTRAINT `FKbvhkf7khj43q0xgb81phbbyfi` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `historial`
+--
+
+LOCK TABLES `historial` WRITE;
+/*!40000 ALTER TABLE `historial` DISABLE KEYS */;
+INSERT INTO `historial` VALUES (1,'Publicidad, Administración y Marketing','EIA','5/6/2026, 23:51:01','nombre.apellido@gmail.com',8,'','','','','',''),(2,'Publicidad, Administración y Marketing','EIA','5/6/2026, 23:52:08','nombre.apellido@gmail.com',8,'','','','','',''),(3,'Antropología, Periodismo, Filosofía, Historia, Humanidades, Lingüística, Literatura','IAS','6/6/2026, 15:32:30','nombre.apellido@gmail.com',8,'30','22','29','30','27','30'),(4,'Ingeniería de Software, Ingeniería de Sistemas, Ingeniería Civil, Ingeniería Industrial, Ingeniería de Minas, Arquitectura, Ingeniería Ambiental, Ingeniería de Telecomunicaciones, Ingeniería Electrónica, Ingeniería Mecánica, Ingeniería Mecatrónica, Ingeniería Química, Ingeniería Automotriz, Ingeniería Biomédica, Ingeniería Eléctrica, Física, Farmacia y Bioquímica, Odontología, Ciberseguridad, Sistemas de Información','RIC','6/6/2026, 21:10:02','nombre.apellido@gmail.com',8,'10','50','13','50','50','15'),(5,'Ingeniería de Software, Ingeniería de Sistemas, Ingeniería Civil, Ingeniería Industrial, Ingeniería de Minas, Arquitectura, Ingeniería Ambiental, Ingeniería de Telecomunicaciones, Ingeniería Electrónica, Ingeniería Mecánica, Ingeniería Mecatrónica, Ingeniería Química, Ingeniería Automotriz, Ingeniería Biomédica, Ingeniería Eléctrica, Física, Farmacia y Bioquímica, Odontología, Ciberseguridad, Sistemas de Información','RIC','23/6/2026, 00:47:59','nombre.apellido@gmail.com',8,'10','50','14','50','50','10');
+/*!40000 ALTER TABLE `historial` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `nivelinteres`
 --
 
@@ -224,32 +260,6 @@ LOCK TABLES `preguntas` WRITE;
 /*!40000 ALTER TABLE `preguntas` DISABLE KEYS */;
 INSERT INTO `preguntas` VALUES (181,'Construir muebles de cocina.',13),(182,'Colocar ladrillos o mayólicas en una construcción.',13),(183,'Reparar electrodomésticos.',13),(184,'Trabajar en la crianza de peces.',13),(185,'Ensamblar componentes electrónicos.',13),(186,'Conducir un camión para repartir paquetes.',13),(187,'Revisar la calidad de productos antes de enviarlos.',13),(188,'Reparar e instalar cerraduras.',13),(189,'Operar máquinas para fabricar productos.',13),(190,'Participar en labores de control de incendios forestales.',13),(191,'Desarrollar un nuevo medicamento.',14),(192,'Investigar formas de reducir la contaminación del agua.',14),(193,'Realizar experimentos químicos.',14),(194,'Estudiar el movimiento de los planetas.',14),(195,'Analizar muestras de sangre con un microscopio.',14),(196,'Investigar las causas de un incendio.',14),(197,'Desarrollar métodos para mejorar la predicción del clima.',14),(198,'Trabajar en un laboratorio de biología.',14),(199,'Crear un sustituto del azúcar mediante investigación científica.',14),(200,'Realizar pruebas de laboratorio para identificar enfermedades.',14),(201,'Escribir libros o obras de teatro.',15),(202,'Tocar un instrumento musical.',15),(203,'Componer o arreglar música.',15),(204,'Dibujar o ilustrar.',15),(205,'Crear efectos especiales para películas.',15),(206,'Diseñar y pintar escenografías para obras teatrales.',15),(207,'Escribir guiones para cine o televisión.',15),(208,'Practicar danza artística.',15),(209,'Cantar en una banda o agrupación musical.',15),(210,'Editar producciones audiovisuales.',15),(211,'Enseñar una rutina de ejercicios a una persona.',16),(212,'Ayudar a personas con problemas personales o emocionales.',16),(213,'Brindar orientación vocacional o profesional.',16),(214,'Realizar terapias de rehabilitación.',16),(215,'Participar como voluntario en una organización sin fines de lucro.',16),(216,'Enseñar deportes a niños y adolescentes.',16),(217,'Enseñar lengua de señas a personas con discapacidad auditiva.',16),(218,'Apoyar en sesiones de terapia grupal.',16),(219,'Cuidar niños en un centro de atención infantil.',16),(220,'Dictar clases en una institución educativa de nivel secundario.',16),(221,'Comprar y vender acciones o inversiones financieras.',17),(222,'Administrar una tienda.',17),(223,'Dirigir un salón de belleza o barbería.',17),(224,'Gestionar un área dentro de una gran empresa.',17),(225,'Crear tu propio negocio.',17),(226,'Negociar contratos comerciales.',17),(227,'Representar a un cliente en un proceso legal.',17),(228,'Promocionar una nueva línea de ropa.',17),(229,'Vender productos en una tienda por departamentos.',17),(230,'Administrar una tienda de ropa.',17),(231,'Crear hojas de cálculo utilizando software informático.',18),(232,'Revisar documentos y registros para detectar errores.',18),(233,'Instalar software en varias computadoras de una red.',18),(234,'Utilizar una calculadora para realizar operaciones.',18),(235,'Llevar registros de inventario y control de productos.',18),(236,'Calcular pagos o remuneraciones de trabajadores.',18),(237,'Registrar y controlar suministros utilizando herramientas digitales.',18),(238,'Registrar pagos de alquiler u otros ingresos.',18),(239,'Mantener registros de envíos y recepciones.',18),(240,'Clasificar, sellar y distribuir correspondencia dentro de una organización.',18);
 /*!40000 ALTER TABLE `preguntas` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `respuesta`
---
-
-DROP TABLE IF EXISTS `respuesta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `respuesta` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(60) NOT NULL,
-  `pregunta_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKmlq7l9u0bpvxor26presg5x84` (`pregunta_id`),
-  CONSTRAINT `FKmlq7l9u0bpvxor26presg5x84` FOREIGN KEY (`pregunta_id`) REFERENCES `preguntas` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `respuesta`
---
-
-LOCK TABLES `respuesta` WRITE;
-/*!40000 ALTER TABLE `respuesta` DISABLE KEYS */;
-/*!40000 ALTER TABLE `respuesta` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -440,7 +450,7 @@ CREATE TABLE `usuario_rol` (
 
 LOCK TABLES `usuario_rol` WRITE;
 /*!40000 ALTER TABLE `usuario_rol` DISABLE KEYS */;
-INSERT INTO `usuario_rol` VALUES (1,1),(2,1),(8,2),(9,1),(11,1),(12,1),(13,1),(14,1),(15,1);
+INSERT INTO `usuario_rol` VALUES (1,1),(2,1),(8,2),(9,1),(11,1),(12,1),(13,1),(14,1),(15,1),(16,1);
 /*!40000 ALTER TABLE `usuario_rol` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -463,7 +473,7 @@ CREATE TABLE `usuarios` (
   PRIMARY KEY (`id`),
   KEY `FK5gmfjqr63gaxj9wcwpdvfmevh` (`departamento_id`),
   CONSTRAINT `FK5gmfjqr63gaxj9wcwpdvfmevh` FOREIGN KEY (`departamento_id`) REFERENCES `departamento` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -472,7 +482,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Meza','Manuel','$2a$10$HrrTKwM0JnaKmZ/TRiSOBujyFJ7H1yRwGIJKzwXQONbBJuGE7oB8O','987654321','mezalopem@gmail.com',NULL,NULL),(2,'Gomez','Jose','$2a$10$t0UtwSuukUnPxDrta/j6huqoy0Yk.upyptm8gS09VzrWY5Se3.33S','87561','jofe@ou.com',NULL,NULL),(8,'Apellido','Nombre','$2a$10$01yUvoYrJ8bvaMqVUvJwy.WzuE1qjbwKdHAJRnSpPzyemG7v8QBUu','987654321','nombre.apellido@gmail.com',NULL,NULL),(9,'Meza','Manuel','$2a$10$XCZGa/Uy3.M5f.9UMJ5qvOL8Kq0Wm6gWhhxUy4BQcr0m0mPMlG8He','987654321','mezalopem@gmail.com',NULL,NULL),(11,'Garcia','Juan','$2a$10$sqmBpP6JVAEw7JWKjBZ28umTuZE1pDRBFn971yV1la5og2jdI0Zq6','987456132','juan.garcia@gmail.com',8,NULL),(12,'Garcia','Choledo','$2a$10$UNMs3JXGquNKHrbV7BN1y.JlCeyonMPYMeyiJGDrN7SEIPZnTSx/G','977777744','lala@gmail.com',1,NULL),(13,'Garcia','Manolas','$2a$10$fW0EZg.yArOMrtvYk3PIJuXtILXPFI.HtuU2QNjv1YU5QIDFi.f1i','977777744','gaga@gmail.com',2,NULL),(14,'caire','diego','$2a$10$96Mh9RFwqCVfvdDO48evoOusE3v927lqGyA8PnrX/m109TrMRAzW6','977777744','didi@gmail.com',20,NULL),(15,'quino','diego','$2a$10$1wEnEH2tzpHe2uGcquKhe.YxuZMKk6f7RpB6vSoXm6eTxrGB.4.Yu','958632147','diego123@gmail.com',14,NULL);
+INSERT INTO `usuarios` VALUES (1,'Meza','Manuel','$2a$10$HrrTKwM0JnaKmZ/TRiSOBujyFJ7H1yRwGIJKzwXQONbBJuGE7oB8O','987654321','mezalopem@gmail.com',NULL,NULL),(2,'Gomez','Jose','$2a$10$t0UtwSuukUnPxDrta/j6huqoy0Yk.upyptm8gS09VzrWY5Se3.33S','87561','jofe@ou.com',NULL,NULL),(8,'Apellido','Nombre','$2a$10$01yUvoYrJ8bvaMqVUvJwy.WzuE1qjbwKdHAJRnSpPzyemG7v8QBUu','987654321','nombre.apellido@gmail.com',14,NULL),(9,'Meza','Manuel','$2a$10$XCZGa/Uy3.M5f.9UMJ5qvOL8Kq0Wm6gWhhxUy4BQcr0m0mPMlG8He','987654321','mezalopem@gmail.com',NULL,NULL),(11,'Garcia','Juan','$2a$10$sqmBpP6JVAEw7JWKjBZ28umTuZE1pDRBFn971yV1la5og2jdI0Zq6','987456132','juan.garcia@gmail.com',8,NULL),(12,'Garcia','Choledo','$2a$10$UNMs3JXGquNKHrbV7BN1y.JlCeyonMPYMeyiJGDrN7SEIPZnTSx/G','977777744','lala@gmail.com',1,NULL),(13,'Garcia','Manolas','$2a$10$fW0EZg.yArOMrtvYk3PIJuXtILXPFI.HtuU2QNjv1YU5QIDFi.f1i','977777744','gaga@gmail.com',2,NULL),(14,'caire','diego','$2a$10$96Mh9RFwqCVfvdDO48evoOusE3v927lqGyA8PnrX/m109TrMRAzW6','977777744','didi@gmail.com',20,NULL),(15,'quino','diego','$2a$10$1wEnEH2tzpHe2uGcquKhe.YxuZMKk6f7RpB6vSoXm6eTxrGB.4.Yu','958632147','diego123@gmail.com',14,NULL),(16,'Meza','Manuel','$2a$10$ZebkarABNZozhdVH383GyeWBUyQya3VYdgdo/AvzeyB7GNMb1WKZm','987654321','ejemplo@gmail.com',15,NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -485,4 +495,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-02 14:27:30
+-- Dump completed on 2026-06-23  1:04:50

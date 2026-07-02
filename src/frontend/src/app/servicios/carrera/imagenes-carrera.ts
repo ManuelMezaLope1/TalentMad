@@ -1,28 +1,73 @@
-// Mapa centralizado de imágenes por carrera.
-// Se usa tanto en "resultado" como en "detallecarrera", así que hay
-// UNA sola fuente de verdad: cambiar la imagen de una carrera aquí
-// NO afecta a ninguna otra.
-//
-// Cómo agregar una imagen:
-//   1. Busca el "id" real de la carrera (el mismo que usas en la URL
-//      /detallecarrera/:id).
-//   2. Agrega una línea: `<id>: '<url-de-la-imagen>',`
-//
-// Ejemplo:
-//   1: 'https://miservidor.com/imagenes/ingenieria-sistemas.jpg',
-//   7: 'assets/imagenes/carreras/medicina.jpg',
-//
-// Si una carrera NO tiene entrada aquí, se genera automáticamente una
-// imagen de respaldo (picsum.photos) usando su id como semilla.
+
 
 export const IMAGENES_CARRERA: { [id: number]: string } = {
-    43: 'https://cba.ucb.edu.bo/blog/wp-content/uploads/2021/04/retrato-lider-exitoso_109710-668.jpg',
-    66: 'https://www.usmpvirtual.edu.pe/wp-content/uploads/2024/10/judge-gavel-with-justice-lawyers-having-team-meeting-law-firm-background-concepts-law-1024x512.jpg',
-    20: 'https://adex.edu.pe/wp-content/uploads/2025/08/administracion-y-gestion-de-empresas-adex-escuela.jpg',
-    68: 'https://www.upsjb.edu.pe/wp-content/uploads/2024/03/HOTELERIA-Y-TURISMO-%C2%BFCOMO-SABER-SI-ES-MI-CARRERA.jpeg',
-  // 1: 'https://miservidor.com/imagenes/ingenieria-sistemas.jpg',
-  // 2: 'assets/imagenes/carreras/medicina.jpg',
-  // 3: 'assets/imagenes/carreras/derecho.jpg',
+
+  9: "https://worldcampus.saintleo.edu/img/article/que-hace-un-ingeniero-de-software.webp",
+  10: "https://cba.ucb.edu.bo/blog/wp-content/uploads/2021/04/desarrollo-programadores-desarrollo-tecnologias-diseno-codificacion-sitios-web_18497-1019.jpg",
+  11: "https://www.civilengineer.org/wp-content/uploads/2021/05/civil-engineering.jpg",
+  12: "https://www.supplychaininfo.eu/wp-content/uploads/2022/08/industrial-engineering.jpg",
+  14: "https://www.queestudiar.org/wp-content/uploads/2017/10/ingenieria-de-minas.jpg",
+  16: "https://www.hok.com/wp-content/uploads/2019/01/Architecture.jpg",
+  17: "https://www.unir.net/wp-content/uploads/2021/08/ingenieria-ambiental.jpg",
+  18: "https://www.universia.net/content/dam/universia/imagenes/2023/psicologia.jpg",
+  19: "https://www.crehana.com/blog/wp-content/uploads/2021/05/diseno-grafico.jpg",
+  20: "https://adex.edu.pe/wp-content/uploads/2025/08/administracion-y-gestion-de-empresas-adex-escuela.jpg",
+  21: "https://concepto.de/wp-content/uploads/2018/08/antropologia.jpg",
+  22: "https://www.unir.net/wp-content/uploads/2022/03/relaciones-internacionales.jpg",
+  23: "https://concepto.de/wp-content/uploads/2018/09/sociologia.jpg",
+  24: "https://www.euroinnova.edu.es/blog/wp-content/uploads/educacion-inicial.jpg",
+  25: "https://www.euroinnova.edu.es/blog/wp-content/uploads/educacion-primaria.jpg",
+  26: "https://www.euroinnova.edu.es/blog/wp-content/uploads/educacion-secundaria.jpg",
+  27: "https://www.nexointernacional.com/wp-content/uploads/2022/08/contabilidad.jpg",
+  28: "https://www.universia.net/content/dam/universia/imagenes/diseno-industrial.jpg",
+  29: "https://www.esdesignbarcelona.com/sites/default/files/styles/img_blog/public/2022-03/diseno-moda.jpg",
+  30: "https://www.masterd.es/blog/wp-content/uploads/2022/06/artes-escenicas.jpg",
+  31: "https://economipedia.com/wp-content/uploads/economia.jpg",
+  32: "https://www.bbva.com/wp-content/uploads/2020/10/finanzas.jpg",
+  33: "https://www.universia.net/content/dam/universia/imagenes/ciencias-politicas.jpg",
+  34: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0DQ2pNA-VYDHDsXfzmncrET_qOn3UqRpk3g&s",
+  35: "https://concepto.de/wp-content/uploads/2018/09/ingenieria-electronica.jpg",
+  36: "https://www.careermine.com/mining-engineering.jpg",
+  37: "https://www.ceupe.com/images/easyblog_articles/3308/ingenieria-mecanica.jpg",
+  38: "https://www.universia.net/content/dam/universia/imagenes/mecatronica.jpg",
+  39: "https://cba.ucb.edu.bo/blog/wp-content/uploads/2021/04/quimico-adulto-mujer-belleza-caucasica-proteccion_151013-1823.jpg",
+  40: "https://www.ceupe.com/images/easyblog_articles/3240/ingenieria-automotriz.jpg",
+  41: "https://www.ceupe.com/images/easyblog_articles/3230/ingenieria-biomedica.jpg",
+  42: "https://www.ceupe.com/images/easyblog_articles/3220/ingenieria-electrica.jpg",
+  43: "https://cba.ucb.edu.bo/blog/wp-content/uploads/2021/04/retrato-lider-exitoso_109710-668.jpg",
+  44: "https://www.universia.net/content/dam/universia/imagenes/medicina.jpg",
+  45: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSezuBVvVY8TJUBoajNLrbwVGQm9_QeLoc02Q&s",
+  46: "https://www.universia.net/content/dam/universia/imagenes/estadistica.jpg",
+  47: "https://quecarreraestudio.com/wp-content/uploads/fisica-1024x616.jpg",
+  48: "https://concepto.de/wp-content/uploads/2018/09/quimica.jpg",
+  49: "https://www.masterd.es/blog/wp-content/uploads/2022/06/teatro.jpg",
+  50: "https://www.masterd.es/blog/wp-content/uploads/2022/06/danza.jpg",
+  51: "https://www.masterd.es/blog/wp-content/uploads/2022/06/musica.jpg",
+  52: "https://www.universia.net/content/dam/universia/imagenes/enfermeria.jpg",
+  53: "https://www.universia.net/content/dam/universia/imagenes/farmacia.jpg",
+  54: "https://www.universia.net/content/dam/universia/imagenes/nutricion.jpg",
+  55: "https://www.universia.net/content/dam/universia/imagenes/obstetricia.jpg",
+  56: "https://www.universia.net/content/dam/universia/imagenes/odontologia.jpg",
+  57: "https://www.universia.net/content/dam/universia/imagenes/terapia-fisica.jpg",
+  58: "https://www.kaspersky.es/content/es-es/images/repository/isc/2021/cybersecurity.jpg",
+  59: "https://datascientest.com/es/files/2021/01/data-science.jpg",
+  60: "https://www.universia.net/content/dam/universia/imagenes/sistemas-informacion.jpg",
+  61: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRedITx3PuJtRQ1L1AIqIA5BpaAAxJMaBhBzw&s",
+  62: "https://www.universia.net/content/dam/universia/imagenes/comunicacion.jpg",
+  63: "https://www.universia.net/content/dam/universia/imagenes/comunicacion-audiovisual.jpg",
+  64: "https://www.universia.net/content/dam/universia/imagenes/publicidad.jpg",
+  65: "https://www.universia.net/content/dam/universia/imagenes/periodismo.jpg",
+  66: "https://www.usmpvirtual.edu.pe/wp-content/uploads/2024/10/judge-gavel-with-justice-lawyers-having-team-meeting-law-firm-background-concepts-law-1024x512.jpg",
+  67: "https://t4.ftcdn.net/jpg/07/16/71/39/360_F_716713995_iSve9YwUWLBkIhuSJBQCcY64NCjgK0Tt.jpg",
+  68: "https://www.upsjb.edu.pe/wp-content/uploads/2024/03/HOTELERIA-Y-TURISMO-%C2%BFCOMO-SABER-SI-ES-MI-CARRERA.jpeg",
+  69: "https://www.universia.net/content/dam/universia/imagenes/turismo.jpg",
+  70: "https://media.istockphoto.com/id/1421018611/photo/group-professional-business-people-person-working-together-to-analyze-in-office-work-together.jpg?s=170667a&w=0&k=20&c=490YngsVQdWNsH7a4XJIvQYDQtm7ojNhVX4QYx001yg=",
+  71: "https://concepto.de/wp-content/uploads/2018/08/filosofia.jpg",
+  72: "https://concepto.de/wp-content/uploads/2018/08/historia.jpg",
+  73: "https://www.universia.net/content/dam/universia/imagenes/humanidades.jpg",
+  74: "https://www.universia.net/content/dam/universia/imagenes/linguistica.jpg",
+  75: "https://www.universia.net/content/dam/universia/imagenes/literatura.jpg",
+  76: "https://www.esan.edu.pe/images/blog/2023/09/05/1500x844-marketing-digital.jpg"
 };
 
 export function obtenerImagenCarrera(id: number, ancho = 600, alto = 340): string {

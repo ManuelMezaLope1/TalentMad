@@ -8,7 +8,7 @@
 
   <ng-container *ngIf="!isLoading && carrera">
 
-    <!-- ── Hero de la carrera ─────────────────────────────────────────── -->
+    <!-- ── Hero ──────────────────────────────────────────────────────────── -->
     <div class="hero">
       <img [src]="getImagenCarrera()" [alt]="carrera.nombre" class="hero-img" />
       <div class="hero-overlay"></div>
@@ -18,223 +18,48 @@
         <h1 class="hero-title">{{ carrera.nombre }}</h1>
         <p class="hero-desc">{{ carrera.descripcion }}</p>
         <div class="hero-meta">
-          <span class="meta-chip">⏱ {{ carrera.duracion }} semestres</span>
-          <span class="meta-chip">🏛 {{ carrera.universidad?.length ?? 0 }} universidades</span>
+          <span class="meta-chip">🏛 {{ universidadesUnicas.length }} universidades</span>
         </div>
       </div>
     </div>
 
-    <!-- ── Contenido principal ───────────────────────────────────────── -->
+    <!-- ── Contenido principal ───────────────────────────────────────────── -->
     <div class="detalle-container">
 
-      <!-- ── FILTROS HORIZONTALES ──────────────────────────────────── -->
-      <div class="filtros-horizontal">
-        <div class="filtros-header">
-          <h2 class="filtros-title">🎯 Filtrar universidades</h2>
-          <button (click)="limpiarFiltros()" class="btn-limpiar-horizontal">✕ Limpiar</button>
-        </div>
-
-        <div class="filtros-grid">
-
-          <!-- Filtro Costo Mensual: Desde / Hasta -->
-          <div class="filtro-item costo-filtro">
-            <label class="filtro-label-horizontal">💰 Costo mensual</label>
-
-            <div class="costo-dropdown">
-              <button type="button" class="costo-trigger" (click)="toggleCostoDropdown()">
-                <span>{{ costoFiltroLabel }}</span>
-                <span class="costo-chevron" [class.open]="costoDropdownOpen">⌄</span>
-              </button>
-
-              <div class="costo-panel" *ngIf="costoDropdownOpen">
-                <div class="costo-panel-inputs">
-                  <div class="costo-input-box">
-                    <span class="costo-input-label">Desde</span>
-                    <input type="number" min="0" placeholder="S/. 0" [(ngModel)]="costoDesdeTemp" />
-                  </div>
-                  <div class="costo-input-box">
-                    <span class="costo-input-label">Hasta</span>
-                    <input type="number" min="0" placeholder="Sin límite" [(ngModel)]="costoHastaTemp" />
-                  </div>
-                </div>
-
-                <div class="costo-presets">
-                  <button
-                    type="button"
-                    *ngFor="let preset of opcionesCosto"
-                    class="costo-preset-chip"
-                    [class.active]="costoHastaTemp === preset"
-                    (click)="seleccionarPresetCosto(preset)">
-                    Hasta {{ formatCosto(preset) }}
-                  </button>
-                </div>
-
-                <div class="costo-panel-footer">
-                  <button type="button" class="costo-btn-limpiar" (click)="limpiarCosto()">Limpiar</button>
-                  <button type="button" class="costo-btn-aplicar" (click)="aplicarCosto()">Ver resultados</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Filtro Beca -->
-          <div class="filtro-item beca-filtro">
-            <label class="filtro-label-horizontal" for="becaSelect">🎓 Convenio de beca</label>
-            <select id="becaSelect" class="filtro-select-horizontal" [(ngModel)]="becaFiltro">
-              <option value="">Todas las universidades</option>
-              <option *ngFor="let entidad of entidadesBeca" [value]="entidad">
-                {{ entidad }}
-              </option>
-            </select>
-            <p class="filtro-hint-horizontal" *ngIf="becaFiltro">
-              Mostrando universidades con convenio <strong>{{ becaFiltro }}</strong>
-            </p>
-          </div>
-        </div>
-
-        <div class="filtro-count-horizontal">
-          <strong>{{ universidadesFiltradas.length }}</strong>
-          {{ universidadesFiltradas.length === 1 ? 'universidad encontrada' : 'universidades encontradas' }}
-        </div>
+      <div class="unis-header">
+        <h2 class="unis-title">Universidades que ofrecen esta carrera</h2>
+        <p class="unis-subtitle">Selecciona una universidad para ver sus sedes, costos y becas disponibles.</p>
       </div>
 
-      <!-- ── Lista de universidades ──────────────────────────────────── -->
-      <main class="unis-main">
+      <!-- ── Grid de universidades ──────────────────────────────────────── -->
+      <div class="unis-grid">
+        <button
+          *ngFor="let uni of universidadesUnicas"
+          type="button"
+          class="uni-card"
+          (click)="irASedes(uni.nombre)">
 
-        <div *ngIf="universidadesFiltradas.length === 0" class="unis-empty">
-          <span class="empty-icon">🔍</span>
-          <p>No hay universidades que cumplan los filtros seleccionados.</p>
-          <button (click)="limpiarFiltros()" class="btn-limpiar-horizontal" style="margin-top:1rem">Limpiar filtros</button>
-        </div>
-
-        <div class="unis-grid">
-          <article *ngFor="let uni of universidadesFiltradas" class="uni-card">
-
-            <div class="uni-img-wrapper">
-              <img [src]="getImagenUniversidad(uni.nombre)" [alt]="uni.nombre" class="uni-img" loading="lazy" />
-              <div class="uni-badges">
-                <span *ngFor="let c of getConveniosUniversidad(uni.nombre)" class="convenio-badge">
-                  🎓 {{ c }}
-                </span>
-              </div>
-            </div>
-
-            <div class="uni-body">
-              <h3 class="uni-nombre">{{ uni.nombre }}</h3>
-              <p class="uni-tipo">{{ uni.tipoUniversidad?.nombre }}</p>
-
-              <div class="uni-datos">
-                <div class="dato">
-                  <span class="dato-icon">📍</span>
-                  <span class="dato-text">{{ uni.departamento?.nombre }}</span>
-                </div>
-                <div class="dato">
-                  <span class="dato-icon">💸</span>
-                  <span class="dato-text">
-                    {{ formatCosto(+uni.costoMensualMinimo) }} – {{ formatCosto(+uni.costoMensualMaximo) }} / mes
-                  </span>
-                </div>
-                <div class="dato">
-                  <span class="dato-icon">📊</span>
-                  <span class="dato-text">Promedio: <strong>{{ formatCosto(obtenerPromedio(uni)) }}</strong></span>
-                </div>
-              </div>
-
-              <!-- Resumen de becas: solo abre el modal, no estira el card -->
-              <button
-                *ngIf="getConveniosUniversidad(uni.nombre).length > 0"
-                type="button"
-                class="btn-ver-becas"
-                (click)="abrirModalBecas(uni)">
-                <span class="ver-becas-info">
-                  <span class="ver-becas-icon">🎓</span>
-                  <span class="ver-becas-text">Convenio con {{ getConveniosUniversidad(uni.nombre).join(', ') }}</span>
-                </span>
-                <span class="ver-becas-cta">Ver becas →</span>
-              </button>
-
-              <p *ngIf="getConveniosUniversidad(uni.nombre).length === 0" class="sin-convenio">
-                Esta universidad no tiene convenios de beca registrados.
-              </p>
-
-              <a [href]="getUrlUniversidad(uni.nombre)" target="_blank" rel="noopener" class="btn-uni-web">
-                Visitar sitio oficial →
-              </a>
-            </div>
-          </article>
-        </div>
-
-      </main>
-    </div><!-- /detalle-container -->
-
-    <!-- ── Modal de becas ─────────────────────────────────────────────── -->
-    <div class="modal-overlay" *ngIf="modalBecasAbierto" (click)="cerrarModalBecas()">
-      <div class="modal-becas" (click)="$event.stopPropagation()">
-        <div class="modal-becas-header">
-          <div>
-            <p class="modal-becas-universidad">{{ universidadModal?.nombre }}</p>
-            <h3 class="modal-becas-title">🎓 Becas y convenios disponibles</h3>
+          <div class="uni-img-wrapper">
+            <img
+              [src]="uni.imagen"
+              [alt]="uni.nombre"
+              class="uni-img"
+              loading="lazy" />
+            <div class="uni-img-overlay"></div>
           </div>
-          <button type="button" class="modal-close-btn" (click)="cerrarModalBecas()">✕</button>
-        </div>
 
-        <div class="modal-becas-body">
-
-          <!-- Convenios de esta universidad (informativo) -->
-          <div class="modal-becas-convenios" *ngIf="universidadModal">
-            <span class="convenio-chip" *ngFor="let c of getConveniosUniversidad(universidadModal.nombre)">
-              🎓 {{ c }}
+          <div class="uni-card-footer">
+            <p class="uni-nombre">{{ uni.nombre }}</p>
+            <span class="uni-sedes-badge">
+              {{ uni.cantidadSedes }} {{ uni.cantidadSedes === 1 ? 'sede' : 'sedes' }} →
             </span>
           </div>
 
-          <!-- Becas REALES registradas en la base de datos para esta carrera -->
-          <ng-container *ngIf="carrera?.beca && (carrera?.beca?.length ?? 0) > 0; else sinDataBecas">
-            <div class="beca-mini-card" *ngFor="let beca of carrera?.beca">
-              <div class="beca-mini-header">
-                <span class="beca-mini-nombre">{{ beca.nombre }}</span>
-                <span class="beca-mini-tipo">{{ beca.tipoBeca }}</span>
-              </div>
-              <p class="beca-mini-desc">{{ beca.descripcion }}</p>
-
-              <div class="beca-mini-grid">
-                <div class="beca-mini-col">
-                  <p class="beca-mini-label">✅ Beneficios</p>
-                  <ul class="beca-lista">
-                    <li *ngFor="let item of splitLista(beca.beneficio)">{{ item }}</li>
-                  </ul>
-                </div>
-                <div class="beca-mini-col">
-                  <p class="beca-mini-label">📋 Requisitos</p>
-                  <ul class="beca-lista">
-                    <li *ngFor="let item of splitLista(beca.requisito)">{{ item }}</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div *ngIf="beca.restriccion" class="beca-restriccion">
-                <p class="beca-mini-label">⚠ Restricciones</p>
-                <ul class="beca-lista">
-                  <li *ngFor="let item of splitLista(beca.restriccion)">{{ item }}</li>
-                </ul>
-              </div>
-
-              <p class="beca-duracion">⏳ Duración: {{ beca.duracion }}</p>
-            </div>
-          </ng-container>
-
-          <ng-template #sinDataBecas>
-            <p class="beca-no-data">
-              Esta universidad tiene convenio con
-              <strong>{{ getConveniosUniversidad(universidadModal?.nombre || '').join(', ') }}</strong>,
-              pero todavía no hay becas registradas para esta carrera en el sistema.
-              Consulta directamente con la universidad para obtener información actualizada.
-            </p>
-          </ng-template>
-        </div>
+        </button>
       </div>
-    </div>
 
-  </ng-container><!-- /ng-container carrera -->
+    </div>
+  </ng-container>
 
   <!-- Error -->
   <div *ngIf="!isLoading && !carrera" class="loading-card">

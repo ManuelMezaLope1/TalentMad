@@ -139,7 +139,7 @@
                   </span>
                   <span class="carrera-unis">
                     <span class="unis-icon">🏛</span>
-                    {{ car.universidad?.length ?? 0 }} universidades
+                    {{ obtenerUniversidadesUnicas(car.universidadCarrera).length }} {{ obtenerUniversidadesUnicas(car.universidadCarrera).length ===1 ? 'universidad' : 'universidades'}}
                   </span>
                 </div>
               </div>

@@ -1,3 +1,5 @@
+import { TipoUniversidad } from "../tipouniversidad/TipoUniversidad";
+
 export class IBeca{
     id: number;
     nombre: string;
@@ -9,4 +11,5 @@ export class IBeca{
     url:string;
     tipoBeca:any;
     carrera:any;
+    origenBeca: any;
 }

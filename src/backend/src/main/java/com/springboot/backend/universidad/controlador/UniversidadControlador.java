@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.springboot.backend.excepcion.ResourceNotFoundException;
 import com.springboot.backend.universidad.modelo.Universidad;
+import com.springboot.backend.universidad.modelo.UniversidadImagenUrlDto;
+import com.springboot.backend.universidad.modelo.UniversidadSedesDto;
 import com.springboot.backend.universidad.repositorio.UniversidadRepositorio;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/v1/public")
@@ -43,6 +47,17 @@ public class UniversidadControlador {
     public ResponseEntity<Universidad> obtenerUniversidadPorId(@PathVariable Long id) {
         Universidad universidad=universidadRepositorio.findById(id).orElseThrow(()->new ResourceNotFoundException("No existe la universidad con el id: "+id));
         return ResponseEntity.ok(universidad);
+    }
+
+    @GetMapping("/universidad-imagen")
+    public ResponseEntity<UniversidadImagenUrlDto> obtenerImagen(@RequestParam String nombre) {
+        UniversidadImagenUrlDto uci=universidadRepositorio.obtenerImagenUrlDeUniversidad(nombre);
+        return ResponseEntity.ok(uci);
+    }
+
+    @GetMapping("/universidad-sedes")
+    public List<UniversidadSedesDto> obtenerSedes(@RequestParam String nombre, @RequestParam Long id) {
+        return universidadRepositorio.obtenerSedes(nombre, id);
     }
     
     @PutMapping("/universidad/{id}")

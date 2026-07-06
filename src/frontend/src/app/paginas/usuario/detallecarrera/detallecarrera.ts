@@ -12,51 +12,11 @@ import Swal from 'sweetalert2';
 import { Departamento } from '../../../servicios/departamento/Departamento';
 import { UsuarioServicio } from '../../../servicios/usuario/usuario-servicio';
 import { DepartamentoServicio } from '../../../servicios/departamento/departamento-servicio';
-
-// ──────────────────────────────────────────────────────────────────────────────
-// Interfaces
-// ──────────────────────────────────────────────────────────────────────────────
-export interface Universidad {
-  nombre: string;
-  tipoUniversidad: { nombre: string };
-  departamento: { nombre: string };
-  costoMensualMinimo: number;
-  costoMensualMaximo: number;
-}
-
-export interface Beca {
-  nombre: string;
-  tipoBeca: string;
-  descripcion: string;
-  duracion: string;
-  beneficio: string;
-  requisito: string;
-  restriccion: string;
-}
-
-// Mapeo de universidades conocidas a sus convenios de becas.
-const CONVENIOS_BECAS: { [universidadPrefix: string]: string[] } = {
-  'Pontificia Universidad Católica del Perú': ['Pronabec', 'Beca 18'],
-  'Universidad Nacional Mayor de San Marcos': ['Pronabec', 'Beca 18', 'Inabec'],
-  'Universidad Peruana de Ciencias Aplicadas': ['Pronabec'],
-  'Universidad César Vallejo': ['Pronabec', 'Beca 18'],
-  'Universidad Continental': ['Pronabec', 'Beca 18'],
-  'Universidad Privada del Norte': ['Pronabec'],
-  'Universidad Tecnológica del Perú': ['Pronabec', 'Inabec'],
-  'Universidad de Lima': ['Inabec'],
-  'Universidad de San Martín de Porres': ['Pronabec', 'Inabec'],
-  'Universidad Privada San Ignacio de Loyola': ['Pronabec'],
-};
-
-/** Devuelve los convenios (entidades de beca) de una universidad */
-function getConvenios(nombreUniversidad: string): string[] {
-  for (const prefix of Object.keys(CONVENIOS_BECAS)) {
-    if (nombreUniversidad.startsWith(prefix)) return CONVENIOS_BECAS[prefix];
-  }
-  return [];
-}
-
-// ──────────────────────────────────────────────────────────────────────────────
+import { UniversidadCarreraServicio } from '../../../servicios/universidad-carrera/universidad-carrera-servicio';
+import { OrigenBecaServicio } from '../../../servicios/origen-beca/origen-beca-servicio';
+import { UniversidadBecaServicio } from '../../../servicios/universidad-beca/universidad-beca-servicio';
+import { IBeca } from '../../../servicios/beca/IBeca';
+import { IUniversidadBeca } from '../../../servicios/universidad-beca/IUniversidadBeca';
 
 @Component({
   selector: 'app-detalle-carrera',
@@ -66,12 +26,15 @@ function getConvenios(nombreUniversidad: string): string[] {
   styleUrls: ['./detallecarrera.css']
 })
 export class DetalleCarrera implements OnInit, OnDestroy {
-
+  id: number;
+  universidadCarrera: any[] = [];
+  universidades: any[] = [];
+  universidadNombre: any;
   carrera: ICarrera | null = null;
+  becas: any[] = [];
   isLoading = true;
   private destroy$ = new Subject<void>();
-
-  // ── Filtro de costo mensual (Desde / Hasta) ─────────────────────────────────
+  
   costoDesde: number | null = null;
   costoHasta: number | null = null;
 
@@ -107,6 +70,7 @@ export class DetalleCarrera implements OnInit, OnDestroy {
   departamentosSelva: any[] = []
 
   // ── Filtro de beca ───────────────────────────────────────────────────────────
+  origenBecas: any[] = [];
   becaFiltro: string = '';
   entidadesBeca: string[] = [];
 
@@ -119,11 +83,49 @@ export class DetalleCarrera implements OnInit, OnDestroy {
     private router: Router,
     private carreraServicio: CarreraServicio,
     private usuarioServicio: UsuarioServicio,
+    private universidadCarreraServicio: UniversidadCarreraServicio,
+    private universidadBecaServicio: UniversidadBecaServicio,
     private departamentoServicio: DepartamentoServicio,
+    private origenBecaServicio: OrigenBecaServicio,
     private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
+    this.id = this.route.snapshot.params['id'];
+    if (!this.id) { this.router.navigate(['/resultado']); return; }
+
+    this.carreraServicio.obtenerCarreraPorId(this.id).pipe(
+      tap(dato => {
+        this.carrera = dato;
+        this.cd.detectChanges();
+      }),
+      catchError(err => {
+        console.error(err);
+        return of(null)
+      })
+    ).subscribe()
+
+    this.universidadCarreraServicio.obtenerPorCarreraId(this.id).pipe(
+      tap(dato => {
+        this.universidadCarrera = dato;
+
+        this.universidades = this.universidadCarrera.map(x => ({
+          ...x.universidad,
+          ranking: x.ranking,
+          origen: x.universidad.universidadBeca
+            ?.map((ub: IUniversidadBeca) => ub.beca?.origenBeca?.nombre)
+            .filter(Boolean)
+            .join(', ') ?? 'Sin beca'
+        }));
+
+        this.cd.detectChanges();
+      }),
+      catchError(err => {
+        console.error(err)
+        return of(null)
+      })
+    ).subscribe()
+
     this.usuarioServicio.obtenerPerfil().pipe(
       tap(data => {
         this.usuario = data;
@@ -136,11 +138,25 @@ export class DetalleCarrera implements OnInit, OnDestroy {
       })
     ).subscribe();
 
+    this.origenBecaServicio.obtenerTodosLosOrigenesBeca().pipe(
+      tap(dato => {
+        this.origenBecas = dato;
+        this.entidadesBeca = this.origenBecas.map(b =>
+          b.nombre
+        )
+        this.cd.detectChanges();
+      }),
+      catchError(err => {
+        console.error(err)
+        return of(null)
+      })
+    ).subscribe()
+
     this.departamentoServicio.obtenerDepartamentoCosta().pipe(
       tap(dato => {
         this.departamentosCosta = dato;
-        this.departamentosCosta=this.departamentosCosta.map(
-          departamento=>departamento.nombre
+        this.departamentosCosta = this.departamentosCosta.map(
+          departamento => departamento.nombre
         )
         this.cd.detectChanges();
       }),
@@ -153,8 +169,8 @@ export class DetalleCarrera implements OnInit, OnDestroy {
     this.departamentoServicio.obtenerDepartamentoSierra().pipe(
       tap(dato => {
         this.departamentosSierra = dato;
-        this.departamentosSierra=this.departamentosSierra.map(
-          departamento=>departamento.nombre
+        this.departamentosSierra = this.departamentosSierra.map(
+          departamento => departamento.nombre
         )
         this.cd.detectChanges();
       }),
@@ -167,8 +183,8 @@ export class DetalleCarrera implements OnInit, OnDestroy {
     this.departamentoServicio.obtenerDepartamentoSelva().pipe(
       tap(dato => {
         this.departamentosSelva = dato;
-        this.departamentosSelva=this.departamentosSelva.map(
-          departamento=>departamento.nombre
+        this.departamentosSelva = this.departamentosSelva.map(
+          departamento => departamento.nombre
         )
         this.cd.detectChanges();
       }),
@@ -177,67 +193,49 @@ export class DetalleCarrera implements OnInit, OnDestroy {
         return of(null)
       })
     ).subscribe();
-
-    const cached = localStorage.getItem('carrera_seleccionada');
-    if (cached) {
-      this.carrera = JSON.parse(cached);
-      this.inicializar();
-      return;
-    }
-
-    const id = this.route.snapshot.paramMap.get('id');
-    if (!id) { this.router.navigate(['/resultado']); return; }
-
-    this.carreraServicio.obtenerListaDeCarrera()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (carreras) => {
-          this.carrera = carreras.find(c => String(c.id) === id) ?? null;
-          if (!this.carrera) { this.router.navigate(['/resultado']); return; }
-          this.inicializar();
-        },
-        error: () => this.router.navigate(['/resultado'])
-      });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next(); this.destroy$.complete();
   }
 
-  // ── Inicialización ────────────────────────────────────────────────────────
-
-  inicializar(): void {
-    if (!this.carrera) return;
-
-    const set = new Set<string>();
-    (this.carrera.universidad ?? []).forEach(u => {
-      getConvenios(u.nombre).forEach(e => set.add(e));
-    });
-    this.entidadesBeca = Array.from(set).sort();
-
-    this.isLoading = false;
-  }
-
   // ── Datos filtrados ───────────────────────────────────────────────────────
 
   get universidadesFiltradas(): IUniversidad[] {
-    if (!this.carrera?.universidad) return [];
+    if (!this.universidades) return [];
 
-    return this.obtenerUniversidadesUnicas(this.carrera.universidad).filter(u => {
+    return this.obtenerUniversidadesUnicas(this.universidades).filter(u => {
       const costoMin = parseFloat(u.costoMensualMinimo);
       const costoMax = parseFloat(u.costoMensualMaximo);
-      const departamento=u.departamento.nombre;
+      const departamento = u.departamento.nombre;
+      const ranking = u.ranking;
+      const origen = u.origen;
 
       const promedio = Math.round((costoMin + costoMax) / 2)
 
       const cumpleDesde = this.costoDesde == null || promedio >= this.costoDesde;
       const cumpleHasta = this.costoHasta == null || promedio <= this.costoHasta;
-      const tieneBeca = this.becaFiltro === '' ||
-        getConvenios(u.nombre).includes(this.becaFiltro);
+      const tieneBeca = this.becaFiltro === '';
 
-      const cumpleDepartamento=this.departamento==null || departamento===this.departamento;
+      this.universidades = this.universidadCarrera
+        .map(x => ({
+          ...x.universidad,
+          ranking: x.ranking,
+          origen: x.universidad.universidadBeca
+            ?.map((ub:IUniversidadBeca) => ub.beca?.origenBeca?.nombre)
+            .filter(Boolean)
+            .join(', ') ?? 'Sin beca'
+        }))
+        .filter(u =>
+          tieneBeca || u.origen.includes(this.becaFiltro)
+        );
 
-      return cumpleDesde && cumpleHasta && tieneBeca && cumpleDepartamento;
+      const cumpleDepartamento = this.departamento == null || departamento === this.departamento;
+
+      const cumpleRankingDesde = this.rankingDesde == null || ranking >= this.rankingDesde;
+      const cumpleRankingHasta = this.rankingHasta == null || ranking <= this.rankingHasta;
+
+      return cumpleDesde && cumpleHasta && cumpleDepartamento && cumpleRankingDesde && cumpleRankingHasta;
     });
   }
 
@@ -315,17 +313,17 @@ export class DetalleCarrera implements OnInit, OnDestroy {
 
   aplicarRanking(): void {
     if (this.rankingDesdeTemp === null) {
-      Swal.fire('Oops..', 'Añada un desde', 'warning');
+      Swal.fire('Oops..', 'Añada un ranking mínimo', 'warning');
       return;
     }
 
     if (this.rankingHastaTemp === null) {
-      Swal.fire('Oops..', 'Añada un hasta', 'warning');
+      Swal.fire('Oops..', 'Añada un ranking máximo', 'warning');
       return;
     }
 
     if (this.rankingDesdeTemp > this.rankingHastaTemp) {
-      Swal.fire('Oops..', 'El desde no puede ser mayor al hasta', 'warning');
+      Swal.fire('Oops..', 'El ranking mínimo no puede ser mayor que el ranking máximo', 'warning');
       return;
     }
 
@@ -417,17 +415,28 @@ export class DetalleCarrera implements OnInit, OnDestroy {
     this.departamentoDropdownOpen = false;
   }
 
-  // ── Métodos del filtro de beca ────────────────────────────────────────────
-
-  getConveniosUniversidad(nombre: string): string[] {
-    return getConvenios(nombre);
-  }
-
   // ── Modal de becas ────────────────────────────────────────────────────────
   // Muestra siempre la información real registrada en carrera.beca,
   // sin intentar adivinar a qué convenio corresponde cada una.
 
   abrirModalBecas(uni: IUniversidad): void {
+    this.universidadNombre = uni.nombre;
+
+    this.universidadBecaServicio.obtenerBecasPorUniversidad(this.universidadNombre).pipe(
+      tap(datos => {
+        const becasAgrupadas = Array.from(
+          new Map(datos.map(beca => [beca.nombre, beca])).values()
+        );
+
+        this.becas = becasAgrupadas;
+        this.cd.detectChanges();
+      }),
+      catchError(err => {
+        console.error(err)
+        return of(null)
+      })
+    ).subscribe()
+
     this.universidadModal = uni;
     this.modalBecasAbierto = true;
   }
@@ -448,28 +457,59 @@ export class DetalleCarrera implements OnInit, OnDestroy {
 
   // ── Utilidades ────────────────────────────────────────────────────────────
 
-  get universidadesUnicas(): { nombre: string; cantidadSedes: number }[] {
-    if (!this.carrera?.universidad) return [];
-    const mapa = new Map<string, number>();
-    (this.carrera.universidad as IUniversidad[]).forEach(u => {
+  get universidadesUnicas(): { nombre: string; cantidadSedes: number; promedioRanking: number; }[] {
+    if (!this.universidades) return [];
+
+    const mapa = new Map<string, { cantidadSedes: number; sumaRanking: number }>();
+    (this.universidades as any[]).forEach(u => {
+      if (!u?.nombre) return;
+
       const nombreBase = u.nombre.split(' - ')[0].trim();
-      mapa.set(nombreBase, (mapa.get(nombreBase) ?? 0) + 1);
+
+      const actual = mapa.get(nombreBase);
+
+      if (actual) {
+        actual.cantidadSedes++;
+        actual.sumaRanking += Number(u.ranking ?? 0);
+      } else {
+        mapa.set(nombreBase, {
+          cantidadSedes: 1,
+          sumaRanking: Number(u.ranking ?? 0)
+        });
+      }
     });
-    return Array.from(mapa.entries()).map(([nombre, cantidadSedes]) => ({
+
+    return Array.from(mapa.entries()).map(([nombre, datos]) => ({
       nombre,
-      cantidadSedes,
+      cantidadSedes: datos.cantidadSedes,
+      promedioRanking: datos.sumaRanking / datos.cantidadSedes
     }));
   }
 
   obtenerUniversidadesUnicas(universidades: any[]): any[] {
     const mapa = new Map();
+
     universidades.forEach(u => {
       const nombrePrincipal = u.nombre.split(' - ')[0].trim();
+
       if (!mapa.has(nombrePrincipal)) {
-        mapa.set(nombrePrincipal, { ...u, nombre: nombrePrincipal });
+        mapa.set(nombrePrincipal, {
+          ...u,
+          nombre: nombrePrincipal,
+          cantidadSedes: 1,
+          sumaRanking: Number(u.ranking ?? 0)
+        });
+      } else {
+        const item = mapa.get(nombrePrincipal);
+        item.cantidadSedes++;
+        item.sumaRanking += Number(u.ranking ?? 0);
       }
     });
-    return Array.from(mapa.values());
+
+    return Array.from(mapa.values()).map(item => ({
+      ...item,
+      rankingPromedio: item.sumaRanking / item.cantidadSedes
+    }));
   }
 
   obtenerPromedio(u: IUniversidad): number {

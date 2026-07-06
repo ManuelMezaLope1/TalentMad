@@ -55,6 +55,7 @@ public class BecaControlador {
         becaExistente.setUrl(detallesBeca.getUrl());
         becaExistente.setTipoBeca(detallesBeca.getTipoBeca());
         becaExistente.setCarrera(detallesBeca.getCarrera());
+        becaExistente.setOrigenBeca(detallesBeca.getOrigenBeca());
         
         Beca becaActualizada=becaRepositorio.save(becaExistente);
 

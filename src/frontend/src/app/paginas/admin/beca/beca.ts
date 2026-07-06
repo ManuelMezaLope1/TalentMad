@@ -33,6 +33,9 @@ export class Beca {
   @ViewChild('btnInfoAgregar')
   btnInfoAgregar!: ElementRef;
 
+  @ViewChild('btnInfoOrigenBeca')
+  btnInfoOrigenBeca!: ElementRef;
+
   @ViewChild('btnInfoDashboard')
   btnInfoDashboard!: ElementRef;
 
@@ -76,6 +79,26 @@ export class Beca {
     setTimeout(() => {
       try {
         tooltipAgregar.hide();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000);
+  }
+
+  mostrarTooltipOrigenBeca() {
+    if (!this.btnInfoOrigenBeca?.nativeElement) {
+      return;
+    }
+
+    const tooltipOrigenBeca = bootstrap.Tooltip.getOrCreateInstance(
+      this.btnInfoOrigenBeca.nativeElement
+    );
+
+    tooltipOrigenBeca.show();
+
+    setTimeout(() => {
+      try {
+        tooltipOrigenBeca.hide();
       } catch (e) {
         console.error(e);
       }
@@ -158,6 +181,10 @@ export class Beca {
 
   registrarBeca() {
     this.router.navigate(['creacion-beca']);
+  }
+
+  origenBeca(){
+    this.router.navigate(['origen-beca'])
   }
 
   private obtenerBeca() {

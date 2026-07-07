@@ -1,20 +1,13 @@
 <div class="sedes-page">
-
-  <!-- Loading -->
-  <div *ngIf="isLoading" class="loading-card">
-    <div class="spinner"></div>
-    <p class="loading-text">Cargando sedes...</p>
-  </div>
-
-  <ng-container *ngIf="!isLoading && carrera">
+  <ng-container>
 
     <!-- ── Hero ──────────────────────────────────────────────────────────── -->
     <div class="hero">
-      <img [src]="getImagenUniversidad(universidadNombre)" [alt]="universidadNombre" class="hero-img" />
+      <img [src]="universidadImagen" [alt]="universidadNombre" class="hero-img" />
       <div class="hero-overlay"></div>
       <div class="hero-content">
         <button (click)="volverADetalle()" class="btn-back">← Volver a universidades</button>
-        <span class="hero-eyebrow">{{ carrera.nombre }}</span>
+        <span class="hero-eyebrow">{{ carreraNombre }}</span>
         <h1 class="hero-title">{{ universidadNombre }}</h1>
         <div class="hero-meta">
           <span class="meta-chip">🏢 {{ todasLasSedes.length }} {{ todasLasSedes.length === 1 ? 'sede' : 'sedes' }}</span>
@@ -117,7 +110,7 @@
           </div>
 
           <!-- Filtro Origen de Beca -->
-          <div class="filtro-item">
+          <!--<div class="filtro-item">
             <label class="filtro-label-horizontal">Becas</label>
             <div class="filtro-select-wrapper">
               <select class="filtro-select-horizontal" [(ngModel)]="origenFiltro">
@@ -133,7 +126,7 @@
             <p class="filtro-hint-horizontal" *ngIf="origenFiltro">
               Mostrando becas de <strong>{{ getLabelOrigen(origenFiltro) }}</strong>
             </p>
-          </div>
+          </div>-->
 
           <!-- Filtro Departamento -->
           <div class="filtro-item">
@@ -174,7 +167,7 @@
             <!-- Imagen de la universidad -->
             <div class="sede-img-wrapper">
               <img
-                [src]="getImagenUniversidad(sede.nombre)"
+                [src]="universidadImagen"
                 [alt]="universidadNombre"
                 class="sede-img"
                 loading="lazy" />
@@ -188,55 +181,23 @@
               <div class="sede-datos">
                 <div class="dato">
                   <span class="dato-icon">📍</span>
-                  <span class="dato-text">{{ sede.departamento?.nombre ?? 'Ubicación no disponible' }}</span>
+                  <span class="dato-text">{{ sede.departamento ?? 'Ubicación no disponible' }}</span>
                 </div>
                 <div class="dato">
                   <span class="dato-icon">💸</span>
                   <span class="dato-text">
-                    {{ formatCosto(+sede.costoMensualMinimo) }} – {{ formatCosto(+sede.costoMensualMaximo) }} / mes
+                    {{ formatCosto(+sede.total/6) }} / mes
                   </span>
                 </div>
                 <div class="dato dato--destacado">
                   <span class="dato-icon">📊</span>
                   <span class="dato-text">
-                    Promedio mensual: <strong>{{ formatCosto(obtenerPromedio(sede)) }}</strong>
+                    Ranking: {{sede.ranking ?? 0}} de 5
                   </span>
                 </div>
               </div>
 
-              <!-- Becas disponibles -->
-              <button
-                *ngIf="(sede.beca?.length ?? 0) > 0"
-                type="button"
-                class="btn-ver-becas"
-                (click)="abrirModalBecas(sede)">
-                <span class="ver-becas-info">
-                  <span class="ver-becas-icon">🎓</span>
-                  <span class="ver-becas-text">
-                    {{ sede.beca?.length }}
-                    {{ (sede.beca?.length ?? 0) === 1 ? 'beca disponible' : 'becas disponibles' }}
-                  </span>
-                </span>
-                <span class="ver-becas-cta">Ver becas →</span>
-              </button>
-
-              <p *ngIf="(sede.beca?.length ?? 0) === 0" class="sin-convenio">
-                No hay becas registradas para esta sede aún.
-              </p>
-
-              <!-- Tags de origen de becas disponibles en esta sede -->
-              <div class="sede-origen-tags" *ngIf="(sede.beca?.length ?? 0) > 0">
-                <ng-container *ngFor="let o of origenesLista">
-                  <span
-                    *ngIf="(sede.beca ?? []).some(b => getOrigenBeca(b) === o.key)"
-                    class="beca-mini-origen"
-                    [ngClass]="getClaseOrigen(o.key)">
-                    {{ o.label }}
-                  </span>
-                </ng-container>
-              </div>
-
-              <a [href]="getUrlUniversidad(sede.nombre)" target="_blank" rel="noopener" class="btn-uni-web">
+              <a [href]="sede.url" target="_blank" rel="noopener" class="btn-uni-web">
                 Visitar sitio oficial →
               </a>
             </div>
@@ -256,94 +217,6 @@
             <h3 class="modal-becas-title">🎓 Becas disponibles</h3>
           </div>
           <button type="button" class="modal-close-btn" (click)="cerrarModalBecas()">✕</button>
-        </div>
-
-        <!-- Chips de origen -->
-        <div class="modal-origen-filtro">
-          <button
-            class="origen-chip"
-            [class.active]="origenFiltro === ''"
-            (click)="seleccionarOrigen('')">Todas</button>
-          <button
-            *ngFor="let o of origenesLista"
-            class="origen-chip"
-            [class.active]="origenFiltro === o.key"
-            [class.disabled]="!origenesDisponibles.includes(o.key)"
-            (click)="origenesDisponibles.includes(o.key) && seleccionarOrigen(o.key)">
-            {{ o.label }}
-          </button>
-        </div>
-
-        <div class="modal-becas-body">
-          <ng-container *ngIf="becasFiltradas.length > 0; else sinDataBecas">
-            <div class="beca-mini-card" *ngFor="let beca of becasFiltradas">
-
-              <div class="beca-mini-header">
-                <span class="beca-mini-nombre">{{ beca.nombre }}</span>
-                <div class="beca-mini-tags">
-                  <span
-                    class="beca-mini-origen"
-                    [ngClass]="getClaseOrigen(getOrigenBeca(beca))">
-                    {{ getLabelOrigen(getOrigenBeca(beca)) }}
-                  </span>
-                  <span class="beca-mini-tipo">{{ beca.tipoBeca }}</span>
-                </div>
-              </div>
-
-              <p class="beca-mini-desc">{{ beca.descripcion }}</p>
-
-              <div class="beca-mini-grid">
-                <div class="beca-mini-col">
-                  <p class="beca-mini-label">✅ Beneficios</p>
-                  <ul class="beca-lista">
-                    <li *ngFor="let item of splitLista(beca.beneficio)">{{ item }}</li>
-                  </ul>
-                </div>
-                <div class="beca-mini-col">
-                  <p class="beca-mini-label">📋 Requisitos</p>
-                  <ul class="beca-lista">
-                    <li *ngFor="let item of splitLista(beca.requisito)">{{ item }}</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div *ngIf="beca.restriccion" class="beca-restriccion">
-                <p class="beca-mini-label">⚠ Restricciones</p>
-                <ul class="beca-lista">
-                  <li *ngFor="let item of splitLista(beca.restriccion)">{{ item }}</li>
-                </ul>
-              </div>
-
-              <div class="beca-footer">
-                <p class="beca-duracion">⏳ Duración: {{ beca.duracion }}</p>
-                <a
-                  *ngIf="tieneUrl(beca)"
-                  [href]="beca.url"
-                  target="_blank"
-                  rel="noopener"
-                  class="beca-url-btn">
-                  Más información →
-                </a>
-              </div>
-
-            </div>
-          </ng-container>
-
-          <ng-template #sinDataBecas>
-            <div class="beca-no-data">
-              <span class="beca-no-data-icon">🎓</span>
-              <p>
-                No hay becas registradas
-                <ng-container *ngIf="origenFiltro">
-                  de origen <strong>{{ getLabelOrigen(origenFiltro) }}</strong>
-                </ng-container>
-                para esta sede.
-              </p>
-              <p class="beca-no-data-sub">
-                Consulta directamente con la universidad para obtener información actualizada.
-              </p>
-            </div>
-          </ng-template>
         </div>
       </div>
     </div>

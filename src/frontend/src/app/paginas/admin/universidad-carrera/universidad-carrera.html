@@ -3,7 +3,8 @@
     <div class="">
         <h1 class="text-center">Registro de Carreras y Universidades</h1>
         <div class="d-flex justify-content-end">
-            <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>
+            <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>&nbsp;
+            <button class="btn btn-primary" (click)="elegirUniversidad()">Editar</button>
         </div>
     </div>
     
@@ -73,6 +74,18 @@
                             <span class="label">🎓 Tipo</span>
                             <span class="valor">{{carreraSeleccionada.tipoCarrera}}</span>
                         </div>
+
+                        <div class="info-item">
+                            <span class="label">🎓 Ranking</span>
+                            <input type="number" class="form-control input" min="1" max="5"
+                                [(ngModel)]="rankingSeleccionado" placeholder="Ingrese el ranking">
+                        </div>
+
+                        <div class="info-item">
+                            <span class="label">🎓 Total</span>
+                            <input type="number" class="form-control input" min="1" [(ngModel)]="totalSeleccionado"
+                                placeholder="Ingrese el total">
+                        </div>
                     </div>
                 </div>
 
@@ -128,6 +141,16 @@
                         <div class="info-seleccion-item">
                             <span class="label">🎓 Tipo</span>
                             <span class="valor">{{item.tipoCarrera}}</span>
+                        </div>
+
+                        <div class="info-seleccion-item">
+                            <span class="label">⭐ Ranking</span>
+                            <span class="valor">{{item.ranking}}</span>
+                        </div>
+
+                        <div class="info-seleccion-item">
+                            <span class="label">🎓 Tipo</span>
+                            <span class="valor">S/. {{item.total}}</span>
                         </div>
                     </div>
                 </div>

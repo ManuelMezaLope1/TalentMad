@@ -191,13 +191,17 @@ export class Carrera {
     }).then((result) => {
       if (result.isConfirmed) {
         this.carreraServicio.eliminarCarrera(id).subscribe(dato => {
-          console.log(dato);
           this.obtenerCarrera();
-          Swal.fire(
-            'Carrera eliminada',
-            'La carrera ha sido eliminada con exito',
-            'success'
-          )
+          Swal.fire({
+            title: 'Carrera eliminada',
+            text: 'La carrera ha sido eliminada con exito',
+            icon: 'success',
+            confirmButtonText: 'Ok',
+          }).then((result2)=>{
+            if(result2.isConfirmed){
+              window.location.reload();
+            }
+          })
         })
       }
     });
@@ -226,6 +230,5 @@ export class Carrera {
       default:
         return resultado;
     }
-
   }
 }

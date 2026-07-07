@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.backend.carrera.modelo.Carrera;
 import com.springboot.backend.carrera.repositorio.CarreraRepositorio;
+import com.springboot.backend.excepcion.ResourceNotFoundException;
 import com.springboot.backend.universidad.modelo.Universidad;
 import com.springboot.backend.universidad.repositorio.UniversidadRepositorio;
 import com.springboot.backend.universidadcarrera.modelo.UniversidadCarrera;
@@ -19,6 +20,9 @@ import com.springboot.backend.universidadcarrera.modelo.UniversidadCarreraDto;
 import com.springboot.backend.universidadcarrera.repositorio.UniversidadCarreraRepositorio;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/v1/public")
@@ -32,9 +36,24 @@ public class UniversidadCarreraControlador {
     @Autowired
     private CarreraRepositorio carreraRepositorio;
 
+    @GetMapping("/universidad-carrera/lote")
+    public List<UniversidadCarrera> listarTodasUniversidadesCarreras() {
+        return universidadCarreraRepositorio.findAll();
+    }
+
     @PostMapping("/universidad-carrera/lote")
     public ResponseEntity<?> guardarLote(
             @RequestBody List<UniversidadCarreraDto> relaciones) {
+
+        Long universidadId = relaciones.get(0).getUniversidadId();
+
+        System.out.println("Antes: " +
+                universidadCarreraRepositorio.findByUniversidadId(universidadId).size());
+
+        universidadCarreraRepositorio.deleteByUniversidadId(universidadId);
+
+        System.out.println("Después: " +
+                universidadCarreraRepositorio.findByUniversidadId(universidadId).size());
 
         List<UniversidadCarrera> lista = new ArrayList<>();
 
@@ -73,6 +92,8 @@ public class UniversidadCarreraControlador {
 
             uc.setUniversidad(universidad);
             uc.setCarrera(carrera);
+            uc.setRanking(dto.getRanking());
+            uc.setTotal(dto.getTotal());
 
             lista.add(uc);
 
@@ -90,5 +111,25 @@ public class UniversidadCarreraControlador {
         respuesta.put("duplicados", duplicados);
 
         return ResponseEntity.ok(respuesta);
+    }
+
+    @GetMapping("/universidad-carrera/lote/{id}")
+    public ResponseEntity<List<UniversidadCarrera>> obtenerPorUniversidadId(@PathVariable Long id) {
+        List<UniversidadCarrera> lista = universidadCarreraRepositorio.findByUniversidadId(id);
+        if (lista.isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "No existen carreras para la universidad con id: " + id);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/carrera-universidad/lote/{id}")
+    public ResponseEntity<List<UniversidadCarrera>> obtenerPorCarreraId(@PathVariable Long id) {
+        List<UniversidadCarrera> lista = universidadCarreraRepositorio.findByCarreraId(id);
+        if (lista.isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "No existen universidad para la carrera con id: " + id);
+        }
+        return ResponseEntity.ok(lista);
     }
 }

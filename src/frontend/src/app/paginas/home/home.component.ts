@@ -3,18 +3,19 @@ import { RouterLink } from '@angular/router';
 import { AuthServicio } from '../../servicios/auth/auth-servicio';
 import { CommonModule } from '@angular/common';
 import { TemaServicio } from '../../servicios/global/tema-servicio';
+import { ChatbotComponent } from '../chatbot/chatbot.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, ChatbotComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
   constructor(public authServicio: AuthServicio, public temaServicio: TemaServicio) { }
 
-  // Método para manejar el acordeón FAQ
+
   toggleFaq(event: Event): void {
     const questionElement = event.currentTarget as HTMLElement;
     const answerElement = questionElement.nextElementSibling as HTMLElement;
@@ -30,7 +31,7 @@ export class HomeComponent {
     }
   }
 
-  // Método para scroll suave a secciones
+
   scrollToSection(sectionId: string): void {
     const element = document.getElementById(sectionId);
     if (element) {

@@ -21,7 +21,6 @@ export class RegistroCategoriaPreguntas {
   guardarCategoriaPregunta(){
     this.categoriaPreguntasServicio.registrarCategoria(this.categoria).pipe(
       tap(dato => {
-        console.log(dato);
         this.irALaListaDeCategorias();
       }),
       catchError(err => {

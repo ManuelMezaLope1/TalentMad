@@ -6,8 +6,7 @@
                 <div class="col">
                     <label>Nombre : </label>
                     <input type="text" class="form-control" id="nombre" [(ngModel)]="beca.nombre" name="nombre" required
-                        minlength="4" maxlength="60"
-                        placeholder="Digite su nombre " #nombre="ngModel" />
+                        minlength="4" maxlength="60" placeholder="Digite su nombre " #nombre="ngModel" />
                     <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
                         <div *ngIf="nombre.errors?.['required']">
                             Digite su nombre por favor
@@ -57,27 +56,39 @@
         </div>
 
         <div class="form-group">
-            <div class="row">
-                <div class="col">
-                    <label>Beneficios: </label>
-                    <input type="text" class="form-control" id="beneficio" name="beneficio" [(ngModel)]="beca.beneficio" required #beneficio="ngModel">
-                </div>
-
-                <div class="col">
-                    <label>Requisitos: </label>
-                    <input type="text" class="form-control" id="requisito" name="requisito" [(ngModel)]="beca.requisito" required #requisito="ngModel">
-                </div>
-
-                <div class="col">
-                    <label>Restricciones: </label>
-                    <input type="text" class="form-control" id="restriccion" name="restriccion" [(ngModel)]="beca.restriccion" required #restriccion="ngModel">
-                </div>
-            </div>
+            <label>Beneficios: </label>
+            <input type="text" class="form-control" id="beneficio" name="beneficio" [(ngModel)]="beca.beneficio"
+                required #beneficio="ngModel">
         </div>
 
         <div class="form-group">
-            <label>Url: </label>
-            <input class="form-control" type="text" id="url" name="url" [(ngModel)]="beca.url" required #url="ngModel">
+            <label>Requisitos: </label>
+            <input type="text" class="form-control" id="requisito" name="requisito" [(ngModel)]="beca.requisito"
+                required #requisito="ngModel">
+        </div>
+
+        <div class="form-group">
+            <label>Restricciones: </label>
+            <input type="text" class="form-control" id="restriccion" name="restriccion" [(ngModel)]="beca.restriccion"
+                required #restriccion="ngModel">
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label>Url: </label>
+                    <input class="form-control" type="text" id="url" name="url" [(ngModel)]="beca.url" required
+                        #url="ngModel">
+                </div>
+
+                <div class="col">
+                    <label>Origen:</label>
+                    <select class="form-control" name="origenBeca" id="origenBeca" [(ngModel)]="beca.origenBeca" required #origen="ngModel">
+                        <option [ngValue]="null">--Seleccione el origen--</option>
+                        <option *ngFor="let ori of origenBecas" [ngValue]="ori">{{ori.nombre}}</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <button class="btn btn-success" [disabled]="!categoriaForm.form.valid">Guardar</button>

@@ -4,7 +4,8 @@
         <div class="form-group">
             <label>Nombre : </label>
             <input type="text" class="form-control" id="nombre" [(ngModel)]="carrera.nombre" name="nombre" required
-                pattern="^[A-Z][a-zA-ZáéíóúÁÉÍÓÚÑñü\s,]+$" minlength="4" maxlength="60" placeholder="Digite su nombre " #nombre="ngModel" />
+                pattern="^[A-Z][a-zA-ZáéíóúÁÉÍÓÚÑñü\s,]+$" minlength="4" maxlength="60" placeholder="Digite su nombre "
+                #nombre="ngModel" />
             <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
                 <div *ngIf="nombre.errors?.['required']">
                     Digite su nombre por favor
@@ -23,8 +24,8 @@
 
         <div class="form-group">
             <label>Descripción: </label>
-            <input type="text" class="form-control" id="descripcion" [(ngModel)]="carrera.descripcion" name="descripcion" required
-                maxlength="500" #descripcion="ngModel">
+            <input type="text" class="form-control" id="descripcion" [(ngModel)]="carrera.descripcion"
+                name="descripcion" required maxlength="500" #descripcion="ngModel">
             <div class="alert alert-danger" *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
                 <div *ngIf="descripcion.errors?.['required']">
                     Digite la descripción por favor
@@ -37,23 +38,38 @@
 
         <div class="form-group">
             <label>Duración: </label>
-            <input type="number" class="form-control" id="duracion" min="1" [(ngModel)]="carrera.duracion" name="duracion" required #duracion="ngModel">
+            <input type="number" class="form-control" id="duracion" min="1" [(ngModel)]="carrera.duracion"
+                name="duracion" required #duracion="ngModel">
         </div>
 
         <div class="form-group">
             <label>Tipo: </label>
-            <select class="form-control" name="tiposCarre" id="tiposCarre" required (change)="actualizarTipoCarrera($event)">
+            <select class="form-control" name="tiposCarre" id="tiposCarre" required
+                (change)="actualizarTipoCarrera($event)">
                 <option [ngValue]="null">--Seleccione el tipo--</option>
                 <option *ngFor="let ti of tipos" [ngValue]="ti">{{ti}}</option>
             </select>
-            <input type="hidden" class="form-control" name="tipoCarrera" id="tipoCarrera" [(ngModel)]="carrera.tipoCarrera" required #tipoCarrera="ngModel">
+            <input type="hidden" class="form-control" name="tipoCarrera" id="tipoCarrera"
+                [(ngModel)]="carrera.tipoCarrera" required #tipoCarrera="ngModel">
         </div>
 
         <div class="form-group">
             <label>Combinación: </label>
-            <input type="text" class="form-control" name="combinacion" id="combinacion" [(ngModel)]="carrera.combinacion" required #combinacion="ngModel">
+            <input type="text" class="form-control" name="combinacion" id="combinacion"
+                [(ngModel)]="carrera.combinacion" required #combinacion="ngModel">
         </div>
 
-        <button class="btn btn-success" [disabled]="!categoriaForm.form.valid">Guardar</button>
+        <div class="form-group">
+            <label>Imagen:</label>
+            <input type="file" class="form-control" accept="image/*" (change)="seleccionarImagen($event)">
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <div *ngIf="imagenPreview">
+                <img [src]="imagenPreview" width="400" class="img-thumbnail">
+            </div>
+        </div>
+        <br><br>
+        <button class="btn btn-success mt-4" [disabled]="!categoriaForm.form.valid">Guardar</button>
     </form>
 </div>

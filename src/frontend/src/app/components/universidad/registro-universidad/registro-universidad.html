@@ -4,7 +4,8 @@
         <div class="form-group">
             <label>Nombre : </label>
             <input type="text" class="form-control" id="nombre" [(ngModel)]="universidad.nombre" name="nombre" required
-                pattern="^[A-Z][a-zA-ZáéíóúÁÉÍÓÚÑñ\s-]+$" minlength="4" maxlength="60" placeholder="Digite su nombre " #nombre="ngModel" />
+                pattern="^[A-Z][a-zA-ZáéíóúÁÉÍÓÚÑñ\s-]+$" minlength="4" maxlength="60" placeholder="Digite su nombre "
+                #nombre="ngModel" />
             <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
                 <div *ngIf="nombre.errors?.['required']">
                     Digite su nombre por favor
@@ -23,28 +24,55 @@
 
         <div class="form-group">
             <label>Departamento: </label>
-            <select class="form-control" name="departamento" id="departamento" [(ngModel)]="universidad.departamento" required #departamento="ngModel">
+            <select class="form-control" name="departamento" id="departamento" [(ngModel)]="universidad.departamento"
+                required #departamento="ngModel">
                 <option [ngValue]="null">--Seleccione el departamento--</option>
                 <option *ngFor="let depart of departamentos" [ngValue]="depart">{{depart.nombre}}</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label>Costo Mensual Mínimo: </label>
-            <input type="number" min="1" class="form-control" id="costoMensualMinimo" [(ngModel)]="universidad.costoMensualMinimo" name="costoMensualMinimo" required #costoMensualMinimo="ngModel" />
-        </div>
+            <div class="row">
+                <div class="col">
+                    <label>Costo Mensual Mínimo: </label>
+                    <input type="number" min="1" class="form-control" id="costoMensualMinimo"
+                        [(ngModel)]="universidad.costoMensualMinimo" name="costoMensualMinimo" required
+                        #costoMensualMinimo="ngModel" />
+                </div>
 
-        <div class="form-group">
-            <label>Costo Mensual Máximo: </label>
-            <input type="number" min="1" class="form-control" id="costoMensualMaximo" [(ngModel)]="universidad.costoMensualMaximo" name="costoMensualMaximo" required costoMensualMaximo="ngModel">
+                <div class="col">
+                    <label>Costo Mensual Máximo: </label>
+                    <input type="number" min="1" class="form-control" id="costoMensualMaximo"
+                        [(ngModel)]="universidad.costoMensualMaximo" name="costoMensualMaximo" required
+                        costoMensualMaximo="ngModel">
+                </div>
+            </div>
         </div>
 
         <div class="form-group">
             <label>Tipo: </label>
-            <select class="form-control" name="tipoUniversidad" id="tipoUniversidad" [(ngModel)]="universidad.tipoUniversidad" required #tipoUniversidad="ngModel">
+            <select class="form-control" name="tipoUniversidad" id="tipoUniversidad"
+                [(ngModel)]="universidad.tipoUniversidad" required #tipoUniversidad="ngModel">
                 <option [ngValue]="null">--Seleccione el tipo de la universidad--</option>
                 <option *ngFor="let tipo of tipoUniversidades" [ngValue]="tipo">{{tipo.nombre}}</option>
             </select>
+        </div>
+
+        <div class="form-group">
+            <label>Url:</label>
+            <input type="text" class="form-control" id="url" [(ngModel)]="universidad.url" name="url" required placeholder="Digite la url"
+                #url="ngModel" />
+        </div>
+
+        <div class="form-group">
+            <label>Imagen:</label>
+            <input type="file" class="form-control" accept="image/*" (change)="seleccionarImagen($event)">
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <div *ngIf="imagenPreview">
+                <img [src]="imagenPreview" width="400" class="img-thumbnail">
+            </div>
         </div>
 
         <button class="btn btn-success" [disabled]="!categoriaForm.form.valid">Guardar</button>

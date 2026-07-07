@@ -5,9 +5,10 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.backend.beca.modelo.Beca;
-import com.springboot.backend.carrera.modelo.Carrera;
 import com.springboot.backend.departamento.modelo.Departamento;
 import com.springboot.backend.tipouniversidad.modelo.TipoUniversidad;
+import com.springboot.backend.universidadbeca.modelo.UniversidadBeca;
+import com.springboot.backend.universidadcarrera.modelo.UniversidadCarrera;
 
 import jakarta.persistence.*;
 
@@ -32,48 +33,52 @@ public class Universidad {
     @Column(name = "costo_mensual_maximo", nullable = false)
     private double costoMensualMaximo;
 
+    @Column(name = "imagen")
+    private String imagen;
+
+    @Column(name = "url")
+    private String url;
+
     @ManyToOne
     @JoinColumn(name = "tipo_universidad_id")
     @JsonIgnoreProperties({ "universidad" })
     private TipoUniversidad tipoUniversidad;
 
-    @ManyToMany(mappedBy = "universidad")
+    @OneToMany(mappedBy = "universidad")
     @JsonIgnoreProperties({ "universidad" })
-    private List<Carrera> carrera;
+    private List<UniversidadCarrera> universidadCarrera;
 
-    @ManyToMany
-    @JoinTable(
-        name="universidad_beca",
-        joinColumns = @JoinColumn(name="universidad_id"),
-        inverseJoinColumns = @JoinColumn(name="beca_id")
-    )
-    @JsonIgnoreProperties({"universidad"})
-    private List<Beca> beca;
+    @OneToMany(mappedBy="universidad")
+    @JsonIgnoreProperties({ "universidad" })
+    private List<UniversidadBeca> universidadBeca;
 
     public Universidad() {
     }
 
     public Universidad(Long id, String nombre, Departamento departamento, double costoMensualMinimo,
-            double costoMensualMaximo, TipoUniversidad tipoUniversidad, List<Carrera> carrera, List<Beca> beca) {
+            double costoMensualMaximo, String imagen, String url, TipoUniversidad tipoUniversidad,
+            List<UniversidadCarrera> universidadCarrera, List<UniversidadBeca> universidadBeca) {
         this.id = id;
         this.nombre = nombre;
         this.departamento = departamento;
         this.costoMensualMinimo = costoMensualMinimo;
         this.costoMensualMaximo = costoMensualMaximo;
+        this.imagen = imagen;
+        this.url = url;
         this.tipoUniversidad = tipoUniversidad;
-        this.carrera = carrera;
-        this.beca=beca;
+        this.universidadCarrera = universidadCarrera;
+        this.universidadBeca = universidadBeca;
     }
 
     public Universidad(String nombre, Departamento departamento, double costoMensualMinimo, double costoMensualMaximo,
-            TipoUniversidad tipoUniversidad, List<Carrera> carrera, List<Beca> beca) {
+            TipoUniversidad tipoUniversidad, List<UniversidadCarrera> universidadCarrera, List<UniversidadBeca> universidadBeca) {
         this.nombre = nombre;
         this.departamento = departamento;
         this.costoMensualMinimo = costoMensualMinimo;
         this.costoMensualMaximo = costoMensualMaximo;
         this.tipoUniversidad = tipoUniversidad;
-        this.carrera = carrera;
-        this.beca=beca;
+        this.universidadCarrera = universidadCarrera;
+        this.universidadBeca = universidadBeca;
     }
 
     public Long getId() {
@@ -116,6 +121,22 @@ public class Universidad {
         this.costoMensualMaximo = costoMensualMaximo;
     }
 
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public TipoUniversidad getTipoUniversidad() {
         return tipoUniversidad;
     }
@@ -124,20 +145,20 @@ public class Universidad {
         this.tipoUniversidad = tipoUniversidad;
     }
 
-    public List<Carrera> getCarrera() {
-        return carrera;
+    public List<UniversidadCarrera> getUniversidadCarrera() {
+        return universidadCarrera;
     }
 
-    public void setCarrera(List<Carrera> carrera) {
-        this.carrera = carrera;
+    public void setUniversidadCarrera(List<UniversidadCarrera> universidadCarrera) {
+        this.universidadCarrera = universidadCarrera;
     }
 
-    public List<Beca> getBeca(){
-        return beca;
+    public List<UniversidadBeca> getUniversidadBeca() {
+        return universidadBeca;
     }
 
-    public void setBeca(List<Beca> beca){
-        this.beca=beca;
+    public void setUniversidadBeca(List<UniversidadBeca> universidadBeca) {
+        this.universidadBeca = universidadBeca;
     }
 
     @Override

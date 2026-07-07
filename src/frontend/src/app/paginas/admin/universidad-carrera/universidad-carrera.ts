@@ -28,6 +28,9 @@ export class UniversidadCarrera {
   universidadSeleccionada: any = null;
   carreraSeleccionada: any = null;
 
+  rankingSeleccionado: any = null;
+  totalSeleccionado: any = null;
+
   constructor(private universidadServicio: UniversidadServicio, private carreraServicio: CarreraServicio, private universidadCarreraServicio: UniversidadCarreraServicio, private cd: ChangeDetectorRef, private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
@@ -45,7 +48,11 @@ export class UniversidadCarrera {
   }
 
   volverDashboard() {
-    this.router.navigate(['/dashboard'])
+    this.router.navigate(['/dashboard']);
+  }
+
+  elegirUniversidad() {
+    this.router.navigate(['elegir-universidad-carrera']);
   }
 
   universidadAgregada: any = null;
@@ -71,9 +78,28 @@ export class UniversidadCarrera {
 
     if (!this.carreraSeleccionada) return;
 
+    if (this.rankingSeleccionado === null) {
+      Swal.fire('Oops...', 'El ranking no puede estar vacio', 'warning')
+      return;
+    } else if(this.rankingSeleccionado<=0 || this.rankingSeleccionado>=6){
+      Swal.fire('Oops...','El ranking debe estar entre 1 y 5','warning')
+      return;
+    }
+
+    if (this.totalSeleccionado === null) {
+      Swal.fire('Oops...', 'El total no puede estar vacio', 'warning')
+      return;
+    } else if(this.totalSeleccionado<=0){
+      Swal.fire('Oops...','El total no puede ser menor o igual que cero','warning')
+      return;
+    }
+
     const carreraExistente = this.carreraAgregada.find(
       p => p.id === this.carreraSeleccionada.id
     );
+
+    this.carreraSeleccionada.ranking = this.rankingSeleccionado;
+    this.carreraSeleccionada.total = this.totalSeleccionado;
 
     if (carreraExistente) {
       Swal.fire('Oops...', 'Ya se agregó la carrera', 'warning')
@@ -83,7 +109,9 @@ export class UniversidadCarrera {
         nombre: this.carreraSeleccionada.nombre,
         descripcion: this.carreraSeleccionada.descripcion,
         duracion: this.carreraSeleccionada.duracion,
-        tipoCarrera: this.carreraSeleccionada.tipoCarrera
+        tipoCarrera: this.carreraSeleccionada.tipoCarrera,
+        ranking: this.carreraSeleccionada.ranking,
+        total: this.carreraSeleccionada.total
       });
     }
   }

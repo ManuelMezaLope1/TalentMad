@@ -5,8 +5,7 @@ import { Registro } from './components/auth/registro/registro';
 import { AuthGuard } from './guards/auth-guard';
 import { Preguntas } from './paginas/usuario/preguntas/preguntas';
 import { Resultado } from './paginas/usuario/resultado/resultado';
-import { DetalleCarrera }  from './paginas/usuario/detallecarrera/detallecarrera';
-import { SedesUniversidad } from './paginas/usuario/sedes-universidad/sedes-universidad';
+import { DetalleCarrera } from './paginas/usuario/detallecarrera/detallecarrera';
 import { Perfil } from './paginas/usuario/perfil/perfil';
 import { Dashboard } from './paginas/admin/dashboard/dashboard';
 import { PreguntasAdmin } from './paginas/admin/preguntas-admin/preguntas-admin';
@@ -26,13 +25,21 @@ import { ActualizacionBeca } from './components/beca/actualizacion-beca/actualiz
 import { UniversidadCarrera } from './paginas/admin/universidad-carrera/universidad-carrera';
 import { CarreraBeca } from './paginas/admin/carrera-beca/carrera-beca';
 import { UniversidadBeca } from './paginas/admin/universidad-beca/universidad-beca';
+import { ElegirUniversidad } from './paginas/admin/elegir-universidad/elegir-universidad';
+import { ActualizacionUniversidadCarrera } from './paginas/admin/actualizacion-universidad-carrera/actualizacion-universidad-carrera';
+import { SedesUniversidad } from './paginas/usuario/sedes-universidad/sedes-universidad';
+import { OrigenBeca } from './paginas/admin/origen-beca/origen-beca';
+import { RegistroOrigenBeca } from './components/origen-beca/registro-origen-beca/registro-origen-beca';
+import { ActualizacionOrigenBeca } from './components/origen-beca/actualizacion-origen-beca/actualizacion-origen-beca';
+import { ElegirUniversidadBeca } from './paginas/admin/elegir-universidad-beca/elegir-universidad-beca';
+import { ActualizacionUniversidadBeca } from './paginas/admin/actualizacion-universidad-beca/actualizacion-universidad-beca';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
   { path: 'inicio', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: Registro },
-  { path: 'preguntas', component: Preguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_USER','ROLE_ADMIN'] } },
+  { path: 'preguntas', component: Preguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_USER', 'ROLE_ADMIN'] } },
   { path: 'resultado', component: Resultado, canActivate: [AuthGuard], data: { roles: ['ROLE_USER', 'ROLE_ADMIN'] } },
   { path: 'detallecarrera/:id', component: DetalleCarrera, canActivate: [AuthGuard], data: { roles: ['ROLE_USER', 'ROLE_ADMIN'] } },
   { path: 'sedes-universidad', component: SedesUniversidad, canActivate: [AuthGuard], data: { roles: ['ROLE_USER', 'ROLE_ADMIN'] } },
@@ -42,8 +49,16 @@ export const routes: Routes = [
   { path: 'universidad', component: Universidad, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'carrera', component: Carrera, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'beca', component: Beca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'origen-beca', component: OrigenBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+
   { path: 'universidad-carrera', component: UniversidadCarrera, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'elegir-universidad-carrera', component: ElegirUniversidad, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'actualizacion-universidad-carrera/:id', component: ActualizacionUniversidadCarrera, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+
   { path: 'carrera-beca', component: CarreraBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'elegir-universidad-beca', component: ElegirUniversidadBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'actualizacion-universidad-beca/:id', component: ActualizacionUniversidadBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+
   { path: 'universidad-beca', component: UniversidadBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
 
   { path: 'creacion-categoria-preguntas', component: RegistroCategoriaPreguntas, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
@@ -60,6 +75,9 @@ export const routes: Routes = [
 
   { path: 'creacion-beca', component: RegistroBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'actualizacion-beca/:id', component: ActualizacionBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+
+  { path: 'creacion-origen-beca', component: RegistroOrigenBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'actualizacion-origen-beca/:id', component: ActualizacionOrigenBeca, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
 ];
 
 export const routing = RouterModule.forRoot(routes, {

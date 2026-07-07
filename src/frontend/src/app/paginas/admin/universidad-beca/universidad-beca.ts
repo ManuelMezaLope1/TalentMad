@@ -30,12 +30,17 @@ export class UniversidadBeca {
   constructor(private universidadServicio: UniversidadServicio, private becaServicio: BecaServicio, private universidadBecaServicio: UniversidadBecaServicio, private router: Router) { }
 
   ngOnInit(): void {
+    
     this.universidades$ = this.universidadServicio.obtenerListaDeUniversidad();
     this.becas$ = this.becaServicio.obtenerListaDeBeca();
   }
 
   volverDashboard() {
     this.router.navigate(['/dashboard'])
+  }
+
+  elegirUniversidadBeca() {
+    this.router.navigate(['elegir-universidad-beca']);
   }
 
   universidadAgregada: any = null;
@@ -78,6 +83,10 @@ export class UniversidadBeca {
         restriccion: this.becaSeleccionada.restriccion,
       });
     }
+  }
+
+  quitarBeca(index: number) {
+    this.becaAgregada.splice(index, 1);
   }
 
   guardarRelaciones() {

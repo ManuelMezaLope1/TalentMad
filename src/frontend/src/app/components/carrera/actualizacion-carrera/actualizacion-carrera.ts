@@ -18,6 +18,8 @@ import Swal from 'sweetalert2';
 export class ActualizacionCarrera {
   id: number;
   carrera: ICarrera = new ICarrera();
+  imagenSeleccionada!: File;
+  imagenPreview: any;
 
   constructor(private carreraServicio: CarreraServicio, private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) { }
 
@@ -26,6 +28,7 @@ export class ActualizacionCarrera {
 
     this.carreraServicio.obtenerCarreraPorId(this.id).subscribe(carrera => {
       this.carrera = carrera;
+      this.imagenPreview = this.carrera.imagen;
 
       this.cd.detectChanges();
     });
@@ -37,7 +40,7 @@ export class ActualizacionCarrera {
 
   tipos = [
     'Administración', 'Arquitectura', 'Arte y Diseño', 'Artes Escénicas', 'Ciencias Básicas', 'Ciencias de la Salud',
-    'Ciencias Económicas', 'Ciencias Sociales', 'Computación', 'Comunicaciones',  'Derecho', 'Educación', 'Gastronomía, Hotelería y Turismo',
+    'Ciencias Económicas', 'Ciencias Sociales', 'Computación', 'Comunicaciones', 'Derecho', 'Educación', 'Gastronomía, Hotelería y Turismo',
     'Gestión y Alta Dirección', 'Ingeniería', 'Letras y Ciencias Humanas', 'Medicina', 'Negocios', 'Psicología'
   ];
 
@@ -46,9 +49,39 @@ export class ActualizacionCarrera {
     Swal.fire('Carrera actualizada', 'La carrera ha sido actualizada éxitosamente', 'success');
   }
 
+  seleccionarImagen(event: any): void {
+    this.imagenSeleccionada = event.target.files[0];
+    if (this.imagenSeleccionada) {
+      const reader = new FileReader();
+      reader.readAsDataURL(this.imagenSeleccionada);
+      reader.onload = () => {
+        this.imagenPreview = reader.result;
+        this.cd.detectChanges();
+      };
+    }
+  }
+
+
   onSubmit(): void {
+    const formData = new FormData();
+
+    formData.append(
+      'carrera',
+      new Blob(
+        [JSON.stringify(this.carrera)],
+        { type: 'application/json' }
+      )
+    );
+
+    if (this.imagenSeleccionada) {
+      formData.append(
+        'imagen',
+        this.imagenSeleccionada
+      )
+    }
+
     if (this.carrera) {
-      this.carreraServicio.actualizarCarrera(this.id, this.carrera).pipe(
+      this.carreraServicio.actualizarCarrera(this.id, formData).pipe(
         tap(dato => {
           this.irALaListaDeCarrera();
         }),

@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.backend.beca.modelo.Beca;
-import com.springboot.backend.universidad.modelo.Universidad;
+import com.springboot.backend.universidadcarrera.modelo.UniversidadCarrera;
 
 import jakarta.persistence.*;
 
@@ -28,14 +28,12 @@ public class Carrera {
     @Column(name="tipo_carrera", nullable = false)
     private String tipoCarrera;
 
-    @ManyToMany
-    @JoinTable(
-        name="universidad_carrera",
-        joinColumns = @JoinColumn(name="carrera_id"),
-        inverseJoinColumns = @JoinColumn(name="universidad_id")
-    )
-    @JsonIgnoreProperties({"carrera"})
-    private List<Universidad> universidad;
+    @Column(name="imagen")
+    private String imagen;
+
+    @OneToMany(mappedBy = "carrera")
+    @JsonIgnoreProperties({"universidadCarrera"})
+    private List<UniversidadCarrera> universidadCarrera;
 
     @ManyToMany(mappedBy = "carrera")
     @JsonIgnoreProperties({"carrera"})
@@ -47,26 +45,28 @@ public class Carrera {
     public Carrera(){}
 
     public Carrera(Long id, String nombre, String descripcion, Integer duracion, String tipoCarrera,
-            List<Universidad> universidad, List<Beca> beca, String combinacion) {
+            List<UniversidadCarrera> universidadCarrera, List<Beca> beca, String combinacion, String imagen) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
         this.tipoCarrera = tipoCarrera;
-        this.universidad = universidad;
+        this.universidadCarrera = universidadCarrera;
         this.beca = beca;
         this.combinacion=combinacion;
+        this.imagen=imagen;
     }
 
     public Carrera(String nombre, String descripcion, Integer duracion, String tipoCarrera,
-            List<Universidad> universidad, List<Beca> beca, String combinacion) {
+            List<UniversidadCarrera> universidadCarrera, List<Beca> beca, String combinacion, String imagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
         this.tipoCarrera = tipoCarrera;
-        this.universidad = universidad;
+        this.universidadCarrera = universidadCarrera;
         this.beca = beca;
         this.combinacion=combinacion;
+        this.imagen=imagen;
     }
     
     public Long getId() {
@@ -109,12 +109,12 @@ public class Carrera {
         this.tipoCarrera = tipoCarrera;
     }
 
-    public List<Universidad> getUniversidad() {
-        return universidad;
+    public List<UniversidadCarrera> getUniversidadCarrera() {
+        return universidadCarrera;
     }
 
-    public void setUniversidad(List<Universidad> universidad) {
-        this.universidad = universidad;
+    public void setUniversidadCarrera(List<UniversidadCarrera> universidadCarrera) {
+        this.universidadCarrera = universidadCarrera;
     }
 
     public List<Beca> getBeca() {
@@ -131,6 +131,14 @@ public class Carrera {
 
     public void setCombinacion(String combinacion) {
         this.combinacion = combinacion;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     @Override

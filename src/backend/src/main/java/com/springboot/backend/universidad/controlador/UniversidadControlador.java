@@ -1,5 +1,6 @@
 package com.springboot.backend.universidad.controlador;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,10 +8,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.springboot.backend.excepcion.ResourceNotFoundException;
 import com.springboot.backend.universidad.modelo.Universidad;
+import com.springboot.backend.universidad.modelo.UniversidadImagenUrlDto;
+import com.springboot.backend.universidad.modelo.UniversidadSedesDto;
 import com.springboot.backend.universidad.repositorio.UniversidadRepositorio;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +24,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/v1/public")
@@ -41,16 +48,34 @@ public class UniversidadControlador {
         Universidad universidad=universidadRepositorio.findById(id).orElseThrow(()->new ResourceNotFoundException("No existe la universidad con el id: "+id));
         return ResponseEntity.ok(universidad);
     }
+
+    @GetMapping("/universidad-imagen")
+    public ResponseEntity<UniversidadImagenUrlDto> obtenerImagen(@RequestParam String nombre) {
+        UniversidadImagenUrlDto uci=universidadRepositorio.obtenerImagenUrlDeUniversidad(nombre);
+        return ResponseEntity.ok(uci);
+    }
+
+    @GetMapping("/universidad-sedes")
+    public List<UniversidadSedesDto> obtenerSedes(@RequestParam String nombre, @RequestParam Long id) {
+        return universidadRepositorio.obtenerSedes(nombre, id);
+    }
     
     @PutMapping("/universidad/{id}")
-    public ResponseEntity<Universidad> actualizarUniversidad(@PathVariable Long id, @RequestBody Universidad detallesUniversidad) {
+    public ResponseEntity<Universidad> actualizarUniversidad(@PathVariable Long id, @RequestPart("universidad") Universidad detallesUniversidad, @RequestPart(value = "imagen", required = false) MultipartFile imagen) throws IOException {
         Universidad universidadExistente=universidadRepositorio.findById(id).orElseThrow(()->new ResourceNotFoundException("No existe la universidad con el id: "+id));
 
         universidadExistente.setNombre(detallesUniversidad.getNombre());
         universidadExistente.setDepartamento(detallesUniversidad.getDepartamento());
         universidadExistente.setCostoMensualMinimo(detallesUniversidad.getCostoMensualMinimo());
         universidadExistente.setCostoMensualMaximo((detallesUniversidad.getCostoMensualMaximo()));
+        universidadExistente.setUrl(detallesUniversidad.getUrl());
         universidadExistente.setTipoUniversidad(detallesUniversidad.getTipoUniversidad());
+
+        if (imagen != null && !imagen.isEmpty()) {
+            String nombreImagen = imagen.getOriginalFilename();
+
+            universidadExistente.setImagen(nombreImagen);
+        }
 
         Universidad universidadActualizada=universidadRepositorio.save(universidadExistente);
         

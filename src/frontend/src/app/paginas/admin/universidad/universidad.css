@@ -172,6 +172,32 @@
   flex-wrap: wrap;
 }
 
+@media(max-width:7000px) {
+  .universidad-nombre{
+    height: 100px;
+  }
+
+  .op1.activo {
+    transform: translateX(90px);
+  }
+
+  .op2.activo {
+    transform: translateX(180px);
+  }
+
+  .op3.activo {
+    transform: translateX(270px);
+  }
+
+  .op4.activo {
+    transform: translateX(360px);
+  }
+
+  .op5.activo {
+    transform: translateX(450px);
+  }
+}
+
 @media(max-width:1500px) {
   .universidad-nombre{
     height: 100px;

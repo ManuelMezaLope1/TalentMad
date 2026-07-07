@@ -23,8 +23,8 @@ export class RegistroCarrera {
   }
 
   tipos = [
-    'Administración', 'Arquitectura','Arte y Diseño','Artes Escénicas', 'Ciencias Básicas', 'Ciencias de la Salud', 
-    'Ciencias Económicas', 'Ciencias Sociales', 'Computación', 'Comunicaciones','Derecho', 'Educación', 'Gastronomía, Hotelería y Turismo', 
+    'Administración', 'Arquitectura', 'Arte y Diseño', 'Artes Escénicas', 'Ciencias Básicas', 'Ciencias de la Salud',
+    'Ciencias Económicas', 'Ciencias Sociales', 'Computación', 'Comunicaciones', 'Derecho', 'Educación', 'Gastronomía, Hotelería y Turismo',
     'Gestión y Alta Dirección', 'Ingeniería', 'Letras y Ciencias Humanas', 'Medicina', 'Negocios', 'Psicología'
   ];
 
@@ -33,8 +33,42 @@ export class RegistroCarrera {
     this.carrera.tipoCarrera = tipoSeleccionado || '';
   }
 
+  imagenSeleccionada!: File;
+  imagenPreview: any;
+
+  seleccionarImagen(event: any): void {
+    this.imagenSeleccionada = event.target.files[0];
+    if (this.imagenSeleccionada) {
+      const reader = new FileReader();
+      reader.readAsDataURL(this.imagenSeleccionada);
+      reader.onload = () => {
+        this.imagenPreview = reader.result;
+        this.cd.detectChanges();
+      };
+    }
+  }
+
+  onSubmit() {
+    this.guardarCarrera();
+  }
+
   guardarCarrera() {
-    this.carreraServicio.registrarCarrera(this.carrera).pipe(
+    const formData = new FormData();
+
+    formData.append(
+      'carrera',
+      new Blob(
+        [JSON.stringify(this.carrera)],
+        { type: 'application/json' }
+      )
+    );
+
+    formData.append(
+      'imagen',
+      this.imagenSeleccionada
+    )
+
+    this.carreraServicio.registrarCarrera(formData).pipe(
       tap(dato => {
         this.irALaListaDeCarreras();
       }),
@@ -58,9 +92,5 @@ export class RegistroCarrera {
         this.router.navigate(['/carrera']);
       }
     });
-  }
-
-  onSubmit() {
-    this.guardarCarrera();
   }
 }

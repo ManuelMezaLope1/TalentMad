@@ -1,4 +1,5 @@
 import { IBeca } from "../beca/IBeca";
+import { IUniversidadCarrera } from "../universidad-carrera/IUniversidadCarrera";
 import { IUniversidad } from "../universidad/IUniversidad"; // ← agregar este import
 
 export class ICarrera {
@@ -7,7 +8,11 @@ export class ICarrera {
     descripcion: string;
     duracion: string;
     tipoCarrera: any;
-    universidad: IUniversidad[]; // ← era ICarrera[], debe ser IUniversidad[]
+    imagen: string;
+    universidad: IUniversidad[];
+    universidadCarrera: IUniversidadCarrera[];
     combinacion: string;
     beca: IBeca[];
+    ranking: number;
+    total: number;
 }

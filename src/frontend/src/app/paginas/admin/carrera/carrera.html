@@ -3,27 +3,28 @@
     <h1 class="text-center">Carreras</h1>
 
     <div class="menu-radial d-flex justify-content-start ml-0">
-        <button class="btn-central" (click)="abierto = !abierto" #btnInfo data-bs-toggle="tooltip" title="Más acciones" (mouseenter)="mostrarTooltip()">
+        <button class="btn-central" (click)="abierto = !abierto" #btnInfo data-bs-toggle="tooltip" title="Más acciones"
+            (mouseenter)="mostrarTooltip()">
             ➕
         </button>
 
-        <button class="btn-opcion op1 btn btn-success" #btnInfoAgregar (click)="registrarCarrera();" [class.activo]="abierto"
-            (mouseenter)="mostrarTooltipAgregar()" title="Agregar carrera">
+        <button class="btn-opcion op1 btn btn-success" #btnInfoAgregar (click)="registrarCarrera();"
+            [class.activo]="abierto" (mouseenter)="mostrarTooltipAgregar()" title="Agregar carrera">
             <i class="material-icons">add</i>
         </button>
 
-        <button class="btn-opcion op2 btn btn-primary" #btnInfoDashboard (click)="volverDashboard()" [class.activo]="abierto"
-            (mouseenter)="mostrarTooltipDashboard()" title="Volver dashboard">
+        <button class="btn-opcion op2 btn btn-primary" #btnInfoDashboard (click)="volverDashboard()"
+            [class.activo]="abierto" (mouseenter)="mostrarTooltipDashboard()" title="Volver dashboard">
             <i class="material-icons">dashboard</i>
         </button>
 
-        <button class="btn-opcion op3 btn btn-warning" #btnInfoFacultad (click)="tipoFiltro='facultad'" [class.activo]="abierto"
-            (mouseenter)="mostrarTooltipFacultad()" title="Ordenar por facultad">
+        <button class="btn-opcion op3 btn btn-warning" #btnInfoFacultad (click)="tipoFiltro='facultad'"
+            [class.activo]="abierto" (mouseenter)="mostrarTooltipFacultad()" title="Ordenar por facultad">
             <i class="material-icons">apartment</i>
         </button>
 
-        <button class="btn-opcion op4 btn btn-warning" #btnInfoNombre (click)="tipoFiltro='nombre'" [class.activo]="abierto"
-            (mouseenter)="mostrarTooltipNombre()" title="Ordenar por nombre">
+        <button class="btn-opcion op4 btn btn-warning" #btnInfoNombre (click)="tipoFiltro='nombre'"
+            [class.activo]="abierto" (mouseenter)="mostrarTooltipNombre()" title="Ordenar por nombre">
             <i class="material-icons">label</i>
         </button>
     </div>
@@ -32,11 +33,13 @@
         <div class="row">
             <div class="col-md-4 mb-4" *ngFor="let car of obtenerCarrerasOrdenadas(carreras$ | async)">
                 <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0 carrera-nombre">{{ car.nombre }}</h5>
-                        <small class="text-light carrera-tipo">{{ car.tipoCarrera }}</small>
+                    <div class="img-container">
+                        <img [src]="car.imagen" alt="Imagen de la carrera" class="imagen-carrera">
                     </div>
                     <div class="card-body">
+                        <h5 class="card-title mb-0 carrera-nombre">{{ car.nombre }}</h5>
+                        <small class="categoria-badge">{{ car.tipoCarrera }}</small>
+
                         <p class="card-text text-muted carrera-descripcion">{{ car.descripcion }}</p>
 
                         <br>

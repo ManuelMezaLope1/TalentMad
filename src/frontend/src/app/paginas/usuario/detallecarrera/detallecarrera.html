@@ -23,7 +23,7 @@
       <!-- ── FILTROS HORIZONTALES ──────────────────────────────────── -->
       <div class="filtros-horizontal">
         <div class="filtros-header">
-          <h2 class="filtros-title">🎯 Filtrar universidades</h2>
+          <h2 class="filtros-title">Filtrar universidades</h2>
           <button (click)="limpiarFiltros()" class="btn-limpiar-horizontal">✕ Limpiar</button>
         </div>
 
@@ -111,9 +111,9 @@
               </div>-->
 
               <div class="beca-filtro">
-                <label class="filtro-label-horizontal" for="becaSelect">🎓 Origen de beca</label>
+                <label class="filtro-label-horizontal" for="becaSelect">Beca</label>
                 <select id="becaSelect" class="filtro-select-horizontal" [(ngModel)]="becaFiltro">
-                  <option value="">--Seleccione el origen--</option>
+                  <option value="">--Seleccione Beca--</option>
                   <option *ngFor="let entidad of entidadesBeca" [value]="entidad">
                     {{ entidad }}
                   </option>
@@ -155,7 +155,7 @@
 
             <div class="uni-card-footer">
               <p class="uni-nombre">{{ uni.nombre }}</p>
-              
+
               <button type="button" class="btn-sedes" (click)="irASedes(uni.nombre)">
                 <span class="uni-sedes-badge">
                   {{ uni.cantidadSedes }} {{ uni.cantidadSedes === 1 ? 'sede' : 'sedes' }} →
@@ -165,7 +165,7 @@
               <button *ngIf="uni.universidadBeca.length > 0" type="button" class="btn-ver-becas"
                 (click)="abrirModalBecas(uni)">
                 <span class="ver-becas-info">
-                  <span class="ver-becas-icon">🎓</span>
+                  <span class="ver-becas-icon"></span>
                   <span class="ver-becas-text">{{uni.origen}} </span>
                 </span>
                 <span class="ver-becas-cta">Ver becas →</span>
@@ -189,7 +189,14 @@
             <p class="modal-becas-universidad">{{ universidadModal?.nombre }}</p>
             <h3 class="modal-becas-title">🎓 Becas y convenios disponibles</h3>
           </div>
-          <button type="button" class="modal-close-btn" (click)="cerrarModalBecas()">✕</button>
+          <div class="modal-becas-header-actions">
+            <button type="button" class="btn-imprimir-todas" (click)="imprimirTodasLasBecas()"
+              *ngIf="becas && becas.length > 0" title="Imprimir todas las becas">
+              <span class="material-icons" style="font-size:17px;">print</span>
+              <span>Imprimir todo</span>
+            </button>
+            <button type="button" class="modal-close-btn" (click)="cerrarModalBecas()">✕</button>
+          </div>
         </div>
 
         <div class="modal-becas-body">
@@ -203,7 +210,13 @@
             <div class="beca-mini-card" *ngFor="let beca of becas">
               <div class="beca-mini-header">
                 <span class="beca-mini-nombre">{{ beca.nombre }}</span>
-                <span class="beca-mini-tipo">{{ beca.tipoBeca }}</span>
+                <div class="beca-mini-header-actions">
+                  <span class="beca-mini-tipo">{{ beca.tipoBeca }}</span>
+                  <button type="button" class="btn-imprimir-beca" (click)="imprimirBeca(beca)"
+                    title="Imprimir esta beca">
+                    <span class="material-icons" style="font-size:15px;">print</span>
+                  </button>
+                </div>
               </div>
               <p class="beca-mini-desc">{{ beca.descripcion }}</p>
 

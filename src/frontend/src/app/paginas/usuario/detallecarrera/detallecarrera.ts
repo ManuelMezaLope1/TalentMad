@@ -34,7 +34,7 @@ export class DetalleCarrera implements OnInit, OnDestroy {
   becas: any[] = [];
   isLoading = true;
   private destroy$ = new Subject<void>();
-  
+
   costoDesde: number | null = null;
   costoHasta: number | null = null;
 
@@ -453,6 +453,117 @@ export class DetalleCarrera implements OnInit, OnDestroy {
         carreraId: this.carrera?.id,
       }
     });
+  }
+
+  // ── Impresión de becas ────────────────────────────────────────────────────
+
+  private estilosImpresion(): string {
+    return `
+      body { font-family: 'DM Sans', Arial, sans-serif; padding: 40px; color: #1f2937; }
+      .print-doc-header { border-bottom: 3px solid #2563eb; padding-bottom: 16px; margin-bottom: 28px; }
+      .print-universidad { font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+      .print-doc-header h1 { font-size: 22px; color: #1e3a8a; margin: 4px 0; }
+      .print-carrera { font-size: 13px; color: #6b7280; }
+      .print-card { margin-bottom: 24px; }
+      .print-header { margin-bottom: 10px; }
+      .print-title { font-size: 20px; font-weight: 700; color: #1e3a8a; }
+      .print-tipo { display: inline-block; margin-top: 6px; background: #eff6ff; color: #2563eb; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px; }
+      .print-desc { margin: 14px 0; font-size: 14px; color: #4b5563; font-style: italic; line-height: 1.6; }
+      .print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 16px; }
+      .print-col h3 { font-size: 13px; color: #374151; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.03em; }
+      .print-col ul { margin: 0; padding-left: 18px; }
+      .print-col li { font-size: 13px; color: #4b5563; margin-bottom: 6px; line-height: 1.5; }
+      .print-restriccion { background: #fff7ed; border: 1px solid #fdba74; border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; }
+      .print-restriccion h3 { color: #92400e; font-size: 13px; margin-bottom: 8px; }
+      .print-restriccion li { color: #78350f; font-size: 13px; }
+      .print-duracion { font-size: 13px; color: #6b7280; }
+      .print-divider { border: none; border-top: 1px dashed #d1d5db; margin: 24px 0; }
+      .print-footer { border-top: 1px solid #e5e7eb; padding-top: 12px; margin-top: 24px; font-size: 12px; color: #9ca3af; text-align: right; }
+      @media print { body { padding: 20px; } }
+    `;
+  }
+
+  private abrirVentanaImpresion(titulo: string, cuerpoHtml: string): void {
+    const ventana = window.open('', '_blank', 'width=800,height=900');
+    if (!ventana) {
+      Swal.fire('Oops..', 'Habilita las ventanas emergentes para poder imprimir', 'warning');
+      return;
+    }
+
+    ventana.document.write(`
+      <html>
+        <head>
+          <title>${titulo}</title>
+          <style>${this.estilosImpresion()}</style>
+        </head>
+        <body>${cuerpoHtml}</body>
+      </html>
+    `);
+    ventana.document.close();
+    ventana.onload = () => {
+      ventana.focus();
+      ventana.print();
+    };
+  }
+
+  private renderBecaImpresion(beca: IBeca): string {
+    return `
+      <div class="print-card">
+        <div class="print-header">
+          <div class="print-title">${beca.nombre}</div>
+          <span class="print-tipo">${beca.tipoBeca}</span>
+        </div>
+        <p class="print-desc">${beca.descripcion ?? ''}</p>
+        <div class="print-grid">
+          <div class="print-col">
+            <h3>✅ Beneficios</h3>
+            <ul>${this.splitLista(beca.beneficio).map(i => `<li>${i}</li>`).join('')}</ul>
+          </div>
+          <div class="print-col">
+            <h3>📋 Requisitos</h3>
+            <ul>${this.splitLista(beca.requisito).map(i => `<li>${i}</li>`).join('')}</ul>
+          </div>
+        </div>
+        ${beca.restriccion ? `
+        <div class="print-restriccion">
+          <h3>⚠ Restricciones</h3>
+          <ul>${this.splitLista(beca.restriccion).map(i => `<li>${i}</li>`).join('')}</ul>
+        </div>` : ''}
+        <p class="print-duracion">⏳ Duración: ${beca.duracion ?? 'No especificado'}</p>
+      </div>
+    `;
+  }
+
+  imprimirBeca(beca: IBeca): void {
+    const cuerpo = `
+      <div class="print-doc-header">
+        <div class="print-universidad">${this.universidadModal?.nombre ?? ''}</div>
+        <h1>Detalle de beca</h1>
+        <span class="print-carrera">${this.carrera?.nombre ?? ''}</span>
+      </div>
+      ${this.renderBecaImpresion(beca)}
+      <div class="print-footer">Generado el ${new Date().toLocaleDateString('es-PE')}</div>
+    `;
+    this.abrirVentanaImpresion(`Beca - ${beca.nombre}`, cuerpo);
+  }
+
+  imprimirTodasLasBecas(): void {
+    if (!this.becas || this.becas.length === 0) return;
+
+    const tarjetas = this.becas
+      .map(beca => this.renderBecaImpresion(beca))
+      .join('<hr class="print-divider" />');
+
+    const cuerpo = `
+      <div class="print-doc-header">
+        <div class="print-universidad">${this.universidadModal?.nombre ?? ''}</div>
+        <h1>Becas y convenios disponibles</h1>
+        <span class="print-carrera">${this.carrera?.nombre ?? ''}</span>
+      </div>
+      ${tarjetas}
+      <div class="print-footer">Generado el ${new Date().toLocaleDateString('es-PE')}</div>
+    `;
+    this.abrirVentanaImpresion(`Becas - ${this.universidadModal?.nombre ?? ''}`, cuerpo);
   }
 
   // ── Utilidades ────────────────────────────────────────────────────────────

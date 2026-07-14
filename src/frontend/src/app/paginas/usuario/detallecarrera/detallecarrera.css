@@ -533,7 +533,8 @@
   border-bottom: 1px solid #e8f0fe;
   position: sticky;
   top: 0;
-  background: #fff;
+  z-index: 1000;
+  background: white;
   border-radius: 1.25rem 1.25rem 0 0;
 }
 
@@ -548,6 +549,13 @@
   font-family: 'Space Mono', monospace;
   font-size: 1.05rem;
   color: #1e3a8a;
+}
+
+.modal-becas-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .modal-close-btn {
@@ -824,6 +832,13 @@
   line-height: 1.3;
 }
 
+.beca-mini-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
 .beca-mini-tipo {
   font-size: 0.65rem;
   font-weight: 700;
@@ -949,6 +964,52 @@
   box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
 }
 
+/* ── Botones de impresión ───────────────────────────────── */
+.btn-imprimir-beca {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 0.4rem;
+  background: #eff6ff;
+  color: #2563eb;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-imprimir-beca:hover {
+  background: #dbeafe;
+  border-color: #3b82f6;
+  transform: translateY(-1px);
+}
+
+.btn-imprimir-todas {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 0.6rem;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-imprimir-todas:hover {
+  background: #dbeafe;
+  border-color: #3b82f6;
+  transform: translateY(-1px);
+}
+
 /* ── Responsive ──────────────────────────── */
 @media (max-width: 968px) {
   .filtros-grid {
@@ -1025,5 +1086,9 @@
   .modal-becas-header {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .btn-imprimir-todas span:last-child {
+    display: none;
   }
 }

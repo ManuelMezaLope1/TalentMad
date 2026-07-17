@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 
 import com.springboot.backend.excepcion.ResourceNotFoundException;
+import com.springboot.backend.historial.modelo.CantidadCodigoDto;
 import com.springboot.backend.historial.modelo.Historial;
+import com.springboot.backend.historial.modelo.HistoricoHistorialDto;
 import com.springboot.backend.historial.repositorio.HistorialRepositorio;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,17 +19,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping("/api/v1/private")
+@RequestMapping("/api/v1")
 public class HistorialControlador {
     @Autowired
     private HistorialRepositorio historialRepositorio;
 
-    @PostMapping("/historial")
+    @PostMapping("/private/historial")
     public Historial guardarHistorial(@RequestBody Historial historial) {
         return historialRepositorio.save(historial);
     }
  
-    @GetMapping("/historial")
+    @GetMapping("/private/historial")
     public ResponseEntity<List<Historial>> obtenerHistorial(Authentication auth) {
         String username = auth.getName();
 
@@ -36,9 +38,20 @@ public class HistorialControlador {
         return ResponseEntity.ok(historial);
     }
 
-    @GetMapping("/historial/{id}")
+    @GetMapping("/private/historial/{id}")
     public ResponseEntity<Historial> obtenerHistorialPorId(@PathVariable Long id){
         Historial historial=historialRepositorio.findById(id).orElseThrow(()->new ResourceNotFoundException("No existe el historial con el id: "+id));
         return ResponseEntity.ok(historial);
     }
+
+    @GetMapping("/public/historial-cantidad")
+    public List<CantidadCodigoDto> obtenerCantidadCodigo() {
+        return historialRepositorio.obtenerCantidadCodigo();
+    }
+    
+    @GetMapping("/public/historial-historico")
+    public List<HistoricoHistorialDto> obtenerHistoricoHistorial() {
+        return historialRepositorio.obtenerHistoricoHistorial();
+    }
+    
 }

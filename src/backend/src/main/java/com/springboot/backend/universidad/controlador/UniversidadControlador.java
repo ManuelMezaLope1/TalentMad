@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.springboot.backend.beca.modelo.BecaNombreCantidadDto;
+import com.springboot.backend.beca.modelo.CantidadBecaDto;
 import com.springboot.backend.excepcion.ResourceNotFoundException;
 import com.springboot.backend.universidad.modelo.Universidad;
 import com.springboot.backend.universidad.modelo.UniversidadImagenUrlDto;
@@ -36,6 +38,31 @@ public class UniversidadControlador {
     @GetMapping("/universidad")
     public List<Universidad> listarTodasLasUniversidades() {
         return universidadRepositorio.findAll();
+    }
+
+    @GetMapping("/universidad-cantidad")
+    public CantidadBecaDto obtenerCantidadUniversidad() {
+        return universidadRepositorio.obtenerCantidadUniversidad();
+    }
+
+    @GetMapping("/universidad-sedes-cantidad")
+    public List<BecaNombreCantidadDto> obtenerUniversidadSedesCantidad() {
+        return universidadRepositorio.obtenerUniversidadSedesCantidad();
+    }
+
+    @GetMapping("/universidad-departamento-cantidad")
+    public List<BecaNombreCantidadDto> obtenerUniversidadDepartamentoCantidad() {
+        return universidadRepositorio.obtenerUniversidadDepartamentoCantidad();
+    }
+
+    @GetMapping("/universidad-carrera-cantidad")
+    public List<BecaNombreCantidadDto> obtenerUniversidadCarreraCantidad() {
+        return universidadRepositorio.obtenerUniversidadCarreraCantidad();
+    }
+
+    @GetMapping("/universidad-beca-cantidad")
+    public List<BecaNombreCantidadDto> obtenerUniversidadBecaCantidad() {
+        return universidadRepositorio.obtenerUniversidadBecaCantidad();
     }
     
     @PostMapping("/universidad")

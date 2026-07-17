@@ -8,7 +8,11 @@
         <a (click)="scrollToSection('beneficios')">Beneficios</a>
         <a (click)="scrollToSection('pasos')">Cómo funciona</a>
         <a (click)="scrollToSection('testimonios')">Testimonios</a>
-
+        <div *ngIf="authServicio.logueado()">
+            <div *ngIf="rolUsuario==='ROLE_ADMIN'">
+                <a (click)="irDashboard()">Dashboard</a>
+            </div>
+        </div>
 
         <div *ngIf="!authServicio.logueado()">
             <a routerLink="/login" class="btn-nav">✨ Comenzar test</a>
@@ -66,6 +70,11 @@
     <a (click)="scrollToSection('beneficios'); closeMobileMenu()">Beneficios</a>
     <a (click)="scrollToSection('pasos'); closeMobileMenu()">Cómo funciona</a>
     <a (click)="scrollToSection('testimonios'); closeMobileMenu()">Testimonios</a>
+    <div *ngIf="authServicio.logueado()">
+        <div *ngIf="rolUsuario==='ROLE_ADMIN'">
+            <a (click)="irDashboard()">Dashboard</a>
+        </div>
+    </div>
 
     <ng-container *ngIf="!authServicio.logueado()">
         <a routerLink="/login" class="mobile-btn-nav" (click)="closeMobileMenu()">

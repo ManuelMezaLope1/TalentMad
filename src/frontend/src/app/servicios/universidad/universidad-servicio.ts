@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { IUniversidad } from './IUniversidad';
 import { UniversidadImagen } from './UniversidadImagen';
 import { UniversidadSedes } from './UniversidadSedes';
+import { Cantidad } from '../dto/Cantidad';
+import { NombreCantidad } from '../dto/NombreCantidad';
 
 @Injectable({
   providedIn: 'root',
@@ -26,15 +28,35 @@ export class UniversidadServicio {
       });
   }
 
-  obtenerSedes(nombre: string, id: number): Observable<UniversidadSedes[]>{
-    return this.HttpClient.get<UniversidadSedes[]>(this.baseURL+'-sedes',
+  obtenerSedes(nombre: string, id: number): Observable<UniversidadSedes[]> {
+    return this.HttpClient.get<UniversidadSedes[]>(this.baseURL + '-sedes',
       {
         params: {
           nombre: nombre,
           id: id
-        }  
+        }
       }
     );
+  }
+
+  obtenerCantidadUniversidad(): Observable<Cantidad> {
+    return this.HttpClient.get<Cantidad>(this.baseURL + '-cantidad');
+  }
+
+  obtenerUniversidadSedesCantidad(): Observable<NombreCantidad[]> {
+    return this.HttpClient.get<NombreCantidad[]>(this.baseURL + '-sedes-cantidad');
+  }
+
+  obtenerUniversidadDepartamentoCantidad(): Observable<NombreCantidad[]> {
+    return this.HttpClient.get<NombreCantidad[]>(this.baseURL + '-departamento-cantidad');
+  }
+
+  obtenerUniversidadCarreraCantidad(): Observable<NombreCantidad[]> {
+    return this.HttpClient.get<NombreCantidad[]>(this.baseURL + '-carrera-cantidad');
+  }
+
+  obtenerUniversidadBecaCantidad(): Observable<NombreCantidad[]> {
+    return this.HttpClient.get<NombreCantidad[]>(this.baseURL + '-beca-cantidad');
   }
 
   registrarUniversidad(formData: FormData): Observable<Object> {

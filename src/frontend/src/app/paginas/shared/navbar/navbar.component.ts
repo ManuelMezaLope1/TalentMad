@@ -18,6 +18,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   mobileMenuOpen = false;
   usuario: any = null;
   username: string = '';
+  rolUsuario: any;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -48,6 +49,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.usuarioServicio.obtenerPerfil().pipe(
       tap(data => {
         this.usuario = data;
+        this.rolUsuario=this.usuario.roles[0].nombre;
         this.cd.detectChanges();
       }),
       catchError(error => {
@@ -102,6 +104,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   irDashboard() {
-    this.router.navigate(['dashboard']);
+    this.router.navigate(['/dashboard']);
   }
 }

@@ -1,52 +1,620 @@
-<div class="panel">
-  <header class="panel-header">
-    <div class="encabezado-texto">
-      <span class="eyebrow">Panel de administración</span>
-      <h1 class="titulo-principal">Gestión del Test Vocacional</h1>
-      <p class="subtitulo">
-        Gestiona el contenido del sistema para mantener actualizado el test vocacional y la información de las carreras.
-      </p>
-    </div>
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <span class="eyebrow">Panel de administración</span>
+    <br>
+    <div class="menu">
+      <button class="menu-item" [class.active]="active==='inicio'" (click)="onInicioTab()">
+        <i class="material-icons">home</i>
+        <span>Inicio</span>
+      </button>
 
-    <label class="buscador" for="buscador-input">
-      <i class="material-icons">search</i>
-      <input
-        id="buscador-input"
-        type="text"
-        placeholder="Buscar una sección…"
-        [value]="busqueda()"
-        (input)="actualizarBusqueda($any($event.target).value)"
-        autocomplete="off"
-      />
-      @if (busqueda()) {
-        <button
-          type="button"
-          class="btn-limpiar"
-          (click)="limpiarBusqueda()"
-          aria-label="Limpiar búsqueda"
-        >
-          <i class="material-icons">close</i>
-        </button>
-      }
-    </label>
-  </header>
+      <button class="menu-item" [class.active]="active==='carrera'" (click)="onCarreraTab()">
+        <i class="material-icons">book</i>
+        <span>Carrera</span>
+      </button>
 
-  @if (sinResultados()) {
-    <div class="sin-resultados">
-      <i class="material-icons">search_off</i>
-      <p>No encontramos secciones que coincidan con "<strong>{{ busqueda() }}</strong>".</p>
-      <button type="button" (click)="limpiarBusqueda()">Ver todas las secciones</button>
+      <button class="menu-item" [class.active]="active==='universidad'" (click)="onUniversidadTab()">
+        <i class="material-icons">apartment</i>
+        <span>Universidad</span>
+      </button>
+
+      <button class="menu-item" [class.active]="active==='beca'" (click)="onBecaTab()">
+        <i class="material-icons">school</i>
+        <span>Beca</span>
+      </button>
+
+      <button class="menu-item" [class.active]="active==='gestion'" (click)="onGestionTab()">
+        <i class="material-icons">engineering</i>
+        <span>Gestión</span>
+      </button>
     </div>
-  } @else {
-    @if (grupoContenido().length > 0) {
-      <section class="grupo-seccion">
-        <div class="grupo-titulo">
-          <i class="material-icons">inventory_2</i>
-          <h2>Contenido</h2>
-          <span class="contador">{{ grupoContenido().length }}</span>
+  </aside>
+
+  <main class="contenido">
+    <div class="tab-content">
+      <div [ngClass]="active == 'inicio' ? 'tab-pane fade show active' : 'tab-pane fade'">
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-usuario">
+            <i class="material-icons">groups</i>
+            <h3>{{cantidadUsuario??0}}</h3>
+            <span>usuarios</span>
+          </div>
+
+          <div class="kpi-card kpi-carrera">
+            <i class="material-icons">book</i>
+            <h3>{{cantidadCarrera??0}}</h3>
+            <span>carreras</span>
+          </div>
+
+          <div class="kpi-card kpi-carrera">
+            <i class="material-icons">book</i>
+            <h3>{{cantidadTipoCarrera??0}}</h3>
+            <span>tipos</span>
+          </div>
         </div>
-        <div class="acciones-grid">
-          @for (accion of grupoContenido(); track accion.ruta) {
+
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-universidad">
+            <i class="material-icons">apartment</i>
+            <h3>{{cantidadUniversidad??0}}</h3>
+            <span>universidades</span>
+          </div>
+
+          <div class="kpi-card kpi-universidad">
+            <i class="material-icons">apartment</i>
+            <h3>{{cantidadDepartamento??0}}</h3>
+            <span>departamentos</span>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-beca">
+            <i class="material-icons">school</i>
+            <h3>{{cantidadBeca??0}}</h3>
+            <span>becas</span>
+          </div>
+
+          <div class="kpi-card kpi-beca">
+            <i class="material-icons">school</i>
+            <h3>{{cantidadTipoBeca??0}}</h3>
+            <span>tipos</span>
+          </div>
+
+          <div class="kpi-card kpi-beca">
+            <i class="material-icons">school</i>
+            <h3>{{cantidadOrigenbeca??0}}</h3>
+            <span>origenes</span>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-pregunta">
+            <i class="material-icons">question_mark</i>
+            <h3>{{cantidadPreguntas??0}}</h3>
+            <span>preguntas</span>
+          </div>
+
+          <div class="kpi-card kpi-pregunta">
+            <i class="material-icons">question_mark</i>
+            <h3>{{cantidadCategoriaPreguntas??0}}</h3>
+            <span>categorías</span>
+          </div>
+        </div>
+
+        <div class="card grafico-card mt-4">
+          <div *ngIf="historicoHistorial.length>0" class="grafico-line">
+            <canvas id="historicoHistorialChart"></canvas>
+          </div>
+
+          <div *ngIf="historicoHistorial.length===0">
+            <div class="recomendacion-vacia">
+              <i class="material-icons icono">warning</i>
+              <h4>Oops...</h4>
+              <p>No se encontraron datos registrados.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="graficos-grid">
+          <div class="card grafico-card mt-4">
+            <div *ngIf="cantidadCodigo.length>0" class="grafico-doughnut">
+              <canvas id="cantidadCodigoChart"></canvas>
+            </div>
+
+            <div *ngIf="cantidadCodigo.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card grafico-card mt-4">
+            <div *ngIf="categoriaPreguntas.length>0" class="grafico-doughnut">
+              <canvas id="cantidadCategoriaPreguntasChart"></canvas>
+            </div>
+
+            <div *ngIf="categoriaPreguntas.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div [ngClass]="active == 'carrera' ? 'tab-pane fade show active' : 'tab-pane fade'">
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-mayor">
+            <h4 class="text-center">Tipo con más Carreras</h4>
+            <div class="grid-mayor">
+              <div class="d-flex justify-content-center">
+                <span class="material-icons icono-mayor">workspace_premium</span>
+              </div>
+
+              <div class="flex-mayor">
+                <span class="nombreMayorSede">{{carreraTipoMayorNombre}}</span>
+                <span class="cantidadMayorSede">{{carreraTipomayorCantidad??0}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-card kpi-mayor">
+            <h4 class="text-center">Tipo en más Universidades</h4>
+            <div class="grid-mayor">
+              <div class="d-flex justify-content-center">
+                <span class="material-icons icono-mayor">workspace_premium</span>
+              </div>
+
+              <div class="flex-mayor">
+                <span class="nombreMayorSede">{{carreraTipoUniversidadMayorNombre}}</span>
+                <span class="cantidadMayorSede">{{carreraTipoUniversidadmayorCantidad??0}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-card kpi-mayor">
+            <h4 class="text-center">Mayor cantidad de Ranking</h4>
+            <div class="grid-mayor">
+              <div class="d-flex justify-content-center">
+                <span class="material-icons icono-mayor">workspace_premium</span>
+              </div>
+
+              <div class="flex-mayor">
+                <span class="nombreMayorSede">Ranking: {{cantidadMayorRanking}}</span>
+                <span class="cantidadMayorSede">{{cantidadMayorCantidad??0}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="graficos-grid">
+          <div class="graficos-flex">
+            <div class="card grafico-card mt-4 grafico-doughnut-card">
+              <div *ngIf="carreraTipo.length>0" class="grafico-doughnut">
+                <button class="btn btn-primary btn-grafico-total" data-bs-toggle="modal"
+                  data-bs-target="#universidadBecaModal" (click)="cargarGraficoTotal('tipoCarrera')">+</button>
+                <canvas id="cantidadTipoCarreraTopSieteChart"></canvas>
+              </div>
+
+              <div *ngIf="carreraTipo.length===0">
+                <div class="recomendacion-vacia">
+                  <i class="material-icons icono">warning</i>
+                  <h4>Oops...</h4>
+                  <p>No se encontraron datos registrados.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card grafico-card mt-4">
+              <div *ngIf="carreraRanking.length>0" class="grafico-doughnut">
+                <canvas id="cantidadCarreraRankingChart"></canvas>
+              </div>
+
+              <div *ngIf="carreraRanking.length===0">
+                <div class="recomendacion-vacia">
+                  <i class="material-icons icono">warning</i>
+                  <h4>Oops...</h4>
+                  <p>No se encontraron datos registrados.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card grafico-card mt-4">
+            <div *ngIf="carreraTipoUniversidadTopDiez.length>0" class="grafico-bar-vertical">
+              <button class="btn btn-primary btn-grafico-total" data-bs-toggle="modal"
+                data-bs-target="#universidadBecaModal" (click)="cargarGraficoTotal('tipoCarreraUniversidad')">+</button>
+              <canvas id="cantidadTipoCarreraUniversidadTopDiezChart"></canvas>
+            </div>
+
+            <div *ngIf="carreraTipoUniversidadTopDiez.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="graficos-grid">
+          <div class="card grafico-card mt-4">
+            <div *ngIf="rankingCarreraPromedio.length>0">
+              <div class="filtro-select-wrapper" [class.open]="rankingDropdownOpen">
+                <button type="button" class="filtro-trigger-btn" (click)="toggleRankingDropdown()">
+                  <span class="filtro-chevron chevron-ranking" [class.open]="rankingDropdownOpen">
+                    <svg width="12" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                  </span>
+                </button>
+
+                <div class="panel-total">
+                  <div class="costo-panel" *ngIf="rankingDropdownOpen">
+                    <div class="panel-grid">
+                      <div *ngFor="let n of carreraNombre" class="boton-eleccion-overflow">
+                        <button class="btn costo-preset-chip" (click)="actualizarNombreCarreraRanking(n)">{{n}}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="text-center">{{nombreCarreraRankingSeleccionada}}</p>
+              <div class="grafico-bar-vertical">
+                <canvas id="cantidadRankingCarreraPromedioChart"></canvas>
+              </div>
+            </div>
+
+            <div *ngIf="rankingCarreraPromedio.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card grafico-card mt-4">
+            <div *ngIf="totalCarreraPromedio.length>0">
+              <div class="filtro-select-wrapper" [class.open]="totalDropdownOpen">
+                <button type="button" class="filtro-trigger-btn" (click)="toggleTotalDropdown()">
+                  <span class="filtro-chevron chevron-total" [class.open]="totalDropdownOpen">
+                    <svg width="12" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                  </span>
+                </button>
+
+                <div class="costo-panel" *ngIf="totalDropdownOpen">
+                  <div class="panel-grid">
+                    <div *ngFor="let n of carreraNombre" class="boton-eleccion-overflow">
+                      <button class="btn costo-preset-chip" (click)="actualizarNombreCarreraTotal(n)">{{n}}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="text-center">{{nombreCarreraTotalSeleccionada}}</p>
+              <div class="grafico-bar-vertical">
+                <canvas id="cantidadTotalCarreraPromedioChart"></canvas>
+              </div>
+            </div>
+
+            <div *ngIf="totalCarreraPromedio.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="graficos-grid">
+          <div class="card grafico-card mt-4">
+            <div class="filtro-select-wrapper" [class.open]="tipoDropdownOpen">
+              <button type="button" class="filtro-trigger-btn" (click)="toggleTipoDropdown()">
+                <span class="filtro-chevron chevron-total" [class.open]="tipoDropdownOpen">
+                  <svg width="12" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                </span>
+              </button>
+
+              <div class="tipo-panel" *ngIf="tipoDropdownOpen">
+                <div class="panel-grid">
+                  <div *ngFor="let t of tipos" class="boton-eleccion-overflow">
+                    <button class="btn costo-preset-chip" (click)="actualizarTipoCarrera(t)">{{t}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-center">{{tipoCarreraSeleccionada}}</p>
+            <div class="grafico-bar-horizontal">
+              <canvas id="cantidadCarreraUniversidadChart"></canvas>
+            </div>
+
+            <div *ngIf="carreraUniversidad.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div [ngClass]="active == 'universidad' ? 'tab-pane fade show active' : 'tab-pane fade'">
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-mayor">
+            <h4 class="text-center">Universidad con más Sedes</h4>
+            <div class="grid-mayor">
+              <div class="d-flex justify-content-center">
+                <span class="material-icons icono-mayor">workspace_premium</span>
+              </div>
+
+              <div class="flex-mayor">
+                <span class="nombreMayorSede">{{universidadSedeMayorNombre}}</span>
+                <span class="cantidadMayorSede">{{universidadSedeMayorCantidad??0}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-card kpi-mayor">
+            <h4 class="text-center">Departamento con más Universidades</h4>
+            <div class="grid-mayor">
+              <div class="d-flex justify-content-center">
+                <span class="material-icons icono-mayor">workspace_premium</span>
+              </div>
+
+              <div class="flex-mayor">
+                <span class="nombreMayorSede">{{universidadDepartamentoMayorNombre}}</span>
+                <span class="cantidadMayorSede">{{universidadDepartamentoMayorCantidad??0}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-mayor">
+            <h4 class="text-center">Universidad con más Carreras</h4>
+            <div class="grid-mayor">
+              <div class="d-flex justify-content-center">
+                <span class="material-icons icono-mayor">workspace_premium</span>
+              </div>
+
+              <div class="flex-mayor">
+                <span class="nombreMayorSede">{{universidadCarreraMayoNombre}}</span>
+                <span class="cantidadMayorSede">{{universidadCarreraMayorCantidad??0}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-card kpi-mayor">
+            <h4 class="text-center">Universidad con más Becas</h4>
+            <div class="grid-mayor">
+              <div class="d-flex justify-content-center">
+                <span class="material-icons icono-mayor">workspace_premium</span>
+              </div>
+
+              <div class="flex-mayor">
+                <span class="nombreMayorSede">{{universidadBecaMayorNombre}}</span>
+                <span class="cantidadMayorSede">{{universidadBecaMayorCantidad??0}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="graficos-grid">
+          <div class="card grafico-card mt-4">
+            <div *ngIf="universidadSedesTopDiez.length>0" class="grafico-bar-vertical">
+              <button class="btn btn-primary btn-grafico-total" data-bs-toggle="modal"
+                data-bs-target="#universidadBecaModal" (click)="cargarGraficoTotal('universidadSedes')">+</button>
+              <canvas id="cantidadUniversidadSedesTopDiezChart"></canvas>
+            </div>
+
+            <div *ngIf="universidadSedesTopDiez.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card grafico-card mt-4">
+            <div *ngIf="universidadDepartamentoTopDiez.length>0" class="grafico-bar-vertical">
+              <button class="btn btn-primary btn-grafico-total" data-bs-toggle="modal"
+                data-bs-target="#universidadBecaModal"
+                (click)="cargarGraficoTotal('universidadDepartamento')">+</button>
+              <canvas id="cantidadUniversidadDepartamentoTopDiezChart"></canvas>
+            </div>
+
+            <div *ngIf="universidadDepartamentoTopDiez.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="graficos-grid">
+          <div class="card grafico-card mt-4">
+            <div *ngIf="universidadCarreraTopDiez.length>0" class="grafico-bar-vertical">
+              <button class="btn btn-primary btn-grafico-total" data-bs-toggle="modal"
+                data-bs-target="#universidadBecaModal" (click)="cargarGraficoTotal('universidadCarrera')">+</button>
+              <canvas id="cantidadUniversidadCarreraTopDiezChart"></canvas>
+            </div>
+
+            <div *ngIf="universidadCarreraTopDiez.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card grafico-card mt-4">
+            <div *ngIf="universidadBecaTopDiez.length>0" class="grafico-bar-vertical">
+              <button class="btn btn-primary btn-grafico-total" data-bs-toggle="modal"
+                data-bs-target="#universidadBecaModal" (click)="cargarGraficoTotal('universidadBeca')">+</button>
+              <canvas id="cantidadUniversidadBecaTopDiezChart"></canvas>
+            </div>
+
+            <div *ngIf="universidadBecaTopDiez.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div [ngClass]="active == 'beca' ? 'tab-pane fade show active' : 'tab-pane fade'">
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-mayor">
+            <h4 class="text-center">Beca con más Universidades</h4>
+            <div class="grid-mayor">
+              <div class="d-flex justify-content-center">
+                <span class="material-icons icono-mayor">workspace_premium</span>
+              </div>
+
+              <div class="flex-mayor">
+                <span class="nombreMayorSede">{{becaUniversidadMayorNombre}}</span>
+                <span class="cantidadMayorSede">{{becaUniversidadMayorCantidad??0}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-card kpi-mayor">
+            <h4 class="text-center">Tipo con más Becas</h4>
+            <div class="grid-mayor">
+              <div class="d-flex justify-content-center">
+                <span class="material-icons icono-mayor">workspace_premium</span>
+              </div>
+
+              <div class="flex-mayor">
+                <span class="nombreMayorSede">{{tipoBecaMayorNombre}}</span>
+                <span class="cantidadMayorSede">{{tipoBecaMayorCantidad??0}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-card kpi-mayor">
+            <h4 class="text-center">Origen con más Becas</h4>
+            <div class="grid-mayor">
+              <div class="d-flex justify-content-center">
+                <span class="material-icons icono-mayor">workspace_premium</span>
+              </div>
+
+              <div class="flex-mayor">
+                <span class="nombreMayorSede">{{origenBecaMayorNombre}}</span>
+                <span class="cantidadMayorSede">{{origenBecaMayorCantidad??0}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="graficos-grid">
+          <div class="card grafico-card mt-4">
+            <div *ngIf="becaUniversidadTopDiez.length>0" class="grafico-bar-vertical">
+              <button class="btn btn-primary btn-grafico-total" data-bs-toggle="modal"
+                data-bs-target="#universidadBecaModal" (click)="cargarGraficoTotal('becaUniversidad')">+</button>
+              <canvas id="cantidadBecaUniversidadTopDiezChart"></canvas>
+            </div>
+
+            <div *ngIf="becaUniversidadTopDiez.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="graficos-flex">
+            <div class="card grafico-card mt-4">
+              <div *ngIf="tipoBeca.length>0" class="grafico-doughnut">
+                <canvas id="cantidadTipoBecaChart"></canvas>
+              </div>
+
+              <div *ngIf="tipoBeca.length===0">
+                <div class="recomendacion-vacia">
+                  <i class="material-icons icono">warning</i>
+                  <h4>Oops...</h4>
+                  <p>No se encontraron datos registrados.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card grafico-card mt-4 grafico-doughnut">
+              <div *ngIf="origenBeca.length>0" class="grafico-doughnut">
+                <canvas id="cantidadOrigenBecaChart"></canvas>
+              </div>
+
+              <div *ngIf="origenBeca.length===0">
+                <div class="recomendacion-vacia">
+                  <i class="material-icons icono">warning</i>
+                  <h4>Oops...</h4>
+                  <p>No se encontraron datos registrados.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div [ngClass]="active == 'gestion' ? 'tab-pane fade show active' : 'tab-pane fade'">
+        <header class="panel-header">
+          <div class="encabezado-texto">
+            <span class="eyebrow">Panel de administración</span>
+            <h1 class="titulo-principal">Gestión del Test Vocacional</h1>
+            <p class="subtitulo">
+              Gestiona el contenido del sistema para mantener actualizado el test vocacional y la información de las
+              carreras.
+            </p>
+          </div>
+
+          <label class="buscador" for="buscador-input">
+            <i class="material-icons">search</i>
+            <input id="buscador-input" type="text" placeholder="Buscar una sección…" [value]="busqueda()"
+              (input)="actualizarBusqueda($any($event.target).value)" autocomplete="off" />
+            @if (busqueda()) {
+            <button type="button" class="btn-limpiar" (click)="limpiarBusqueda()" aria-label="Limpiar búsqueda">
+              <i class="material-icons">close</i>
+            </button>
+            }
+          </label>
+        </header>
+
+        @if (sinResultados()) {
+        <div class="sin-resultados">
+          <i class="material-icons">search_off</i>
+          <p>No encontramos secciones que coincidan con "<strong>{{ busqueda() }}</strong>".</p>
+          <button type="button" (click)="limpiarBusqueda()">Ver todas las secciones</button>
+        </div>
+        } @else {
+        @if (grupoContenido().length > 0) {
+        <section class="grupo-seccion">
+          <div class="grupo-titulo">
+            <i class="material-icons">inventory_2</i>
+            <h2>Contenido</h2>
+            <span class="contador">{{ grupoContenido().length }}</span>
+          </div>
+          <div class="acciones-grid">
+            @for (accion of grupoContenido(); track accion.ruta) {
             <a [routerLink]="accion.ruta" routerLinkActive="active" class="accion-card">
               <span class="accion-etiqueta">{{ accion.etiqueta }}</span>
               <div class="accion-icono"><i class="material-icons">{{ accion.icono }}</i></div>
@@ -54,20 +622,20 @@
               <div class="accion-descripcion">{{ accion.descripcion }}</div>
               <span class="accion-flecha"><i class="material-icons">arrow_forward</i></span>
             </a>
-          }
-        </div>
-      </section>
-    }
+            }
+          </div>
+        </section>
+        }
 
-    @if (grupoVinculos().length > 0) {
-      <section class="grupo-seccion">
-        <div class="grupo-titulo">
-          <i class="material-icons">hub</i>
-          <h2>Vínculos</h2>
-          <span class="contador">{{ grupoVinculos().length }}</span>
-        </div>
-        <div class="acciones-grid">
-          @for (accion of grupoVinculos(); track accion.ruta) {
+        @if (grupoVinculos().length > 0) {
+        <section class="grupo-seccion">
+          <div class="grupo-titulo">
+            <i class="material-icons">hub</i>
+            <h2>Vínculos</h2>
+            <span class="contador">{{ grupoVinculos().length }}</span>
+          </div>
+          <div class="acciones-grid">
+            @for (accion of grupoVinculos(); track accion.ruta) {
             <a [routerLink]="accion.ruta" routerLinkActive="active" class="accion-card accion-card--vinculo">
               <span class="accion-etiqueta">{{ accion.etiqueta }}</span>
               <div class="accion-icono"><i class="material-icons">{{ accion.icono }}</i></div>
@@ -75,9 +643,132 @@
               <div class="accion-descripcion">{{ accion.descripcion }}</div>
               <span class="accion-flecha"><i class="material-icons">arrow_forward</i></span>
             </a>
-          }
-        </div>
-      </section>
-    }
-  }
+            }
+          </div>
+        </section>
+        }
+        }
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal fade" id="universidadBecaModal" tabindex="-1" aria-labelledby="universidadBecaModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Gráfico Completo</h1>
+        <button type="button" class="btn-close btn-primary" style="border-radius: 50px; width: 25px;"
+          data-bs-dismiss="modal" aria-label="Close">X</button>
+      </div>
+      <div class="modal-body">
+        <ng-container *ngIf="eleccionGraficoTotal==='universidadBeca'">
+          <div class="card grafico-card mt-4">
+            <div *ngIf="universidadBeca.length>0" class="grafico-bar-horizontal">
+              <canvas id="cantidadUniversidadBecaChart"></canvas>
+            </div>
+
+            <div *ngIf="universidadBeca.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>universidadBeca
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="eleccionGraficoTotal==='universidadCarrera'">
+          <div class="card grafico-card mt-4">
+            <div *ngIf="universidadCarrera.length>0" class="grafico-bar-horizontal">
+              <canvas id="cantidadUniversidadCarreraChart"></canvas>
+            </div>
+
+            <div *ngIf="universidadCarrera.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>universidadBeca
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="eleccionGraficoTotal==='universidadDepartamento'">
+          <div *ngIf="universidadDepartamento.length>0" class="grafico-bar-horizontal">
+            <canvas id="cantidadUniversidadDepartamentoChart"></canvas>
+          </div>
+
+          <div *ngIf="universidadDepartamento.length===0">
+            <div class="recomendacion-vacia">
+              <i class="material-icons icono">warning</i>
+              <h4>Oops...</h4>
+              <p>No se encontraron datos registrados.</p>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="eleccionGraficoTotal==='universidadSedes'">
+          <div *ngIf="universidadSedes.length>0" class="grafico-bar-horizontal">
+            <canvas id="cantidadUniversidadSedesChart"></canvas>
+          </div>
+
+          <div *ngIf="universidadSedes.length===0">
+            <div class="recomendacion-vacia">
+              <i class="material-icons icono">warning</i>
+              <h4>Oops...</h4>
+              <p>No se encontraron datos registrados.</p>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="eleccionGraficoTotal==='becaUniversidad'">
+          <div *ngIf="becaUniversidad.length>0" class="grafico-bar-horizontal">
+            <canvas id="cantidadBecaUniversidadChart"></canvas>
+          </div>
+
+          <div *ngIf="becaUniversidad.length===0">
+            <div class="recomendacion-vacia">
+              <i class="material-icons icono">warning</i>
+              <h4>Oops...</h4>
+              <p>No se encontraron datos registrados.</p>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="eleccionGraficoTotal==='tipoCarrera'">
+          <div class="card grafico-card mt-4 grafico-doughnut-card">
+            <div *ngIf="carreraTipo.length>0" class="grafico-bar-horizontal">
+              <canvas id="cantidadTipoCarreraChart"></canvas>
+            </div>
+
+            <div *ngIf="carreraTipo.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="eleccionGraficoTotal==='tipoCarreraUniversidad'">
+          <div class="card grafico-card mt-4">
+            <div *ngIf="carreraTipoUniversidad.length>0" class="grafico-bar-horizontal">
+              <canvas id="cantidadTipoCarreraUniversidadChart"></canvas>
+            </div>
+
+            <div *ngIf="carreraTipoUniversidad.length===0">
+              <div class="recomendacion-vacia">
+                <i class="material-icons icono">warning</i>
+                <h4>Oops...</h4>
+                <p>No se encontraron datos registrados.</p>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
 </div>

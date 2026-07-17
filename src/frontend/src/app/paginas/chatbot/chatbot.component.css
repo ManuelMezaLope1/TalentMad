@@ -1,7 +1,7 @@
 .chatbot-fab {
   position: fixed;
-  bottom: 25px;
-  right: 25px;
+  bottom: 0px;
+  left: 0px;
   width: 180px;
   height: 180px;
   background: transparent;
@@ -31,8 +31,8 @@
 }
 
 .chatbot-fab-img {
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
   object-fit: contain;
 }
 
@@ -57,7 +57,7 @@
 .chatbot-window {
   position: fixed;
   bottom: 100px;
-  right: 30px;
+  left: 20px;
   width: 380px;
   height: 500px;
   background: white;

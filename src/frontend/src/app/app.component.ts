@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './paginas/shared/navbar/navbar.component';
 import { FooterComponent } from './paginas/shared/footer/footer.component';
+import { ChatbotComponent } from './paginas/chatbot/chatbot.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, ChatbotComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

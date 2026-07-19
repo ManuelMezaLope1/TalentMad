@@ -34,6 +34,9 @@ interface AccionAdmin {
 export class Dashboard {
   protected readonly busqueda = signal('');
 
+  // Estado del menú lateral en móvil (drawer)
+  protected readonly sidebarAbierto = signal(false);
+
   private readonly acciones: AccionAdmin[] = [
     {
       titulo: 'Preguntas',
@@ -121,6 +124,26 @@ export class Dashboard {
 
   protected limpiarBusqueda(): void {
     this.busqueda.set('');
+  }
+
+  // ---- Menú lateral (móvil) ----
+  protected toggleSidebar(): void {
+    this.sidebarAbierto.update((v) => !v);
+    this.actualizarScrollBody();
+  }
+
+  protected cerrarSidebar(): void {
+    this.sidebarAbierto.set(false);
+    this.actualizarScrollBody();
+  }
+
+  private actualizarScrollBody(): void {
+    document.body.style.overflow = this.sidebarAbierto() ? 'hidden' : '';
+  }
+
+  private irArribaYcerrarMenu(): void {
+    this.cerrarSidebar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   cantidadCodigo: any[] = [];
@@ -238,22 +261,27 @@ export class Dashboard {
 
   onInicioTab() {
     this.active = "inicio"
+    this.irArribaYcerrarMenu();
   }
 
   onCarreraTab() {
     this.active = "carrera"
+    this.irArribaYcerrarMenu();
   }
 
   onUniversidadTab() {
     this.active = "universidad"
+    this.irArribaYcerrarMenu();
   }
 
   onBecaTab() {
     this.active = "beca"
+    this.irArribaYcerrarMenu();
   }
 
   onGestionTab() {
     this.active = "gestion"
+    this.irArribaYcerrarMenu();
   }
 
   toggleRankingDropdown() {
@@ -857,7 +885,7 @@ export class Dashboard {
               data: {
                 labels: this.totalCarreraPromedio.map(d => d.universidad),
                 datasets: [{
-                  label: 'Promedio de Ranking',
+                  label: 'Promedio Total',
                   data: this.totalCarreraPromedio.map(d => d.promedio)
                 }]
               },
@@ -868,7 +896,7 @@ export class Dashboard {
                 plugins: {
                   title: {
                     display: true,
-                    text: 'Promedio de Ranking por Carrera'
+                    text: 'Promedio Total por Carrera'
                   }
                 }
               }

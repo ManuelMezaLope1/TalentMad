@@ -722,3 +722,13 @@ button:focus-visible {
 .text-gray-500 {
   color: #6b7280 !important;
 }
+
+.btn-preguntas{
+  border: 2px solid #fff;
+  box-shadow: 0 0 6px rgba(40, 118, 242, 0.2);
+}
+
+.btn-navegacion{
+  border: 2px solid #fff;
+  box-shadow: 0 0 6px rgba(40, 118, 242, 0.2);
+}

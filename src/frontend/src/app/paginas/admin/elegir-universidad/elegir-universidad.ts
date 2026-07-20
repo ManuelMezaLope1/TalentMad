@@ -28,4 +28,8 @@ export class ElegirUniversidad {
   actualizarCarreras(id: number){
     this.router.navigate(['actualizacion-universidad-carrera',id]);
   }
+
+  volver(){
+    this.router.navigate(['universidad-carrera'])
+  }
 }

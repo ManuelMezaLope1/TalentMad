@@ -11,6 +11,8 @@ import { Historial } from '../../../servicios/historial/Historial';
 import { UsuarioServicio } from '../../../servicios/usuario/usuario-servicio';
 import { HistorialServicio } from '../../../servicios/historial/historial-servicio';
 import Swal from 'sweetalert2';
+import { IUniversidad } from '../../../servicios/universidad/IUniversidad';
+import { IUniversidadCarrera } from '../../../servicios/universidad-carrera/IUniversidadCarrera';
 
 interface RespuestaGuardada { [preguntaTexto: string]: number; }
 interface CategoriaPregunta {
@@ -112,6 +114,8 @@ export class Resultado implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  carreraNombre: any;
+
   cargarResultados(): void {
     try {
       const respuestasGuardadas = localStorage.getItem('respuestas_test_riasec');
@@ -134,10 +138,9 @@ export class Resultado implements OnInit, OnDestroy {
 
           const posicion = combinaciones.indexOf(this.codigoRIASEC);
 
-          return posicion === 0 || posicion===1 || posicion===2;
-        }).slice(0,6))
+          return posicion === 0 || posicion === 1 || posicion === 2;
+        }).slice(0, 6))
       );
-    
 
       const mapa = Object.fromEntries(
         this.todosPuntajes.map(item => [item.categoria, item])
@@ -239,6 +242,16 @@ export class Resultado implements OnInit, OnDestroy {
     localStorage.removeItem('currentProgress_riasec');
     localStorage.removeItem('categorias_test_riasec');
     this.router.navigate(['/preguntas']).then(() => window.location.reload());
+  }
+
+  obtenerUniversidadesUnicas(universidadesCarrera: IUniversidadCarrera[]): string[] {
+    return [
+      ...new Set(
+        universidadesCarrera.map(uc =>
+          uc.universidad.nombre.split(' - ')[0].trim()
+        )
+      )
+    ];
   }
 
   onSubmit() {

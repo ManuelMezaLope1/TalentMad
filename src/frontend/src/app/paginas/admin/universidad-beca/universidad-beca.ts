@@ -39,6 +39,10 @@ export class UniversidadBeca {
     this.router.navigate(['/dashboard'])
   }
 
+  elegirUniversidadBeca() {
+    this.router.navigate(['elegir-universidad-beca']);
+  }
+
   universidadAgregada: any = null;
   becaAgregada: any[] = [];
 
@@ -79,6 +83,10 @@ export class UniversidadBeca {
         restriccion: this.becaSeleccionada.restriccion,
       });
     }
+  }
+
+  quitarBeca(index: number) {
+    this.becaAgregada.splice(index, 1);
   }
 
   guardarRelaciones() {

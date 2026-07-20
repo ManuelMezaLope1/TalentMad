@@ -247,6 +247,43 @@
     background: transparent;
 }
 
+@media(max-width: 7000px) {
+    .carrera-seleccion-body {
+        padding: 25px;
+    }
+
+    .carrera-seleccion-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+
+    .carrera-seleccion-titulo {
+        height: 55px;
+    }
+
+    .carrera-seleccion-descripcion {
+        height: 150px;
+    }
+
+    .info-seleccion-item {
+        height: 120px;
+        background: #f5f3ff;
+        border-radius: 12px;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .universidad-agregada-body {
+        padding: 25px;
+        height: 200px;
+    }
+
+    .carrera-descripcion {
+        height: 109px;
+    }
+}
+
 @media(max-width: 1500px) {
     .carrera-seleccion-body {
         padding: 25px;

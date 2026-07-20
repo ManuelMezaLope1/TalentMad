@@ -2,12 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Historial } from './Historial';
+import { CantidadCodigo } from './CantidadCodigo';
+import { HistorialHistorico } from './HistorialHistorico';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HistorialServicio {
   private baseUrl = "http://localhost:8080/api/v1/private/historial";
+  private baseUrlPublic="http://localhost:8080/api/v1/public/historial";
 
   token = localStorage.getItem('token');
 
@@ -39,4 +42,12 @@ export class HistorialServicio {
         }
       });
   }
+
+  obtenerCantidadCodigo(): Observable<CantidadCodigo[]>{
+    return this.http.get<CantidadCodigo[]>(this.baseUrlPublic+'-cantidad');
+  }
+
+  obtenerHistorialHistorico(): Observable<HistorialHistorico[]>{
+      return this.http.get<HistorialHistorico[]>(this.baseUrlPublic+'-historico');
+    }
 }

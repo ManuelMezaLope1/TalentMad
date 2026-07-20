@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IBeca } from './IBeca';
+import { Cantidad } from '../dto/Cantidad';
+import { NombreCantidad } from '../dto/NombreCantidad';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +15,22 @@ export class BecaServicio {
 
   obtenerListaDeBeca(): Observable<IBeca[]>{
     return this.HttpClient.get<IBeca[]>(`${this.baseURL}`);
+  }
+
+  obtenerCantidadBeca(): Observable<Cantidad>{
+    return this.HttpClient.get<Cantidad>(this.baseURL+'-cantidad');
+  }
+
+  obtenerTipoBecaCantidad(): Observable<NombreCantidad[]>{
+    return this.HttpClient.get<NombreCantidad[]>(this.baseURL+'-tipo-cantidad');
+  }
+
+  obtenerOrigenBecaCantidad(): Observable<NombreCantidad[]>{
+    return this.HttpClient.get<NombreCantidad[]>(this.baseURL+'-origen-cantidad');
+  }
+
+  obtenerBecaUniversidadCantidad(): Observable<NombreCantidad[]>{
+    return this.HttpClient.get<NombreCantidad[]>(this.baseURL+'-universidad-cantidad');
   }
 
   registrarBeca(beca: IBeca): Observable<Object>{

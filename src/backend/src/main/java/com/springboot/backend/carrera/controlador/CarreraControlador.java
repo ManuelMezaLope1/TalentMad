@@ -22,9 +22,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.springboot.backend.beca.modelo.BecaNombreCantidadDto;
+import com.springboot.backend.beca.modelo.CantidadBecaDto;
 import com.springboot.backend.carrera.modelo.Carrera;
 import com.springboot.backend.carrera.repositorio.CarreraRepositorio;
+import com.springboot.backend.dto.NombreTipoCantidadDto;
+import com.springboot.backend.dto.RankingCantidadDto;
+import com.springboot.backend.dto.UniversidadCarreraPromedioDto;
 import com.springboot.backend.excepcion.ResourceNotFoundException;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/v1/public")
@@ -35,6 +42,41 @@ public class CarreraControlador {
     @GetMapping("/carreras")
     public List<Carrera> listarTodasLasCarreras() {
         return carreraRepositorio.findAll();
+    }
+
+    @GetMapping("/carreras-cantidad")
+    public CantidadBecaDto obtenerCantidadCarrera() {
+        return carreraRepositorio.obtenerCantidadCarrera();
+    }
+
+    @GetMapping("/carreras-tipo-cantidad")
+    public List<BecaNombreCantidadDto> obtenerTipoCarreraCantidad() {
+        return carreraRepositorio.obtenerTipoCarreraCantidad();
+    }
+    
+    @GetMapping("/carreras-universidad-cantidad")
+    public List<NombreTipoCantidadDto> obtenerCarreraUniversidadCantidad() {
+        return carreraRepositorio.obtenerCarreraUniversidad();
+    }
+
+    @GetMapping("/carreras-tipo-universidad-cantidad")
+    public List<BecaNombreCantidadDto> obtenerTipoCarreraUniversidadCantidad() {
+        return carreraRepositorio.obtenerTipoCarreraUniversidad();
+    }
+
+    @GetMapping("/carreras-ranking-cantidad")
+    public List<RankingCantidadDto> obtenerRankingCantidad() {
+        return carreraRepositorio.obtenerRankingCantidad();
+    }
+    
+    @GetMapping("/carreras-universidad-ranking-promedio")
+    public List<UniversidadCarreraPromedioDto> obtenerUniversidadCarreraPromedio(@RequestParam String carrera) {
+        return carreraRepositorio.obtenerUniversidadCarreraRankingPromedio(carrera);
+    }
+    
+    @GetMapping("/carreras-universidad-total-promedio")
+    public List<UniversidadCarreraPromedioDto> obtenerUniversidadCarreraTotalPromedio(@RequestParam String carrera) {
+        return carreraRepositorio.obtenerUniversidadCarreraTotalPromedio(carrera);
     }
 
     @PostMapping("/carreras")

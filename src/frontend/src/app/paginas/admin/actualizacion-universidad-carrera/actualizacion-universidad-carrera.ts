@@ -9,6 +9,7 @@ import { ICarrera } from '../../../servicios/carrera/ICarrera';
 import { CarreraServicio } from '../../../servicios/carrera/carrera-servicio';
 import Swal from 'sweetalert2';
 import { UniversidadCarreraServicio } from '../../../servicios/universidad-carrera/universidad-carrera-servicio';
+import { IUniversidadCarrera } from '../../../servicios/universidad-carrera/IUniversidadCarrera';
 
 @Component({
   selector: 'app-actualizacion-universidad-carrera',
@@ -28,32 +29,52 @@ export class ActualizacionUniversidadCarrera {
   universidades: IUniversidad[] = [];
   universidades$!: Observable<IUniversidad[]>;
 
-  rankingSeleccionado: any=null;
-  totalSeleccionado: any=null;
+  universidadCarrera: IUniversidadCarrera[] = [];
+  carrerasUniversidad: any[];
+
+  rankingSeleccionado: any = null;
+  totalSeleccionado: any = null;
 
   constructor(private universidadServicio: UniversidadServicio, private carreraServicio: CarreraServicio, private universidadCarreraServicio: UniversidadCarreraServicio, private router: Router, private route: ActivatedRoute, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
 
-    this.universidadServicio.obtenerUniversidadPorId(this.id).pipe(
+    this.universidadCarreraServicio.obtenerPorUniversidadId(this.id).pipe(
       tap(dato => {
-        Object.assign(this.universidad, dato);
-        console.log(this.universidad)
-        this.universidadSeleccionada=this.universidad;
-        this.universidadAgregada=this.universidad;
+        Object.assign(this.universidadCarrera, dato)
+
+        this.carrerasUniversidad = this.universidadCarrera.map(({ carrera, ranking, total }) => ({
+          carrera,
+          ranking,
+          total
+        }));
 
         this.carreraAgregada.push(
-          ...this.universidad.carrera.map(op => ({
-            id: op.id,
-            nombre: op.nombre,
-            descripcion: op.descripcion,
-            duracion: op.duracion,
-            tipoCarrera: op.tipoCarrera,
+          ...this.carrerasUniversidad.map(op => ({
+            id: op.carrera.id,
+            nombre: op.carrera.nombre,
+            descripcion: op.carrera.descripcion,
+            duracion: op.carrera.duracion,
+            tipoCarrera: op.carrera.tipoCarrera,
             ranking: op.ranking,
             total: op.total
           }))
         )
+        this.cd.detectChanges();
+      }),
+      catchError(err => {
+        console.error(err);
+        return of(null)
+      })
+    ).subscribe()
+
+    this.universidadServicio.obtenerUniversidadPorId(this.id).pipe(
+      tap(dato => {
+        Object.assign(this.universidad, dato);
+        this.universidadSeleccionada = this.universidad;
+
+        this.universidadAgregada = this.universidadSeleccionada
         this.cd.detectChanges();
       }), catchError(err => {
         console.error(err);
@@ -93,33 +114,87 @@ export class ActualizacionUniversidadCarrera {
     };
   }
 
+  idCar: any;
+  carre: any;
+  carreRanking: any;
+  carreTotal: any;
+
+  actualizarCarrera(id: number) {
+    this.idCar = id;
+
+    this.carreraServicio.obtenerCarreraPorId(this.idCar).pipe(
+      tap(dato => {
+        this.carre = dato;
+
+        this.carreRanking = this.carreraAgregada.find(
+          c => c.id === this.idCar
+        )?.ranking;
+
+        this.carreTotal = this.carreraAgregada.find(
+          t => t.id === this.idCar
+        )?.total;
+
+        this.carreraSeleccionada = {
+          id: this.carre.id,
+          nombre: this.carre.nombre,
+          descripcion: this.carre.descripcion,
+          duracion: this.carre.duracion,
+          tipoCarrera: this.carre.tipoCarrera,
+          ranking: this.carreRanking,
+          total: this.carreTotal
+        }
+
+        this.rankingSeleccionado = this.carreraSeleccionada.ranking
+        this.totalSeleccionado = this.carreraSeleccionada.total
+
+        this.cd.detectChanges();
+      }),
+      catchError(err => {
+        console.error(err)
+        return of(null)
+      })
+    ).subscribe()
+  }
+
   agregarCarrera() {
     if (!this.universidadAgregada) {
       Swal.fire('Oops...', 'Primero seleccione una universidad', 'warning');
       return;
     }
 
-    if(this.rankingSeleccionado===null){
-      Swal.fire('Oops...','El ranking no puede estar vacio','warning')
+    if (this.rankingSeleccionado === null) {
+      Swal.fire('Oops...', 'El ranking no puede estar vacio', 'warning')
+      return;
+    } else if (this.rankingSeleccionado <= 0 || this.rankingSeleccionado >= 6) {
+      Swal.fire('Oops...', 'El ranking debe estar entre 1 y 5', 'warning')
       return;
     }
 
-    if(this.totalSeleccionado===null){
-      Swal.fire('Oops...','El total no puede estar vacio','warning')
+    if (this.totalSeleccionado === null) {
+      Swal.fire('Oops...', 'El total no puede estar vacio', 'warning')
+      return;
+    } else if (this.totalSeleccionado <= 0) {
+      Swal.fire('Oops...', 'El total no puede ser menor o igual que cero', 'warning')
       return;
     }
 
     if (!this.carreraSeleccionada) return;
 
-    const carreraExistente = this.carreraAgregada.find(
+    const carreraExistente = this.carreraAgregada.findIndex(
       p => p.id === this.carreraSeleccionada.id
     );
 
-    this.carreraSeleccionada.ranking=this.rankingSeleccionado;
-    this.carreraSeleccionada.total=this.totalSeleccionado;
+    this.carreraSeleccionada.ranking = this.rankingSeleccionado;
+    this.carreraSeleccionada.total = this.totalSeleccionado;
 
-    if (carreraExistente) {
-      Swal.fire('Oops...', 'Ya se agregó la carrera', 'warning')
+    if (carreraExistente !== -1) {
+      this.carreraAgregada[carreraExistente] = this.carreraSeleccionada;
+
+      Swal.fire(
+        'Actualizado',
+        'La carrera fue actualizada.',
+        'success'
+      );
     } else {
       this.carreraAgregada.push({
         id: this.carreraSeleccionada.id,
@@ -137,7 +212,11 @@ export class ActualizacionUniversidadCarrera {
     this.carreraAgregada.splice(index, 1);
   }
 
-  rankingAgregado: any=null;
+  volver(): void {
+    this.router.navigate(['/elegir-universidad']);
+  }
+
+  rankingAgregado: any = null;
 
   guardarRelaciones() {
     if (!this.universidadAgregada) {
@@ -169,7 +248,7 @@ export class ActualizacionUniversidadCarrera {
 
     console.log(relaciones)
 
-    /*this.universidadCarreraServicio
+    this.universidadCarreraServicio
       .guardarLote(relaciones)
       .subscribe({
 
@@ -227,6 +306,6 @@ export class ActualizacionUniversidadCarrera {
             'error'
           );
         }
-      });*/
+      });
   }
 }

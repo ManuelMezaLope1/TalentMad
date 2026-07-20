@@ -1,19 +1,4 @@
-// Mapa centralizado de imágenes por carrera.
-// Se usa tanto en "resultado" como en "detallecarrera", así que hay
-// UNA sola fuente de verdad: cambiar la imagen de una carrera aquí
-// NO afecta a ninguna otra.
-//
-// Cómo agregar una imagen:
-//   1. Busca el "id" real de la carrera (el mismo que usas en la URL
-//      /detallecarrera/:id).
-//   2. Agrega una línea: `<id>: '<url-de-la-imagen>',`
-//
-// Ejemplo:
-//   1: 'https://miservidor.com/imagenes/ingenieria-sistemas.jpg',
-//   7: 'assets/imagenes/carreras/medicina.jpg',
-//
-// Si una carrera NO tiene entrada aquí, se genera automáticamente una
-// imagen de respaldo (picsum.photos) usando su id como semilla.
+
 
 export const IMAGENES_CARRERA: { [id: number]: string } = {
     43: 'https://cba.ucb.edu.bo/blog/wp-content/uploads/2021/04/retrato-lider-exitoso_109710-668.jpg',

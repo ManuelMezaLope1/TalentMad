@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.backend.beca.modelo.BecaNombreCantidadDto;
 import com.springboot.backend.excepcion.ResourceNotFoundException;
 import com.springboot.backend.preguntas.modelo.Pregunta;
 import com.springboot.backend.preguntas.repositorio.PreguntaRepositorio;
@@ -28,6 +29,11 @@ public class PreguntaControlador {
     @GetMapping("/preguntas")
     public List<Pregunta> listarTodasLasPreguntas(){
         return preguntaRepositorio.findAll();
+    }
+
+    @GetMapping("/preguntas-categoria-cantidad")
+    public List<BecaNombreCantidadDto> obtenerCantidadCategoriaPreguntas(){
+        return preguntaRepositorio.obtenerCantidadCategoriaPreguntas();
     }
 
     @PostMapping("/preguntas")

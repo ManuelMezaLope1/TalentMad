@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IPreguntas } from './IPreguntas';
 import { HttpClient } from '@angular/common/http';
+import { NombreCantidad } from '../dto/NombreCantidad';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,10 @@ export class PreguntasServicio {
 
   obtenerListaDePreguntas(): Observable<IPreguntas[]>{
     return this.HttpClient.get<IPreguntas[]>(`${this.baseURL}`);
+  }
+
+  obtenerCantidadCategoriaPreguntas(): Observable<NombreCantidad[]>{
+    return this.HttpClient.get<NombreCantidad[]>(this.baseURL+'-categoria-cantidad');
   }
 
   registrarPregunta(pregunta: IPreguntas): Observable<Object>{

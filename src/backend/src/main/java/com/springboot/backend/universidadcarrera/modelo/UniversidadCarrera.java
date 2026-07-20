@@ -17,12 +17,12 @@ public class UniversidadCarrera {
 
     @ManyToOne
     @JoinColumn(name="universidad_id")
-    @JsonIgnoreProperties({"universidad_carrera"})
+    @JsonIgnoreProperties({"universidadCarrera"})
     private Universidad universidad;
 
     @ManyToOne
     @JoinColumn(name="carrera_id")
-    @JsonIgnoreProperties({"universidad_carrera"})
+    @JsonIgnoreProperties({"universidadCarrera","carrera"})
     private Carrera carrera;
 
     @Column(name="ranking")

@@ -6,9 +6,9 @@ public class UniversidadCarreraDto {
     private Long universidadId;
     private Long carreraId;
     private Integer ranking;
-    private BigDecimal total;
+    private Double total;
     
-    public UniversidadCarreraDto(Long universidadId, Long carreraId, Integer ranking, BigDecimal total) {
+    public UniversidadCarreraDto(Long universidadId, Long carreraId, Integer ranking, Double total) {
         this.universidadId = universidadId;
         this.carreraId = carreraId;
         this.ranking = ranking;
@@ -39,11 +39,11 @@ public class UniversidadCarreraDto {
         this.ranking = ranking;
     }
 
-    public BigDecimal getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 }

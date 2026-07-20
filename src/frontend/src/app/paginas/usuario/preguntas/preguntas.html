@@ -71,7 +71,7 @@
         <!-- Rating Scale (Sí/No) -->
         <div class="space-y-3 mb-8">
           <button *ngFor="let opcion of opcionesRespuesta" (click)="handleAnswer(opcion.valor)"
-            class="w-full p-4 rounded-xl border-2 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            class="w-full p-4 rounded-xl border-2 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] btn-preguntas"
             [class.border-purple-600]="selectedAnswer === opcion.valor"
             [class.bg-gradient-to-r]="selectedAnswer === opcion.valor"
             [class.from-purple-50]="selectedAnswer === opcion.valor"
@@ -126,14 +126,16 @@
         </p>
         <div class="flex justify-center gap-2">
           <button *ngFor="let num of mostrarNumerosNavegacion; let idx = index" (click)="irAPreguntaPorNumero(num)"
-            [disabled]="!puedeNavegarANumero(num)" class="w-12 h-12 rounded-full text-base font-medium transition-all"
+            [disabled]="!puedeNavegarANumero(num)" class="w-12 h-12 rounded-full text-base font-medium transition-all btn-navegacion"
             [class.bg-purple-600]="num === obtenerNumeroPreguntaGlobal()"
             [class.text-white]="num === obtenerNumeroPreguntaGlobal()"
             [class.bg-green-500]="num !== obtenerNumeroPreguntaGlobal() && estaRespondidaPorNumero(num) && puedeNavegarANumero(num)"
             [class.bg-gray-200]="num !== obtenerNumeroPreguntaGlobal() && !estaRespondidaPorNumero(num) && puedeNavegarANumero(num)"
             [class.bg-gray-300]="!puedeNavegarANumero(num)" [class.text-gray-500]="!puedeNavegarANumero(num)"
             [class.text-gray-700]="num !== obtenerNumeroPreguntaGlobal() && puedeNavegarANumero(num)"
-            [class.cursor-not-allowed]="!puedeNavegarANumero(num)" [class.opacity-50]="!puedeNavegarANumero(num)">
+            [class.cursor-not-allowed]="!puedeNavegarANumero(num)" [class.opacity-50]="!puedeNavegarANumero(num)"
+            [class.hover:border-purple-300]="num !== obtenerNumeroPreguntaGlobal()"
+            [class.hover:bg-purple-50]="num !== obtenerNumeroPreguntaGlobal()">
             {{ num }}
           </button>
         </div>

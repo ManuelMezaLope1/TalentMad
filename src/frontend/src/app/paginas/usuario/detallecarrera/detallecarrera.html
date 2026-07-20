@@ -76,40 +76,6 @@
                 </div>
               </div>
 
-              <!--<div>
-                <label class="filtro-label-horizontal">Departamento</label>
-                <div class="costo-dropdown">
-                  <button type="button" class="costo-trigger" (click)="toggleDepartamentoDropdown()">
-                    <span>{{ departamentoFiltroLabel }}</span>
-                    <span class="costo-chevron" [class.open]="departamentoDropdownOpen">⌄</span>
-                  </button>
-
-                  <div class="costo-panel" *ngIf="departamentoDropdownOpen">
-                    <div class="botones-departamentos">
-                      <button type="button" class="departamento-preset-chip" [class.active]="regionActual==='costa'"
-                        style="font-size: 1rem;" (click)="regionSeleccionada('costa')">Costa</button>
-                      <button type="button" class="departamento-preset-chip" [class.active]="regionActual==='sierra'"
-                        style="font-size: 1rem;" (click)="regionSeleccionada('sierra')">Sierra</button>
-                      <button type="button" class="departamento-preset-chip" [class.active]="regionActual==='selva'"
-                        style="font-size: 1rem;" (click)="regionSeleccionada('selva')">Selva</button>
-                    </div>
-                    <br>
-                    <div class="departamento-presets">
-                      <button type="button" *ngFor="let preset of opcionesDepartamento" class="costo-preset-chip"
-                        [class.active]="departamentoTemp === preset" (click)="seleccionarPresetDepartamento(preset)">
-                        {{ preset }}
-                      </button>
-                    </div>
-
-                    <div class="costo-panel-footer">
-                      <button type="button" class="costo-btn-limpiar" (click)="limpiarDepartamento()">Limpiar</button>
-                      <button type="button" class="costo-btn-aplicar" (click)="aplicarDepartamento()">Ver
-                        resultados</button>
-                    </div>
-                  </div>
-                </div>
-              </div>-->
-
               <div class="beca-filtro">
                 <label class="filtro-label-horizontal" for="becaSelect">Beca</label>
                 <select id="becaSelect" class="filtro-select-horizontal" [(ngModel)]="becaFiltro">

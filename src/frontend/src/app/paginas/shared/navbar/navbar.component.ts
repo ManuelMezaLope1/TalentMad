@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthServicio } from '../../../servicios/auth/auth-servicio';

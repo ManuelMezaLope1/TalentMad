@@ -8,13 +8,13 @@
         <a (click)="scrollToSection('beneficios')">Beneficios</a>
         <a (click)="scrollToSection('pasos')">Cómo funciona</a>
         <a (click)="scrollToSection('testimonios')">Testimonios</a>
-        <div *ngIf="authServicio.logueado()">
-            <div *ngIf="rolUsuario==='ROLE_ADMIN'">
+        <ng-container *ngIf="authServicio.logueado()">
+            <ng-container *ngIf="rolUsuario==='ROLE_ADMIN'">
                 <a (click)="irDashboard()">Dashboard</a>
-            </div>
-        </div>
+            </ng-container>
+        </ng-container>
 
-        <div *ngIf="!authServicio.logueado()">
+        <ng-container *ngIf="!authServicio.logueado()">
             <a routerLink="/login" class="btn-nav">✨ Comenzar test</a>
             <button class="theme-switch theme-switch-logout" (click)="cambiarTema()">
                 <div class="switch-circle-logout" [class.active]="temaServicio.getTheme()==='dark'">
@@ -23,7 +23,7 @@
                     </span>
                 </div>
             </button>
-        </div>
+        </ng-container>
 
         <div class="user-menu" *ngIf="authServicio.logueado()">
             <button class="btn-user" (click)="toggleUserMenu()">
@@ -39,7 +39,6 @@
                     <i class="material-icons medalla">badge</i>
                     <span>Mi perfil</span>
                 </a>
-
 
                 <button class="theme-switch" (click)="cambiarTema()">
                     <div class="switch-circle" [class.active]="temaServicio.getTheme()==='dark'">
@@ -66,23 +65,23 @@
 </nav>
 
 <div class="mobile-menu" [class.open]="mobileMenuOpen">
-    <a (click)="scrollToSection('inicio'); closeMobileMenu()">Inicio</a>
+    <a (click)="scrollToSection('inicio'); closeMobileMenu()" class="btn-mobile">Inicio</a>
     <a (click)="scrollToSection('beneficios'); closeMobileMenu()">Beneficios</a>
     <a (click)="scrollToSection('pasos'); closeMobileMenu()">Cómo funciona</a>
     <a (click)="scrollToSection('testimonios'); closeMobileMenu()">Testimonios</a>
-    <div *ngIf="authServicio.logueado()">
-        <div *ngIf="rolUsuario==='ROLE_ADMIN'">
+    <ng-container *ngIf="authServicio.logueado()">
+        <ng-container *ngIf="rolUsuario==='ROLE_ADMIN'">
             <a (click)="irDashboard()">Dashboard</a>
-        </div>
-    </div>
+        </ng-container>
+    </ng-container>
 
     <ng-container *ngIf="!authServicio.logueado()">
         <a routerLink="/login" class="mobile-btn-nav" (click)="closeMobileMenu()">
             ✨ Comenzar test
         </a>
 
-        <button class="theme-switch" (click)="cambiarTema()">
-            <div class="switch-circle" [class.active]="temaServicio.getTheme()==='dark'">
+        <button class="btn-login-switch-circle" (click)="cambiarTema()">
+            <div class="btn-login-switch-circle" [class.active]="temaServicio.getTheme()==='dark'">
                 <span class="material-icons">
                     {{temaServicio.getTheme()==='dark' ? 'bedtime' : 'sunny'}}
                 </span>
@@ -94,6 +93,13 @@
 
     <ng-container *ngIf="authServicio.logueado()">
         <a routerLink="/perfil" (click)="closeMobileMenu()">Mi perfil</a>
+        <button class="btn-login-theme-switch" (click)="cambiarTema()">
+            <div class="btn-login-switch-circle" [class.active]="temaServicio.getTheme()==='dark'">
+                <span class="material-icons">
+                    {{temaServicio.getTheme()==='dark' ? 'bedtime' : 'sunny'}}
+                </span>
+            </div>
+        </button>
         <button (click)="logout()" class="mobile-btn-logout">
             Cerrar sesión
         </button>

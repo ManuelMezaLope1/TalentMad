@@ -1,3 +1,13 @@
+.dark :host ::ng-deep .login-container {
+  transition: 1s;
+  background: #222;
+}
+
+.light :host ::ng-deep .login-container {
+  transition: 1s;
+  background: linear-gradient(135deg, #6a94ca, #fafcff);
+}
+
 .login-container {
   display: flex;
   justify-content: center;
@@ -6,7 +16,6 @@
   padding: 2rem;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #6a94ca, #fafcff);
 }
 
 .background-animation {
@@ -38,12 +47,15 @@
   0% {
     transform: translate(0, 0) scale(1) rotate(0deg);
   }
+
   33% {
     transform: translate(8%, -8%) scale(1.2) rotate(3deg);
   }
+
   66% {
     transform: translate(-8%, 8%) scale(0.8) rotate(-3deg);
   }
+
   100% {
     transform: translate(0, 0) scale(1) rotate(0deg);
   }
@@ -107,12 +119,15 @@
   0% {
     transform: translate(0, 0) scale(1);
   }
+
   33% {
     transform: translate(80px, -50px) scale(1.2);
   }
+
   66% {
     transform: translate(-50px, 80px) scale(0.8);
   }
+
   100% {
     transform: translate(30px, -30px) scale(1.1);
   }
@@ -138,31 +153,117 @@
   box-shadow: 0 0 6px rgba(59, 130, 246, 0.2);
 }
 
-.particle:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: 0s; width: 5px; height: 5px; background: rgba(59, 130, 246, 0.35); }
-.particle:nth-child(2) { left: 20%; animation-duration: 15s; animation-delay: 2s; background: rgba(0, 102, 255, 0.25); }
-.particle:nth-child(3) { left: 30%; animation-duration: 18s; animation-delay: 4s; width: 5px; height: 5px; background: rgba(59, 130, 246, 0.35); }
-.particle:nth-child(4) { left: 40%; animation-duration: 13s; animation-delay: 1s; background: rgba(0, 72, 255, 0.2); }
-.particle:nth-child(5) { left: 50%; animation-duration: 16s; animation-delay: 3s; width: 5px; height: 5px; background: rgba(59, 130, 246, 0.35); }
-.particle:nth-child(6) { left: 60%; animation-duration: 19s; animation-delay: 5s; background: rgba(0, 60, 255, 0.2); }
-.particle:nth-child(7) { left: 70%; animation-duration: 14s; animation-delay: 0.5s; width: 5px; height: 5px; background: rgba(59, 130, 246, 0.35); }
-.particle:nth-child(8) { left: 80%; animation-duration: 17s; animation-delay: 2.5s; background: rgba(0, 47, 255, 0.2); }
-.particle:nth-child(9) { left: 90%; animation-duration: 11s; animation-delay: 3.5s; width: 5px; height: 5px; background: rgba(59, 130, 246, 0.35); }
-.particle:nth-child(10) { left: 15%; animation-duration: 20s; animation-delay: 1.5s; background: rgba(0, 76, 255, 0.2); }
-.particle:nth-child(11) { left: 45%; animation-duration: 22s; animation-delay: 4.5s; width: 5px; height: 5px; background: rgba(59, 130, 246, 0.35); }
-.particle:nth-child(12) { left: 75%; animation-duration: 13s; animation-delay: 0.8s; background: rgba(0, 47, 255, 0.2); }
+.particle:nth-child(1) {
+  left: 10%;
+  animation-duration: 12s;
+  animation-delay: 0s;
+  width: 5px;
+  height: 5px;
+  background: rgba(59, 130, 246, 0.35);
+}
+
+.particle:nth-child(2) {
+  left: 20%;
+  animation-duration: 15s;
+  animation-delay: 2s;
+  background: rgba(0, 102, 255, 0.25);
+}
+
+.particle:nth-child(3) {
+  left: 30%;
+  animation-duration: 18s;
+  animation-delay: 4s;
+  width: 5px;
+  height: 5px;
+  background: rgba(59, 130, 246, 0.35);
+}
+
+.particle:nth-child(4) {
+  left: 40%;
+  animation-duration: 13s;
+  animation-delay: 1s;
+  background: rgba(0, 72, 255, 0.2);
+}
+
+.particle:nth-child(5) {
+  left: 50%;
+  animation-duration: 16s;
+  animation-delay: 3s;
+  width: 5px;
+  height: 5px;
+  background: rgba(59, 130, 246, 0.35);
+}
+
+.particle:nth-child(6) {
+  left: 60%;
+  animation-duration: 19s;
+  animation-delay: 5s;
+  background: rgba(0, 60, 255, 0.2);
+}
+
+.particle:nth-child(7) {
+  left: 70%;
+  animation-duration: 14s;
+  animation-delay: 0.5s;
+  width: 5px;
+  height: 5px;
+  background: rgba(59, 130, 246, 0.35);
+}
+
+.particle:nth-child(8) {
+  left: 80%;
+  animation-duration: 17s;
+  animation-delay: 2.5s;
+  background: rgba(0, 47, 255, 0.2);
+}
+
+.particle:nth-child(9) {
+  left: 90%;
+  animation-duration: 11s;
+  animation-delay: 3.5s;
+  width: 5px;
+  height: 5px;
+  background: rgba(59, 130, 246, 0.35);
+}
+
+.particle:nth-child(10) {
+  left: 15%;
+  animation-duration: 20s;
+  animation-delay: 1.5s;
+  background: rgba(0, 76, 255, 0.2);
+}
+
+.particle:nth-child(11) {
+  left: 45%;
+  animation-duration: 22s;
+  animation-delay: 4.5s;
+  width: 5px;
+  height: 5px;
+  background: rgba(59, 130, 246, 0.35);
+}
+
+.particle:nth-child(12) {
+  left: 75%;
+  animation-duration: 13s;
+  animation-delay: 0.8s;
+  background: rgba(0, 47, 255, 0.2);
+}
 
 @keyframes particleFloat {
   0% {
     transform: translateY(100vh) scale(0);
     opacity: 0;
   }
+
   10% {
     opacity: 1;
     transform: translateY(80vh) scale(1);
   }
+
   90% {
     opacity: 1;
   }
+
   100% {
     transform: translateY(-10vh) scale(0);
     opacity: 0;
@@ -201,6 +302,7 @@
     opacity: 0;
     transform: translateY(50px) scale(0.9);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -226,9 +328,11 @@
     background-position: 0% 50%;
     opacity: 0.6;
   }
+
   50% {
     opacity: 0.9;
   }
+
   100% {
     background-position: 100% 50%;
     opacity: 0.6;
@@ -251,9 +355,12 @@
 }
 
 @keyframes logoPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     filter: drop-shadow(0 4px 30px rgba(59, 130, 246, 0.20));
   }
+
   50% {
     filter: drop-shadow(0 4px 50px rgba(59, 130, 246, 0.35));
   }
@@ -285,11 +392,27 @@
 }
 
 @keyframes shakeError {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-12px); }
-  40% { transform: translateX(12px); }
-  60% { transform: translateX(-8px); }
-  80% { transform: translateX(8px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-12px);
+  }
+
+  40% {
+    transform: translateX(12px);
+  }
+
+  60% {
+    transform: translateX(-8px);
+  }
+
+  80% {
+    transform: translateX(8px);
+  }
 }
 
 .form-group {
@@ -374,6 +497,7 @@
     opacity: 0;
     transform: translateY(5px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -497,7 +621,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .login-footer {
@@ -550,7 +676,18 @@
     font-size: 1.4rem;
   }
 
-  .light-bubble:nth-child(1) { width: 250px; height: 250px; }
-  .light-bubble:nth-child(2) { width: 300px; height: 300px; }
-  .light-bubble:nth-child(3) { width: 200px; height: 200px; }
+  .light-bubble:nth-child(1) {
+    width: 250px;
+    height: 250px;
+  }
+
+  .light-bubble:nth-child(2) {
+    width: 300px;
+    height: 300px;
+  }
+
+  .light-bubble:nth-child(3) {
+    width: 200px;
+    height: 200px;
+  }
 }

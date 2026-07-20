@@ -33,6 +33,26 @@ export class Registro {
   telefono:string='';
 
   registro(){
+    if(this.nombre.startsWith(' ')){
+      Swal.fire('Oops...','El nombre no debe empezar con un espacio','warning');
+      return;
+    }
+
+    if(this.apellido.startsWith(' ')){
+      Swal.fire('Oops...','El apellido no debe empezar con un espacio','warning');
+      return;
+    }
+
+    if(this.telefono.startsWith(' ')){
+      Swal.fire('Oops...','El telefono no debe empezar con un espacio','warning');
+      return;
+    }
+
+    if(this.username.startsWith(' ')){
+      Swal.fire('Oops...','El correo no debe empezar con un espacio','warning');
+      return;
+    }
+
     const usuario={
       nombre:this.nombre,
       apellido:this.apellido,
@@ -41,7 +61,6 @@ export class Registro {
       username:this.username,
       password:this.password
     };
-
     this.http.post('http://localhost:8080/auth/registro',usuario).subscribe({
       next:()=>{
         Swal.fire('Usuario registrado',`El usuario ha sido registrado correctamente`,'success');

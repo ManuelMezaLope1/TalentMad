@@ -6,7 +6,9 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.backend.carrera.modelo.Carrera;
+import com.springboot.backend.origenbeca.modelo.OrigenBeca;
 import com.springboot.backend.universidad.modelo.Universidad;
+import com.springboot.backend.universidadbeca.modelo.UniversidadBeca;
 
 import jakarta.persistence.*;
 
@@ -41,6 +43,11 @@ public class Beca {
     @Column(name="tipo_beca", nullable = false)
     private String tipoBeca;
 
+    @ManyToOne
+    @JoinColumn(name="origen_beca_id")
+    @JsonIgnoreProperties({"beca"})
+    private OrigenBeca origenBeca;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -51,15 +58,15 @@ public class Beca {
     @JsonIgnoreProperties({"carrera"})
     private List<Carrera> carrera;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy="beca")
-    @JsonIgnoreProperties({"universidad"})
-    private List<Universidad> universidad;
+    @OneToMany(mappedBy="beca")
+    @JsonIgnoreProperties({"universidadBeca"})
+    private List<UniversidadBeca> universidadBeca;
 
     public Beca(){}
 
     public Beca(Long id, String nombre, String descripcion, Integer duracion, String beneficio, String requisito,
-            String restriccion, String url, String tipoBeca, List<Carrera> carrera, List<Universidad> universidad) {
+            String restriccion, String url, String tipoBeca, OrigenBeca origenBeca, List<Carrera> carrera,
+            List<UniversidadBeca> universidadBeca) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -69,12 +76,14 @@ public class Beca {
         this.restriccion = restriccion;
         this.url = url;
         this.tipoBeca = tipoBeca;
+        this.origenBeca = origenBeca;
         this.carrera = carrera;
-        this.universidad=universidad;
+        this.universidadBeca = universidadBeca;
     }
 
     public Beca(String nombre, String descripcion, Integer duracion, String beneficio, String requisito,
-            String restriccion, String url, String tipoBeca, List<Carrera> carrera, List<Universidad> universidad) {
+            String restriccion, String url, String tipoBeca, OrigenBeca origenBeca, List<Carrera> carrera,
+            List<UniversidadBeca> universidadBeca) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracion = duracion;
@@ -83,8 +92,9 @@ public class Beca {
         this.restriccion = restriccion;
         this.url = url;
         this.tipoBeca = tipoBeca;
+        this.origenBeca = origenBeca;
         this.carrera = carrera;
-        this.universidad=universidad;
+        this.universidadBeca = universidadBeca;
     }
 
     public Long getId() {
@@ -159,6 +169,14 @@ public class Beca {
         this.tipoBeca = tipoBeca;
     }
 
+    public OrigenBeca getOrigenBeca() {
+        return origenBeca;
+    }
+
+    public void setOrigenBeca(OrigenBeca origenBeca) {
+        this.origenBeca = origenBeca;
+    }
+
     public List<Carrera> getCarrera() {
         return carrera;
     }
@@ -167,12 +185,12 @@ public class Beca {
         this.carrera = carrera;
     }
 
-    public List<Universidad> getUniversidad(){
-        return universidad;
+    public List<UniversidadBeca> getUniversidadBeca() {
+        return universidadBeca;
     }
 
-    public void setUniversidad(List<Universidad> universidad){
-        this.universidad=universidad;
+    public void setUniversidadBeca(List<UniversidadBeca> universidadBeca) {
+        this.universidadBeca = universidadBeca;
     }
 
     @Override

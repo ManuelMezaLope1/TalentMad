@@ -7,6 +7,11 @@
   transition: 1s;
 }
 
+.beca-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
 .beca-card {
     background: white;
     border-radius: 22px;
@@ -169,6 +174,28 @@
   opacity: 1;
 }
 
+@media(max-width:7000px) {
+  .op1.activo {
+    transform: translateX(90px);
+  }
+
+  .op2.activo {
+    transform: translateX(180px);
+  }
+
+  .op3.activo {
+    transform: translateX(270px);
+  }
+
+  .op4.activo {
+    transform: translateX(360px);
+  }
+
+  .op5.activo {
+    transform: translateX(450px);
+  }
+}
+
 @media(max-width:1500px) {
   .op1.activo {
     transform: translateX(90px);
@@ -185,58 +212,62 @@
   .op4.activo {
     transform: translateX(360px);
   }
+
+  .op5.activo {
+    transform: translateX(450px);
+  }
 }
 
 @media(max-width:1500px){
     .beca-descripcion{
-        height: 250px;
+        min-height: 160px;
     }
 
     .beca-beneficio{
-        height: 350px;
+        min-height: 260px;
     }
 
     .beca-requisito{
-        height: 450px;
+        min-height: 280px;
     }
 
     .beca-restriccion{
-        height: 450px;
+        min-height: 400px;
     }
 }
 
 @media(max-width:1115px){
     .beca-descripcion{
-        height: 300px;
+        min-height: 200px;
     }
 
     .beca-beneficio{
-        height: 400px;
+        min-height: 300px;
     }
 
     .beca-requisito{
-        height: 610px;
+        min-height: 350px;
     }
 
     .beca-restriccion{
-        height: 600px;
+        min-height: 400px;
     }
 }
 
 @media(max-width:991px){
     .beca-descripcion{
-        height: 260px;
+        min-height: 260px;
     }
 
     .beca-beneficio{
-        height: 350px;
+        min-height: 350px;
     }
 
     .beca-requisito{
-        height: 540px;
+        min-height: 450px;
     }
 
     .beca-restriccion{
-        height: 470px;
+        min-height: 470px;
     }
 }

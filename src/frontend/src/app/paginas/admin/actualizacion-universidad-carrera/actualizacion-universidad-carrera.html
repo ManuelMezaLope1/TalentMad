@@ -1,8 +1,9 @@
 <br>
 <div class="container">
     <div class="">
-        <h1 class="text-center">Registro de Carreras y Universidades</h1>
+        <h1 class="text-center">Edición de Carreras</h1>
         <div class="d-flex justify-content-end">
+            <button class="btn btn-primary" (click)="volver()">Volver</button>&nbsp;
             <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>
         </div>
     </div>
@@ -113,7 +114,7 @@
                 <div class="universidad-agregada-body">
                     <h3 class="universidad-nombre">{{universidadAgregada.nombre}}</h3>
 
-                    <div class="ubicacion">📍 {{universidadAgregada.departamento}}</div>
+                    <div class="ubicacion">📍 {{universidadAgregada.departamento.nombre}}</div>
 
                     <div class="costo-box">
                         <span class="costo-label">Costo mensual</span>
@@ -150,12 +151,13 @@
 
                         <div class="info-seleccion-item">
                             <span class="label">🎓 Tipo</span>
-                            <span class="valor">{{item.total}}</span>
+                            <span class="valor">S/. {{item.total}}</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="card-footer">
+                <div class="card-footer d-flex justify-content-center">
+                    <button class="btn btn-primary" (click)="actualizarCarrera(item.id)">Editar</button>&nbsp;
                     <button class="btn btn-danger" (click)="quitarCarrera(i)">Eliminar</button>
                 </div>
             </div>

@@ -1,5 +1,4 @@
 <div class="container">
-  <!-- Hero Banner -->
   <section id="inicio" class="hero">
     <div class="hero-content">
       <div class="hero-badge" style="display:inline-flex">
@@ -12,19 +11,19 @@
         segura sobre tu futuro profesional.
       </p>
       <div class="hero-buttons">
-        <div *ngIf="authServicio.logueado()">
+        <ng-container *ngIf="authServicio.logueado()">
           <a routerLink="/preguntas" class="btn-primary">
             <span style="display:inline-flex; align-items:center; padding: 1px;"><i
                 class="material-icons">arrow_circle_right</i>&nbsp;Iniciar test ahora</span>
           </a>
-        </div>
+        </ng-container>
 
-        <div *ngIf="!authServicio.logueado()">
+        <ng-container *ngIf="!authServicio.logueado()">
           <a routerLink="/login" class="btn-primary">
             <span style="display:inline-flex; align-items:center; padding: 1px;"><i
                 class="material-icons">arrow_circle_right</i>&nbsp;Iniciar test ahora</span>
           </a>
-        </div>
+        </ng-container>
 
         <a (click)="scrollToSection('pasos')" class="btn-secondary">
           <span style="display:inline-flex; align-items:center; padding: 1px; margin-top:4px;"><i
@@ -38,7 +37,6 @@
       "></div>
   </section>
 
-  <!-- Beneficios -->
   <section id="beneficios" class="section" style="padding: 40px 0px">
     <div class="section-header">
       <h2>¿Por qué hacer nuestro test?</h2>
@@ -66,7 +64,7 @@
     </div>
   </section>
   <br><br>
-  <!-- Pasos / Cómo funciona -->
+  
   <section id="pasos" class="section steps-section">
     <div class="section-header">
       <h2>Tu camino en 3 simples pasos</h2>
@@ -91,7 +89,6 @@
     </div>
   </section>
 
-  <!-- Testimonios -->
   <section id="testimonios" class="section">
     <div class="section-header">
       <h2>Más de 1000 personas ya encontraron orientación</h2>
@@ -132,7 +129,7 @@
     </div>
   </section>
   <br><br>
-  <!-- FAQ -->
+  
   <section id="faq" class="section">
     <div class="section-header">
       <h2>Preguntas frecuentes</h2>
@@ -174,24 +171,20 @@
     </div>
   </section>
 
-
   <div class="cta-section">
     <h2>¿Listo para descubrir tu vocación?</h2>
     <p>Sin costo, sin spam, solo responde lo que realmente te gusta.</p>
 
-    <div *ngIf="authServicio.logueado()">
+    <ng-container *ngIf="authServicio.logueado()">
       <a routerLink="/preguntas" class="btn-primary">
         <i class="material-icons">rocket_launch</i> Comenzar test gratuito
       </a>
-    </div>
+    </ng-container>
 
-    <div *ngIf="!authServicio.logueado()">
+    <ng-container *ngIf="!authServicio.logueado()">
       <a routerLink="/login" class="btn-primary">
         <i class="material-icons">rocket_launch</i> Comenzar test gratuito
       </a>
-    </div>
-
+    </ng-container>
   </div>
-  <br>
 </div>
-<app-chatbot></app-chatbot>

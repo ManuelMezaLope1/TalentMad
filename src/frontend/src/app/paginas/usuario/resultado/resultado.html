@@ -139,7 +139,7 @@
                   </span>
                   <span class="carrera-unis">
                     <span class="unis-icon">🏛</span>
-                    {{ car.universidad?.length ?? 0 }} universidades
+                    {{ obtenerUniversidadesUnicas(car.universidadCarrera).length }} {{ obtenerUniversidadesUnicas(car.universidadCarrera).length ===1 ? 'universidad' : 'universidades'}}
                   </span>
                 </div>
               </div>
@@ -151,7 +151,7 @@
       <!-- Botones de acción -->
       <div class="action-buttons">
         <button (click)="volverATest()" class="btn-primary">← Volver al test</button>
-        <button (click)="reiniciarTest()" class="btn-secondary">↻ Reiniciar test</button>
+        <button (click)="reiniciarTest()" class="btn-secondary btn-reiniciar-test">↻ Reiniciar test</button>
 
         <form (ngSubmit)="onSubmit()">
           <div *ngIf="usuario">

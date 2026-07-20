@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.backend.beca.modelo.Beca;
+import com.springboot.backend.beca.modelo.BecaNombreCantidadDto;
+import com.springboot.backend.beca.modelo.CantidadBecaDto;
 import com.springboot.backend.beca.repositorio.BecaRepositorio;
 import com.springboot.backend.excepcion.ResourceNotFoundException;
 
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/v1/public")
@@ -29,6 +33,26 @@ public class BecaControlador {
     @GetMapping("/becas")
     public List<Beca> listarTodasLasBecas() {
         return becaRepositorio.findAll();
+    }
+
+    @GetMapping("/becas-cantidad")
+    public CantidadBecaDto obtenerCantidadBeca() {
+        return becaRepositorio.obtenerCantidadBeca();
+    }
+    
+    @GetMapping("/becas-tipo-cantidad")
+    public List<BecaNombreCantidadDto> obtenerTipoBecaCantidad() {
+        return becaRepositorio.obtenerTipoBecaCantidad();
+    }
+    
+    @GetMapping("/becas-origen-cantidad")
+    public List<BecaNombreCantidadDto> obtenerOrigenBecaCantidad() {
+        return becaRepositorio.obtenerOrigenBecaCantidad();
+    }
+    
+    @GetMapping("/becas-universidad-cantidad")
+    public List<BecaNombreCantidadDto> obtenerBecaUniversidadCantidad() {
+        return becaRepositorio.obtenerBecaUniversidadCantidad();
     }
     
     @PostMapping("/becas")
@@ -55,6 +79,7 @@ public class BecaControlador {
         becaExistente.setUrl(detallesBeca.getUrl());
         becaExistente.setTipoBeca(detallesBeca.getTipoBeca());
         becaExistente.setCarrera(detallesBeca.getCarrera());
+        becaExistente.setOrigenBeca(detallesBeca.getOrigenBeca());
         
         Beca becaActualizada=becaRepositorio.save(becaExistente);
 

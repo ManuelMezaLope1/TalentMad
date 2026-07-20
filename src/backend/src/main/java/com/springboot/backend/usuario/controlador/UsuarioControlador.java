@@ -7,11 +7,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.backend.beca.modelo.CantidadBecaDto;
 import com.springboot.backend.usuario.modelo.Usuario;
 import com.springboot.backend.usuario.repositorio.UsuarioRepositorio;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -27,6 +30,11 @@ public class UsuarioControlador {
         Usuario usuario=usuarioRepositorio.findByUsername(username);
 
         return ResponseEntity.ok(usuario);
+    }
+
+    @GetMapping("/public/usuarios-cantidad")
+    public CantidadBecaDto obtenerUsuariosCantidad() {
+        return usuarioRepositorio.obtenerCantidadUsuarios();
     }
 
     @PutMapping("/private/perfil")

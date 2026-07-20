@@ -3,7 +3,8 @@
     <div class="">
         <h1 class="text-center">Registro de Becas y Universidades</h1>
         <div class="d-flex justify-content-end">
-            <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>
+            <button class="btn btn-primary" (click)="volverDashboard()">Dashboard</button>&nbsp;
+            <button class="btn btn-primary" (click)="elegirUniversidadBeca()">Editar</button>
         </div>
     </div>
 
@@ -195,6 +196,10 @@
                             </span>
                         </div>
                     </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-center">
+                    <button class="btn btn-danger" (click)="quitarBeca(i)">Eliminar</button>
                 </div>
             </div>
         </div>

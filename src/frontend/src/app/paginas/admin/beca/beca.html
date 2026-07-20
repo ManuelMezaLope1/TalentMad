@@ -11,17 +11,23 @@
             <i class="material-icons">add</i>
         </button>
 
-        <button class="btn-opcion op2 btn btn-primary" #btnInfoDashboard (click)="volverDashboard()" [class.activo]="abierto"
+        <button class="btn-opcion op2 btn btn-danger" #btnInfoOrigenBeca (click)="origenBeca();" [class.activo]="abierto"
+            (mouseenter)="mostrarTooltipOrigenBeca()" title="Origen beca">
+            <i class="material-icons">trip_origin</i>
+        </button>
+
+
+        <button class="btn-opcion op3 btn btn-primary" #btnInfoDashboard (click)="volverDashboard()" [class.activo]="abierto"
             (mouseenter)="mostrarTooltipDashboard()" title="Volver dashboard">
             <i class="material-icons">dashboard</i>
         </button>
 
-        <button class="btn-opcion op3 btn btn-warning" #btnInfoTipo (click)="tipoFiltro='tipo'" [class.activo]="abierto"
+        <button class="btn-opcion op4 btn btn-warning" #btnInfoTipo (click)="tipoFiltro='tipo'" [class.activo]="abierto"
             (mouseenter)="mostrarTooltipTipo()" title="Ordenar por tipo">
             <i class="material-icons">apartment</i>
         </button>
 
-        <button class="btn-opcion op4 btn btn-warning" #btnInfoNombre (click)="tipoFiltro='nombre'" [class.activo]="abierto"
+        <button class="btn-opcion op5 btn btn-warning" #btnInfoNombre (click)="tipoFiltro='nombre'" [class.activo]="abierto"
             (mouseenter)="mostrarTooltipNombre()" title="Ordenar por nombre">
             <i class="material-icons">label</i>
         </button>
@@ -29,14 +35,17 @@
 
     <div class="beca-grid">
         <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4" *ngFor="let be of obtenerBecasOrdenadas(becas$ | async)">
+            <div class="col-lg-6 col-md-6 mb-4" *ngFor="let be of obtenerBecasOrdenadas(becas$ | async)">
                 <div class="beca-card">
                     <div class="beca-header" style="height: 160px;">
-                        <div style="height: 50px;">
+                        <div>
                             <h4>{{be.nombre}}</h4>
                         </div>
                         <br>
-                        <div class="beca-badge">🎓 {{be.tipoBeca}}</div>
+                        <div class="badge-contenedor">
+                            <div class="beca-badge">🎓 {{be.tipoBeca}}</div>&nbsp;
+                            <div class="beca-badge">🎓 {{be.origenBeca.nombre}}</div>    
+                        </div>
                     </div>
 
                     <div class="beca-body">

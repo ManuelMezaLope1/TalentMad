@@ -1,5 +1,78 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap');
 
+.dark :host ::ng-deep .resultado-page{
+  transition: 1s;
+  color: #fff !important;
+}
+
+.dark :host ::ng-deep .header-title{
+  transition: 1s;
+  color: #fff !important;
+}
+
+.dark :host ::ng-deep .header-subtitle{
+  transition: 1s;
+  color: #fff !important;
+}
+
+.dark :host ::ng-deep .codigo-label{
+  transition: 1s;
+  color: #fff !important;
+}
+
+.dark :host ::ng-deep .codigo-valor{
+  transition: 1s;
+  color: #fff !important;
+}
+
+.dark :host ::ng-deep .carreras-title{
+  transition: 1s;
+  color: #fff !important;
+}
+
+.dark :host ::ng-deep .carreras-subtitle{
+  transition: 1s;
+  color: #fff !important;
+}
+
+.dark :host ::ng-deep .btn-reiniciar-test{
+  transition: 1s;
+  color: #fff !important;
+}
+
+.light :host ::ng-deep .resultado-page{
+  transition: 1s;
+  background: linear-gradient(160deg, #e8f0fe 0%, #d4e4fc 50%, #e0ecff 100%);
+}
+
+.light :host ::ng-deep .header-title{
+  transition: 1s;
+}
+
+.light :host ::ng-deep .header-subtitle{
+  transition: 1s;
+}
+
+.light :host ::ng-deep .codigo-label{
+  transition: 1s;
+}
+
+.light :host ::ng-deep .codigo-valor{
+  transition: 1s;
+}
+
+.light :host ::ng-deep .carreras-title{
+  transition: 1s;
+}
+
+.light :host ::ng-deep .carreras-subtitle{
+  transition: 1s;
+}
+
+.light :host ::ng-deep .btn-reiniciar-test{
+  transition: 1s;
+}
+
 /* ── Reset ───────────────────────────────── */
 *,
 *::before,
@@ -12,7 +85,6 @@
 /* ── Page wrapper ────────────────────────── */
 .resultado-page {
   min-height: 100vh;
-  background: linear-gradient(160deg, #e8f0fe 0%, #d4e4fc 50%, #e0ecff 100%);
   padding: 2rem 1rem 4rem;
   font-family: 'DM Sans', sans-serif;
 }

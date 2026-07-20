@@ -1,0 +1,57 @@
+<div class="container">
+    <br>
+    <div>
+        <h1>Listado de Orígenes de Becas</h1>
+
+        <div class="menu-radial">
+            <button class="btn-central" (click)="abierto = !abierto" #btnInfo data-bs-toggle="tooltip"
+                title="Más acciones" (mouseenter)="mostrarTooltip()">
+                ➕
+            </button>
+
+            <button class="btn-opcion op1 btn btn-success" #btnInfoAgregar (click)="registrarOrigenBeca();"
+                [class.activo]="abierto" (mouseenter)="mostrarTooltipAgregar()" title="Agregar origen beca">
+                <i class="material-icons">add</i>
+            </button>
+
+            <button class="btn-opcion op2 btn btn-primary" #btnInfoDashboard (click)="volverDashboard()"
+                [class.activo]="abierto" (mouseenter)="mostrarTooltipDashboard()" title="Volver dashboard">
+                <i class="material-icons">dashboard</i>
+            </button>
+
+            <button class="btn-opcion op4 btn btn-danger" #btnInfoVolver (click)="regresarBeca()"
+                [class.activo]="abierto" (mouseenter)="mostrarTooltipVolver()" title="Regresar">
+                <i class="material-icons">arrow_back</i>
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource"
+                class="table text-center table-striped table-bordered table-hover">
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> Nombre </th>
+                    <td mat-cell *matCellDef="let be" class="text-center align-middle">{{ be.nombre }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="becas">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> Becas </th>
+                    <td mat-cell *matCellDef="let be" class="text-center align-middle">
+                        <div *ngFor="let b of be.beca">
+                            {{ b.nombre }}
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> Acciones </th>
+                    <td mat-cell *matCellDef="let be" class="text-center align-middle">
+                        <button (click)="actualizarOrigenBeca(be.id)" class="btn btn-info">Editar</button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+            </table>
+        </div>
+    </div>
+</div>
